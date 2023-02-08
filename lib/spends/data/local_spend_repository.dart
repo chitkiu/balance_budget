@@ -1,16 +1,35 @@
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../categories/data/local_category_repository.dart';
 import '../../categories/data/models/category_id.dart';
 import 'models/spend.dart';
 import 'models/spend_id.dart';
 
 class LocalSpendRepository {
   final _uuid = const Uuid();
-  final List<Spend> _spends = [];
+  final RxList<Spend> spends = <Spend>[].obs;
+
+  //TODO Remove after add normal storage
+  LocalSpendRepository() {
+    LocalCategoryRepository category = Get.find();
+    var allCategories = category.categories;
+    create(
+        1.1,
+        allCategories[0].id,
+        DateTime.now(),
+        null
+    );
+    create(
+        2.2,
+        allCategories[1].id,
+        DateTime.now(),
+        null
+    );
+  }
 
   void create(double sum, CategoryId categoryId, DateTime time, String? comment) {
-    _spends.add(Spend(
+    spends.add(Spend(
       id: SpendId(_uuid.v4()),
       sum: sum,
       categoryId: categoryId,
@@ -19,24 +38,20 @@ class LocalSpendRepository {
     ));
   }
 
-  List<Spend> getAllSpends() {
-    return _spends;
-  }
-
   void remove(SpendId spend) {
-    _spends.removeWhere((element) => element.id == spend);
+    spends.removeWhere((element) => element.id == spend);
   }
 
   void edit(SpendId spend, double? sum, CategoryId? categoryId, DateTime? time, String? comment) {
     var editSpend =
-        _spends.firstWhereOrNull((element) => element.id == spend);
+        spends.firstWhereOrNull((element) => element.id == spend);
     if (editSpend == null) {
       return;
     }
-    var index = _spends.lastIndexOf(editSpend);
+    var index = spends.lastIndexOf(editSpend);
 
-    _spends.removeAt(index);
+    spends.removeAt(index);
 
-    _spends.insert(index, editSpend.copyWith(sum: sum, categoryId: categoryId, time: time, comment: comment));
+    spends.insert(index, editSpend.copyWith(sum: sum, categoryId: categoryId, time: time, comment: comment));
   }
 }

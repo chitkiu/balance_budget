@@ -8,10 +8,16 @@ import 'models/category.dart';
 class LocalCategoryRepository {
 
   final _uuid = const Uuid();
-  final List<Category> _categories = [];
+  final RxList<Category> categories = <Category>[].obs;
+
+  //TODO Remove after add normal storage
+  LocalCategoryRepository() {
+    create("Car", null, null);
+    create("Tax", null, null);
+  }
 
   void create(String title, IconData? icon, CategoryId? rootCategory) {
-    _categories.add(Category(
+    categories.add(Category(
       id: CategoryId(_uuid.v4()),
       title: title,
       icon: icon,
@@ -19,24 +25,24 @@ class LocalCategoryRepository {
     ));
   }
 
-  List<Category> getAllCategories() {
-    return _categories;
+  Category? getCategoryById(CategoryId id) {
+    return categories.firstWhereOrNull((element) => element.id == id);
   }
 
   void remove(CategoryId category) {
-    _categories.removeWhere((element) => element.id == category);
+    categories.removeWhere((element) => element.id == category);
   }
 
   void edit(CategoryId category, String? title, IconData? icon,
       CategoryId? rootCategory) {
-    var editCategory = _categories.firstWhereOrNull((element) => element.id == category);
+    var editCategory = categories.firstWhereOrNull((element) => element.id == category);
     if (editCategory == null) {
       return;
     }
-    var index = _categories.lastIndexOf(editCategory);
+    var index = categories.lastIndexOf(editCategory);
 
-    _categories.removeAt(index);
+    categories.removeAt(index);
 
-    _categories.insert(index, editCategory.copyWith(title, icon, rootCategory));
+    categories.insert(index, editCategory.copyWith(title, icon, rootCategory));
   }
 }

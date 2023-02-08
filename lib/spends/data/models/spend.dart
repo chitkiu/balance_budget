@@ -24,4 +24,9 @@ class Spend {
       comment: comment ?? this.comment,
     );
   }
+
+  @override
+  String toString() {
+    return 'Spend{id: $id, sum: $sum, categoryId: $categoryId, time: $time, comment: $comment}';
+  }
 }

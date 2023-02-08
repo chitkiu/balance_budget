@@ -18,4 +18,9 @@ class Category {
       rootCategory: rootCategory ?? this.rootCategory,
     );
   }
+
+  @override
+  String toString() {
+    return 'Category{id: $id, title: $title, icon: $icon, rootCategory: $rootCategory}';
+  }
 }

@@ -2,5 +2,7 @@
   "appTitle": "Balance Budget",
   "spendsTabName": "Spends",
   "budgetTabName": "Budgets",
-  "settingsTabName": "Settings"
+  "settingsTabName": "Settings",
+  "spendSum": "Sum: {SUM}",
+  "spendCategory": "Category: {CATEGORY}"
 }

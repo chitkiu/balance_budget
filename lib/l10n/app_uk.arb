@@ -2,5 +2,7 @@
   "appTitle": "Balance Budget",
   "spendsTabName": "Витрати",
   "budgetTabName": "Бюджети",
-  "settingsTabName": "Налаштування"
+  "settingsTabName": "Налаштування",
+  "spendSum": "Сума: {SUM}",
+  "spendCategory": "Категорія: {CATEGORY}"
 }
