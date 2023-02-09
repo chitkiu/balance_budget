@@ -4,5 +4,11 @@
   "budgetTabName": "Budgets",
   "settingsTabName": "Settings",
   "spendSum": "Sum: {SUM}",
-  "spendCategory": "Category: {CATEGORY}"
+  "spendCategory": "Category: {CATEGORY}",
+  "addSpendTitle": "Add spend",
+  "addSpendSumHint": "Sum",
+  "addSpendCategoryHint": "Category:",
+  "addSpendCommentHint": "Comment",
+  "addCategory": "Add category",
+  "addCategoryNameHint": "Name"
 }

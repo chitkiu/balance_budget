@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
-import '../../translator_extension.dart';
+import '../../../translator_extension.dart';
 import '../domain/spends_controller.dart';
 
 class SpendScreen extends GetWidget<SpendsController> {

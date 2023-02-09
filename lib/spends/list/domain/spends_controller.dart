@@ -1,28 +1,23 @@
 import 'dart:async';
 
-import 'package:balance_budget/spends/data/spend_aggregator.dart';
+import 'package:balance_budget/spends/add/ui/add_spend_screen.dart';
+import 'package:balance_budget/spends/list/data/spend_aggregator.dart';
 import 'package:get/get.dart';
 
-import '../../categories/data/local_category_repository.dart';
-import '../data/local_spend_repository.dart';
+import '../../../categories/common/data/local_category_repository.dart';
+import '../../add/domain/add_spend_binding.dart';
+import '../../common/data/local_spend_repository.dart';
 import '../ui/models/spend_ui_model.dart';
 import 'mappers/spend_ui_mapper.dart';
 
 class SpendsController extends GetxController {
   LocalSpendRepository get _spendRepo => Get.find();
   LocalCategoryRepository get _categoryRepo => Get.find();
-  late final SpendAggregator _spendAggregator;
+  SpendAggregator get _spendAggregator => Get.find();
 
   final SpendUIMapper _spendUIMapper = const SpendUIMapper();
   RxList<SpendUIModel> spends = <SpendUIModel>[].obs;
   StreamSubscription? _spendListener;
-
-  @override
-  void onInit() async {
-    _spendAggregator = SpendAggregator();
-
-    super.onInit();
-  }
 
   @override
   void onReady() {
@@ -32,6 +27,7 @@ class SpendsController extends GetxController {
           .map(_spendUIMapper.mapFromRich)
           .toList();
     });
+    //Add refresh for set initial data
     _categoryRepo.categories.refresh();
     _spendRepo.spends.refresh();
 
@@ -46,8 +42,10 @@ class SpendsController extends GetxController {
   }
 
   void addSpend() {
-    _spendRepo.create(
-        1.2, _categoryRepo.categories[0].id, DateTime.now(), null);
+    Get.to(
+      () => AddSpendScreen(),
+      binding: AddSpendBinding()
+    );
   }
 
 }

@@ -1,5 +1,5 @@
-import 'package:balance_budget/spends/domain/spends_controller.dart';
-import 'package:balance_budget/spends/ui/spend_screen.dart';
+import 'package:balance_budget/spends/list/domain/spends_controller.dart';
+import 'package:balance_budget/spends/list/ui/spend_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 

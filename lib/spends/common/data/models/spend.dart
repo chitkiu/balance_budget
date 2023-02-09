@@ -1,4 +1,4 @@
-import '../../../categories/data/models/category_id.dart';
+import '../../../../categories/common/data/models/category_id.dart';
 import 'spend_id.dart';
 
 class Spend {

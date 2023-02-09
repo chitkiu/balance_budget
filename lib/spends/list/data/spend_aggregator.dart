@@ -1,13 +1,15 @@
 import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../categories/data/local_category_repository.dart';
-import 'local_spend_repository.dart';
+import '../../../categories/common/data/local_category_repository.dart';
+import '../../common/data/local_spend_repository.dart';
 import 'models/rich_spend_model.dart';
 
 class SpendAggregator {
   LocalCategoryRepository get _categoryRepository => Get.find();
   LocalSpendRepository get _spendRepository => Get.find();
+
+  const SpendAggregator();
 
   Stream<List<RichSpendModel>> spends() {
     return CombineLatestStream.combine2(

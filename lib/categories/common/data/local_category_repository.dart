@@ -1,4 +1,4 @@
-import 'package:balance_budget/categories/data/models/category_id.dart';
+import 'package:balance_budget/categories/common/data/models/category_id.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';

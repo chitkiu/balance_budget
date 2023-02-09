@@ -1,5 +1,5 @@
-import '../../../categories/data/models/category.dart';
-import 'spend.dart';
+import '../../../../categories/common/data/models/category.dart';
+import '../../../common/data/models/spend.dart';
 
 class RichSpendModel {
   final Spend spend;

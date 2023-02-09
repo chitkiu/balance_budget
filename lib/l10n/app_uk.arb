@@ -4,5 +4,11 @@
   "budgetTabName": "Бюджети",
   "settingsTabName": "Налаштування",
   "spendSum": "Сума: {SUM}",
-  "spendCategory": "Категорія: {CATEGORY}"
+  "spendCategory": "Категорія: {CATEGORY}",
+  "addSpendTitle": "Додати витрату",
+  "addSpendSumHint": "Сума",
+  "addSpendCategoryHint": "Категорія:",
+  "addSpendCommentHint": "Коментар",
+  "addCategory": "Додати категорію",
+  "addCategoryNameHint": "Назва"
 }

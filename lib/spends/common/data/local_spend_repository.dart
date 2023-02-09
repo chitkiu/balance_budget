@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../categories/data/local_category_repository.dart';
-import '../../categories/data/models/category_id.dart';
+import '../../../categories/common/data/local_category_repository.dart';
+import '../../../categories/common/data/models/category_id.dart';
 import 'models/spend.dart';
 import 'models/spend_id.dart';
 
