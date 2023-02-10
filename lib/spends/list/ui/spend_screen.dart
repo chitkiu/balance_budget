@@ -32,7 +32,15 @@ class SpendScreen extends GetWidget<SpendsController> {
             var item = spends[index];
             return ListTile(
               title: Text(Get.localisation.spendSum(item.sum)),
-              subtitle: Text(Get.localisation.spendCategory(item.categoryName)),
+              subtitle: Column(
+                children: [
+                  Text(Get.localisation.spendCategory(item.categoryName)),
+                  Text("Account: ${item.accountName}"),
+                  Text("Time: ${item.time}"),
+                  if (item.comment != null)
+                    Text("Comment: ${item.comment}"),
+                ],
+              ),
             );
           },
           itemCount: spends.length,

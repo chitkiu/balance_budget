@@ -26,8 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     Get.lazyPut(() => LocalCategoryRepository());
-    Get.lazyPut(() => LocalSpendRepository());
     Get.lazyPut(() => LocalAccountRepository());
+    Get.lazyPut(() => LocalSpendRepository());
     Get.lazyPut(() => const SpendAggregator());
     super.initState();
   }

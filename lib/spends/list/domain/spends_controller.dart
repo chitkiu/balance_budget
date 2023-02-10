@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:balance_budget/accounts/common/data/local_account_repository.dart';
 import 'package:balance_budget/spends/add/ui/add_spend_screen.dart';
 import 'package:balance_budget/spends/list/data/spend_aggregator.dart';
 import 'package:get/get.dart';
@@ -13,6 +14,7 @@ import 'mappers/spend_ui_mapper.dart';
 class SpendsController extends GetxController {
   LocalSpendRepository get _spendRepo => Get.find();
   LocalCategoryRepository get _categoryRepo => Get.find();
+  LocalAccountRepository get _accountRepo => Get.find();
   SpendAggregator get _spendAggregator => Get.find();
 
   final SpendUIMapper _spendUIMapper = const SpendUIMapper();
@@ -30,6 +32,7 @@ class SpendsController extends GetxController {
     //Add refresh for set initial data
     _categoryRepo.categories.refresh();
     _spendRepo.spends.refresh();
+    _accountRepo.accounts.refresh();
 
     super.onReady();
   }
