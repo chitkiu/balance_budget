@@ -1,3 +1,4 @@
+import 'package:balance_budget/accounts/common/data/local_account_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
@@ -26,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     Get.lazyPut(() => LocalCategoryRepository());
     Get.lazyPut(() => LocalSpendRepository());
+    Get.lazyPut(() => LocalAccountRepository());
     Get.lazyPut(() => const SpendAggregator());
     super.initState();
   }

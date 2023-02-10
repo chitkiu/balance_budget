@@ -86,6 +86,44 @@ class AddSpendScreen extends GetWidget<AddSpendController> {
           const SizedBox(
             height: 8,
           ),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(Get.localisation.addSpendAccountHint),
+              PlatformTextButton(
+                onPressed: () {
+
+                },
+                child: Text(Get.localisation.addAccount),
+              )
+            ],
+          ),
+          SizedBox(
+            height: 50,
+            child: Obx(() {
+              return ListView(
+                scrollDirection: Axis.horizontal,
+                children: controller.accountList.map((element) {
+                  return PlatformTextButton(
+                    onPressed: () {
+                      controller.selectAccount(element);
+                    },
+                    child: Row(
+                      children: [
+                        Text(element.title),
+                        if (element.isSelected)
+                          const Icon(Icons.check) //TODO Cross-platform icon
+                      ],
+                    ),
+                  );
+                }).toList(),
+              );
+            }),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
           PlatformTextField(
             controller: _commentController,
             material: (context, platform) {

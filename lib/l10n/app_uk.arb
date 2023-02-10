@@ -8,7 +8,9 @@
   "addSpendTitle": "Додати витрату",
   "addSpendSumHint": "Сума",
   "addSpendCategoryHint": "Категорія:",
+  "addSpendAccountHint": "Аккаунт:",
   "addSpendCommentHint": "Коментар",
+  "addAccount": "Додати аккаунт",
   "addCategory": "Додати категорію",
   "addCategoryNameHint": "Назва"
 }

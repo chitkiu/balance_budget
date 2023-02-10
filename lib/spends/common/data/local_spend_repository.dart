@@ -1,3 +1,5 @@
+import 'package:balance_budget/accounts/common/data/local_account_repository.dart';
+import 'package:balance_budget/accounts/common/data/models/account_id.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
@@ -14,25 +16,30 @@ class LocalSpendRepository {
   LocalSpendRepository() {
     LocalCategoryRepository category = Get.find();
     var allCategories = category.categories;
+    LocalAccountRepository accountRepository = Get.find();
+    var allAccounts = accountRepository.accounts;
     create(
         1.1,
         allCategories[0].id,
+        allAccounts[0].id,
         DateTime.now(),
         null
     );
     create(
         2.2,
         allCategories[1].id,
+        allAccounts[1].id,
         DateTime.now(),
         null
     );
   }
 
-  void create(double sum, CategoryId categoryId, DateTime time, String? comment) {
+  void create(double sum, CategoryId categoryId, AccountId accountId, DateTime time, String? comment) {
     spends.add(Spend(
       id: SpendId(_uuid.v4()),
       sum: sum,
       categoryId: categoryId,
+      accountId: accountId,
       time: time,
       comment: comment,
     ));

@@ -8,7 +8,9 @@
   "addSpendTitle": "Add spend",
   "addSpendSumHint": "Sum",
   "addSpendCategoryHint": "Category:",
+  "addSpendAccountHint": "Account:",
   "addSpendCommentHint": "Comment",
+  "addAccount": "Add account",
   "addCategory": "Add category",
   "addCategoryNameHint": "Name"
 }
