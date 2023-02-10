@@ -92,9 +92,7 @@ class AddSpendScreen extends GetWidget<AddSpendController> {
             children: [
               Text(Get.localisation.addSpendAccountHint),
               PlatformTextButton(
-                onPressed: () {
-
-                },
+                onPressed: controller.onAddAccountClick,
                 child: Text(Get.localisation.addAccount),
               )
             ],

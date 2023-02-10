@@ -6,6 +6,8 @@ import 'package:balance_budget/spends/add/ui/models/spend_account_ui_model.dart'
 import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../../accounts/add/domain/add_account_binding.dart';
+import '../../../accounts/add/ui/add_account_screen.dart';
 import '../../../categories/add/domain/add_category_binding.dart';
 import '../../../categories/add/ui/add_category_screen.dart';
 import '../../../categories/common/data/local_category_repository.dart';
@@ -121,6 +123,13 @@ class AddSpendController extends GetxController {
     Get.to(
       () => AddCategoryScreen(),
       binding: AddCategoryBinding(),
+    );
+  }
+
+  void onAddAccountClick() {
+    Get.to(
+      () => AddAccountScreen(),
+      binding: AddAccountBinding(),
     );
   }
 }

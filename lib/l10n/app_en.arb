@@ -12,5 +12,9 @@
   "addSpendCommentHint": "Comment",
   "addAccount": "Add account",
   "addCategory": "Add category",
-  "addCategoryNameHint": "Name"
+  "nameHint": "Name",
+  "addAccountTypeSelector": "Select account type",
+  "addAccountTotalBalanceHint": "Total balance",
+  "addAccountOwnBalanceHint": "Own balance",
+  "addAccountCreditBalance": "Credit balance"
 }

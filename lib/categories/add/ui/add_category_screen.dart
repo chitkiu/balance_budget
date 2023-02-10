@@ -34,13 +34,13 @@ class AddCategoryScreen extends GetView<AddCategoryController> {
             material: (context, platform) {
               return MaterialTextFieldData(
                   decoration: InputDecoration(
-                      labelText: Get.localisation.addCategoryNameHint
+                      labelText: Get.localisation.nameHint
                   )
               );
             },
             cupertino: (context, platform) {
               return CupertinoTextFieldData(
-                placeholder: Get.localisation.addCategoryNameHint
+                placeholder: Get.localisation.nameHint
               );
             },
           ),
