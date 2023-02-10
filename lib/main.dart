@@ -6,6 +6,15 @@ import 'package:get/get.dart';
 import 'home_screen/ui/home_screen.dart';
 
 void main() async {
+  //TODO Will be use when add login
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Parse().initialize(
+  //     keyParseApplicationId,
+  //     keyParseServerUrl,
+  //     clientKey: keyClientKey,
+  //     autoSendSessionId: true
+  // );
+
   runApp(const MyApp());
 }
 

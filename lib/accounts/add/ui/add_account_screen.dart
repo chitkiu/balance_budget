@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
-import '../../../common/ui/common_add_screen.dart';
+import '../../../common/ui/common_scaffold_with_button_screen.dart';
 import '../../../translator_extension.dart';
 import '../domain/add_account_controller.dart';
 import 'models/account_type.dart';
 
-class AddAccountScreen extends CommonAddScreen<AddAccountController> {
+class AddAccountScreen extends CommonScaffoldWithButtonScreen<AddAccountController> {
   AddAccountScreen({super.key}) : super(Get.localisation.addAccount);
 
   final TextEditingController _nameController = TextEditingController();
@@ -120,7 +120,7 @@ class AddAccountScreen extends CommonAddScreen<AddAccountController> {
   }
 
   @override
-  void onSubmit() {
+  void onButtonPress() {
     controller.onSaveAccount(
       title: _nameController.text,
       totalBalance: _totalBalanceController.text,

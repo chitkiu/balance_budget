@@ -1,12 +1,12 @@
-import 'package:balance_budget/accounts/common/data/local_account_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../accounts/common/data/local_account_repository.dart';
 import '../../categories/common/data/local_category_repository.dart';
-import '../../spends/common/data/local_spend_repository.dart';
-import '../../spends/list/data/spend_aggregator.dart';
+import '../../transactions/common/data/local_transactions_repository.dart';
+import '../../transactions/list/data/transactions_aggregator.dart';
 import 'home_body_builder.dart';
 import 'mappers/home_screen_tab_mapper.dart';
 import 'models/home_screen_tab.dart';
@@ -22,15 +22,15 @@ class _HomeScreenState extends State<HomeScreen> {
   final HomeScreenTabMapper _mapper = const HomeScreenTabMapper();
   final HomeBodyBuilder _builder = const HomeBodyBuilder();
 
-  HomeScreenTab _currentItem = HomeScreenTab.spends;
+  HomeScreenTab _currentItem = HomeScreenTab.transactions;
 
   @override
   void initState() {
     Get.lazyPut(() => const Uuid());
     Get.lazyPut(() => LocalCategoryRepository());
     Get.lazyPut(() => LocalAccountRepository());
-    Get.lazyPut(() => LocalSpendRepository());
-    Get.lazyPut(() => const SpendAggregator());
+    Get.lazyPut(() => LocalTransactionsRepository());
+    Get.lazyPut(() => const TransactionsAggregator());
     super.initState();
   }
 

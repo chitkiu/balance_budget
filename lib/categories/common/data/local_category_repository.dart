@@ -1,4 +1,5 @@
 import 'package:balance_budget/categories/common/data/models/category_id.dart';
+import 'package:balance_budget/common/data/models/transaction_type.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
@@ -12,14 +13,16 @@ class LocalCategoryRepository {
 
   //TODO Remove after add normal storage
   LocalCategoryRepository() {
-    create("Car", null);
-    create("Tax", null);
+    create("Car", TransactionType.spend, null);
+    create("Tax", TransactionType.spend, null);
+    create("Salary", TransactionType.income, null);
   }
 
-  void create(String title, IconData? icon) {
+  void create(String title, TransactionType transactionType, IconData? icon) {
     categories.add(Category(
       id: CategoryId(_uuid.v4()),
       title: title,
+      transactionType: transactionType,
       icon: icon,
     ));
   }
@@ -32,7 +35,7 @@ class LocalCategoryRepository {
     categories.removeWhere((element) => element.id == category);
   }
 
-  void edit(CategoryId category, String? title, IconData? icon,
+  void edit(CategoryId category, String? title, TransactionType? transactionType, IconData? icon,
       CategoryId? rootCategory) {
     var editCategory = categories.firstWhereOrNull((element) => element.id == category);
     if (editCategory == null) {
@@ -42,6 +45,6 @@ class LocalCategoryRepository {
 
     categories.removeAt(index);
 
-    categories.insert(index, editCategory.copyWith(title, icon, rootCategory));
+    categories.insert(index, editCategory.copyWith(title, transactionType, icon, rootCategory));
   }
 }

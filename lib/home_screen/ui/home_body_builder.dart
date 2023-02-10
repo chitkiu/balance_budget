@@ -1,8 +1,8 @@
-import 'package:balance_budget/spends/list/domain/spends_controller.dart';
-import 'package:balance_budget/spends/list/ui/spend_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
+import '../../transactions/list/domain/transactions_controller.dart';
+import '../../transactions/list/ui/transactions_screen.dart';
 import 'models/home_screen_tab.dart';
 
 class HomeBodyBuilder {
@@ -12,17 +12,17 @@ class HomeBodyBuilder {
   //TODO Change Get.put to self-created binding
   Widget getBody(HomeScreenTab tab) {
    switch (tab) {
-     case HomeScreenTab.spends:
-       Get.put(SpendsController());
-       return const SpendScreen();
+     case HomeScreenTab.transactions:
+       Get.put(TransactionsController());
+       return TransactionsScreen();
      case HomeScreenTab.budget:
-       if (Get.isRegistered<SpendsController>()) {
-         Get.delete<SpendsController>();
+       if (Get.isRegistered<TransactionsController>()) {
+         Get.delete<TransactionsController>();
        }
        return const Placeholder();
      case HomeScreenTab.settings:
-       if (Get.isRegistered<SpendsController>()) {
-         Get.delete<SpendsController>();
+       if (Get.isRegistered<TransactionsController>()) {
+         Get.delete<TransactionsController>();
        }
        return const Placeholder();
    }

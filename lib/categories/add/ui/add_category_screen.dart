@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
-import '../../../common/ui/common_add_screen.dart';
+import '../../../common/data/models/transaction_type.dart';
+import '../../../common/ui/common_scaffold_with_button_screen.dart';
 import '../../../translator_extension.dart';
 import '../domain/add_category_controller.dart';
 
-class AddCategoryScreen extends CommonAddScreen<AddCategoryController> {
+class AddCategoryScreen extends CommonScaffoldWithButtonScreen<AddCategoryController> {
   AddCategoryScreen({super.key}) : super(Get.localisation.addCategory);
 
   final TextEditingController _nameController = TextEditingController();
@@ -30,12 +31,32 @@ class AddCategoryScreen extends CommonAddScreen<AddCategoryController> {
             );
           },
         ),
+
+        const SizedBox(height: 8,),
+        Text(Get.localisation.transactionTypeHint),
+        //TODO Make it cross-platform
+        Obx(() {
+          return DropdownButton(
+            items: TransactionType.values.map((e) {
+              return DropdownMenuItem<TransactionType>(
+                value: e,
+                child: Text(e.name),
+              );
+            }).toList(),
+            value: controller.selectedType.value,
+            onChanged: (value) {
+              if (value != null) {
+                controller.selectedType.value = value;
+              }
+            },
+          );
+        }),
       ],
     );
   }
 
   @override
-  void onSubmit() {
+  void onButtonPress() {
     controller.onSaveCategory(_nameController.text);
   }
 

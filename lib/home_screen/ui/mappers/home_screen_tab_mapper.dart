@@ -24,8 +24,8 @@ class HomeScreenTabMapper {
 
   String _getText(HomeScreenTab tab) {
     switch (tab) {
-      case HomeScreenTab.spends:
-        return Get.localisation.spendsTabName;
+      case HomeScreenTab.transactions:
+        return Get.localisation.transactionsTabName;
       case HomeScreenTab.budget:
         return Get.localisation.budgetTabName;
       case HomeScreenTab.settings:
