@@ -26,10 +26,24 @@ class LocalSpendRepository {
         null
     );
     create(
+        1.2,
+        allCategories[0].id,
+        allAccounts[0].id,
+        DateTime.now(),
+        null
+    );
+    create(
         2.2,
         allCategories[1].id,
         allAccounts[1].id,
-        DateTime.now(),
+        DateTime.now().subtract(const Duration(days: 2)),
+        null
+    );
+    create(
+        2.3,
+        allCategories[0].id,
+        allAccounts[1].id,
+        DateTime.now().subtract(const Duration(days: 2)),
         null
     );
   }
