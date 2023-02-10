@@ -65,7 +65,7 @@ class AddTransactionScreen extends CommonScaffoldWithButtonScreen<AddTransaction
             Text(Get.localisation.addTransactionCategoryHint),
             PlatformTextButton(
               onPressed: controller.onManageCategoriesClick,
-              child: Text(Get.localisation.addTransactionManageCategoriesButtonText),
+              child: Text(Get.localisation.manageCategoriesButtonText),
             )
           ],
         ),
@@ -102,7 +102,7 @@ class AddTransactionScreen extends CommonScaffoldWithButtonScreen<AddTransaction
             Text(Get.localisation.addTransactionAccountHint),
             PlatformTextButton(
               onPressed: controller.onManageAccountsClick,
-              child: Text(Get.localisation.addTransactionManageAccountsButtonText),
+              child: Text(Get.localisation.manageAccountsButtonText),
             )
           ],
         ),
