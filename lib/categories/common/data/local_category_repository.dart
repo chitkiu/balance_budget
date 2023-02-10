@@ -1,10 +1,10 @@
-import 'package:balance_budget/categories/common/data/models/category_id.dart';
-import 'package:balance_budget/common/data/models/transaction_type.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../common/data/models/transaction_type.dart';
 import 'models/category.dart';
+import 'models/category_id.dart';
 
 class LocalCategoryRepository {
   Uuid get _uuid => Get.find();

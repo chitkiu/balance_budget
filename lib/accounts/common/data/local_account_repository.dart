@@ -1,7 +1,8 @@
-import 'package:balance_budget/accounts/common/data/models/account.dart';
-import 'package:balance_budget/accounts/common/data/models/account_id.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
+
+import 'models/account.dart';
+import 'models/account_id.dart';
 
 class LocalAccountRepository {
   Uuid get _uuid => Get.find();

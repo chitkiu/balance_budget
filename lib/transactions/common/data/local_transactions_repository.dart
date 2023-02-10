@@ -1,11 +1,11 @@
-import 'package:balance_budget/accounts/common/data/local_account_repository.dart';
-import 'package:balance_budget/accounts/common/data/models/account_id.dart';
-import 'package:balance_budget/common/data/models/transaction_type.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../accounts/common/data/local_account_repository.dart';
+import '../../../accounts/common/data/models/account_id.dart';
 import '../../../categories/common/data/local_category_repository.dart';
 import '../../../categories/common/data/models/category_id.dart';
+import '../../../common/data/models/transaction_type.dart';
 import 'models/transaction.dart';
 import 'models/transaction_id.dart';
 

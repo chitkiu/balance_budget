@@ -1,7 +1,7 @@
-import 'package:balance_budget/translator_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../translator_extension.dart';
 import '../models/home_screen_tab.dart';
 
 class HomeScreenTabMapper {

@@ -8,7 +8,7 @@ import '../domain/add_account_controller.dart';
 import 'models/account_type.dart';
 
 class AddAccountScreen extends CommonScaffoldWithButtonScreen<AddAccountController> {
-  AddAccountScreen({super.key}) : super(Get.localisation.addAccount);
+  AddAccountScreen({super.key}) : super(Get.localisation.addAccountTitle);
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _totalBalanceController = TextEditingController();

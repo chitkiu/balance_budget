@@ -1,8 +1,8 @@
-import 'package:balance_budget/common/data/models/transaction_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
+import '../../../common/data/models/transaction_type.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
 import '../../../translator_extension.dart';
 import '../domain/add_transaction_controller.dart';
@@ -64,8 +64,8 @@ class AddTransactionScreen extends CommonScaffoldWithButtonScreen<AddTransaction
           children: [
             Text(Get.localisation.addTransactionCategoryHint),
             PlatformTextButton(
-              onPressed: controller.onAddCategoryClick,
-              child: Text(Get.localisation.addCategory),
+              onPressed: controller.onManageCategoriesClick,
+              child: Text(Get.localisation.addTransactionManageCategoriesButtonText),
             )
           ],
         ),
@@ -101,8 +101,8 @@ class AddTransactionScreen extends CommonScaffoldWithButtonScreen<AddTransaction
           children: [
             Text(Get.localisation.addTransactionAccountHint),
             PlatformTextButton(
-              onPressed: controller.onAddAccountClick,
-              child: Text(Get.localisation.addAccount),
+              onPressed: controller.onManageAccountsClick,
+              child: Text(Get.localisation.addTransactionManageAccountsButtonText),
             )
           ],
         ),

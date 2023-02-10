@@ -1,7 +1,7 @@
-import 'package:balance_budget/accounts/common/data/local_account_repository.dart';
 import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../../accounts/common/data/local_account_repository.dart';
 import '../../../categories/common/data/local_category_repository.dart';
 import '../../common/data/local_transactions_repository.dart';
 import 'models/rich_transaction_model.dart';

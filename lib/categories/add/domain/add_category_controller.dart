@@ -1,6 +1,6 @@
-import 'package:balance_budget/common/data/models/transaction_type.dart';
 import 'package:get/get.dart';
 
+import '../../../common/data/models/transaction_type.dart';
 import '../../common/data/local_category_repository.dart';
 
 class AddCategoryController extends GetxController {

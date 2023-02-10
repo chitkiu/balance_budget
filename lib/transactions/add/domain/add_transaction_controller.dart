@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../../accounts/add/domain/add_account_binding.dart';
-import '../../../accounts/add/ui/add_account_screen.dart';
 import '../../../accounts/common/data/local_account_repository.dart';
 import '../../../accounts/common/data/models/account_id.dart';
-import '../../../categories/add/domain/add_category_binding.dart';
-import '../../../categories/add/ui/add_category_screen.dart';
+import '../../../accounts/list/domain/accounts_binding.dart';
+import '../../../accounts/list/ui/accounts_screen.dart';
 import '../../../categories/common/data/local_category_repository.dart';
 import '../../../categories/common/data/models/category_id.dart';
+import '../../../categories/list/domain/categories_binding.dart';
+import '../../../categories/list/ui/categories_screen.dart';
 import '../../../common/data/models/transaction_type.dart';
 import '../../common/data/local_transactions_repository.dart';
 import '../ui/models/transaction_account_ui_model.dart';
@@ -125,17 +125,17 @@ class AddTransactionController extends GetxController {
     selectedAccount.value = account.accountId;
   }
 
-  void onAddCategoryClick() {
+  void onManageCategoriesClick() {
     Get.to(
-      () => AddCategoryScreen(),
-      binding: AddCategoryBinding(),
+      () => CategoriesScreen(),
+      binding: CategoriesBinding(),
     );
   }
 
-  void onAddAccountClick() {
+  void onManageAccountsClick() {
     Get.to(
-      () => AddAccountScreen(),
-      binding: AddAccountBinding(),
+      () => AccountsScreen(),
+      binding: AccountsBinding(),
     );
   }
 }

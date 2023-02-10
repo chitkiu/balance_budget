@@ -1,7 +1,7 @@
-import 'package:balance_budget/common/data/models/transaction_type.dart';
 
 import '../../../../accounts/common/data/models/account_id.dart';
 import '../../../../categories/common/data/models/category_id.dart';
+import '../../../../common/data/models/transaction_type.dart';
 import 'transaction_id.dart';
 
 class Transaction {
