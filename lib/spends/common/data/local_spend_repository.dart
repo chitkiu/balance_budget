@@ -9,7 +9,8 @@ import 'models/spend.dart';
 import 'models/spend_id.dart';
 
 class LocalSpendRepository {
-  final _uuid = const Uuid();
+  Uuid get _uuid => Get.find();
+
   final RxList<Spend> spends = <Spend>[].obs;
 
   //TODO Remove after add normal storage

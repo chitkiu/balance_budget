@@ -2,6 +2,7 @@ import 'package:balance_budget/accounts/common/data/local_account_repository.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../categories/common/data/local_category_repository.dart';
 import '../../spends/common/data/local_spend_repository.dart';
@@ -25,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    Get.lazyPut(() => const Uuid());
     Get.lazyPut(() => LocalCategoryRepository());
     Get.lazyPut(() => LocalAccountRepository());
     Get.lazyPut(() => LocalSpendRepository());

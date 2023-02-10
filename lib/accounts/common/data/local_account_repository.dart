@@ -4,7 +4,8 @@ import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
 class LocalAccountRepository {
-  final _uuid = const Uuid();
+  Uuid get _uuid => Get.find();
+
   final RxList<Account> accounts = <Account>[].obs;
 
   //TODO Remove after add normal storage

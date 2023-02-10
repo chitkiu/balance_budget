@@ -6,8 +6,8 @@ import 'package:uuid/uuid.dart';
 import 'models/category.dart';
 
 class LocalCategoryRepository {
+  Uuid get _uuid => Get.find();
 
-  final _uuid = const Uuid();
   final RxList<Category> categories = <Category>[].obs;
 
   //TODO Remove after add normal storage
