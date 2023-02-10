@@ -12,16 +12,15 @@ class LocalCategoryRepository {
 
   //TODO Remove after add normal storage
   LocalCategoryRepository() {
-    create("Car", null, null);
-    create("Tax", null, null);
+    create("Car", null);
+    create("Tax", null);
   }
 
-  void create(String title, IconData? icon, CategoryId? rootCategory) {
+  void create(String title, IconData? icon) {
     categories.add(Category(
       id: CategoryId(_uuid.v4()),
       title: title,
       icon: icon,
-      rootCategory: rootCategory,
     ));
   }
 

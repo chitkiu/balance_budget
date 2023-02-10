@@ -8,7 +8,7 @@ class AddCategoryController extends GetxController {
 
   //TODO
   void onSaveCategory(String title) {
-    _categoryRepo.create(title, null, null);
+    _categoryRepo.create(title, null);
 
     Get.back();
   }

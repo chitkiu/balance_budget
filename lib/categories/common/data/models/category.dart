@@ -6,21 +6,19 @@ class Category {
   final CategoryId id;
   final String title;
   final IconData? icon;
-  final CategoryId? rootCategory;
 
-  Category({required this.id, required this.title, this.icon, this.rootCategory});
+  Category({required this.id, required this.title, this.icon});
 
   Category copyWith(String? title, IconData? icon, CategoryId? rootCategory) {
     return Category(
       id: this.id,
       title: title ?? this.title,
       icon: icon ?? this.icon,
-      rootCategory: rootCategory ?? this.rootCategory,
     );
   }
 
   @override
   String toString() {
-    return 'Category{id: $id, title: $title, icon: $icon, rootCategory: $rootCategory}';
+    return 'Category{id: $id, title: $title, icon: $icon}';
   }
 }

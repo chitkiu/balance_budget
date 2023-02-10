@@ -8,19 +8,9 @@ class SpendCategoryUIMapper {
     return categories.map((category) {
       return SpendCategoryUIModel(
         category.id,
-        _getTitle(category, categories),
+        category.title,
         category.id == selectedCategory,
       );
     }).toList();
-  }
-
-  //TODO Should think about root category and maybe move it to some common part
-  String _getTitle(Category current, List<Category> categories) {
-    if (current.rootCategory == null) {
-      return current.title;
-    } else {
-      var root = categories.firstWhere((element) => element.id == current.rootCategory);
-      return "${_getTitle(root, categories)}/${current.title}";
-    }
   }
 }
