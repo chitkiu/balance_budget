@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
 import '../../../translator_extension.dart';
 import '../domain/transactions_controller.dart';
+import 'models/grouped_transactions_ui_model.dart';
 import 'models/transaction_ui_model.dart';
 
 class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsController> {
@@ -21,19 +22,7 @@ class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsCont
       var transactions = controller.transactions;
       return ListView.builder(
         itemBuilder: (context, index) {
-          var grouped = transactions[index];
-          return Column(
-            children: [
-              const SizedBox(
-                height: 8,
-              ),
-              Text(grouped.title, style: const TextStyle(fontWeight: FontWeight.bold)),
-              const SizedBox(
-                height: 8,
-              ),
-              _transactionItems(grouped.transactions),
-            ],
-          );
+          return _groupedItems(transactions[index]);
         },
         itemCount: transactions.length,
       );
@@ -43,6 +32,46 @@ class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsCont
   @override
   void onButtonPress() {
     controller.addTransaction();
+  }
+
+  Widget _groupedItems(GroupedTransactionsUIModel grouped) {
+    return ValueBuilder<bool>(
+      initialValue: true,
+      builder: (bool? value, updater) {
+        bool isExpanded = value == true;
+        IconData titleIcon;
+
+        //TODO Add cross-platform icons
+        if (isExpanded) {
+          titleIcon = Icons.keyboard_arrow_up_sharp;
+        } else {
+          titleIcon = Icons.keyboard_arrow_down_sharp;
+        }
+        return Column(
+          children: [
+            const SizedBox(
+              height: 12,
+            ),
+            GestureDetector(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(grouped.title,
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  Icon(titleIcon),
+                ],
+              ),
+              onTap: () {
+                if (value != null) {
+                  updater(!value);
+                }
+              },
+            ),
+            if (isExpanded) _transactionItems(grouped.transactions),
+          ],
+        );
+      },
+    );
   }
 
   Widget _transactionItems(List<TransactionUIModel> transactions) {
@@ -59,8 +88,8 @@ class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsCont
           children: [
             Text(spend.categoryName,
                 style: const TextStyle(fontWeight: FontWeight.w500)),
-            Text(
-                spend.sum, style: const TextStyle(fontWeight: FontWeight.w500)),
+            Text(spend.sum,
+                style: const TextStyle(fontWeight: FontWeight.w500)),
           ],
         ),
         Text(spend.time),
