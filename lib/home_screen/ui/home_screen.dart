@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../accounts/common/data/local_account_repository.dart';
+import '../../budgets/common/data/local_budget_repository.dart';
 import '../../categories/common/data/local_category_repository.dart';
 import '../../transactions/common/data/local_transactions_repository.dart';
 import '../../transactions/list/data/transactions_aggregator.dart';
@@ -30,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Get.lazyPut(() => LocalCategoryRepository());
     Get.lazyPut(() => LocalAccountRepository());
     Get.lazyPut(() => LocalTransactionsRepository());
+    Get.lazyPut(() => LocalBudgetRepository());
     Get.lazyPut(() => const TransactionsAggregator());
     super.initState();
   }
