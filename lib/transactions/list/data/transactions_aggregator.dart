@@ -13,7 +13,7 @@ class TransactionsAggregator {
 
   const TransactionsAggregator();
 
-  Stream<List<RichTransactionModel>> spends() {
+  Stream<List<RichTransactionModel>> transactions() {
     return CombineLatestStream.combine3(
       _categoryRepository.categories.stream,
       _transactionsRepository.transactions.stream,

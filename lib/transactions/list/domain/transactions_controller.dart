@@ -24,7 +24,7 @@ class TransactionsController extends GetxController {
   @override
   void onReady() {
     _spendListener?.cancel();
-    _spendListener = _transactionsAggregator.spends().listen((event) {
+    _spendListener = _transactionsAggregator.transactions().listen((event) {
       transactions.value = _transactionsUIMapper.mapGroup(event);
     });
     //Add refresh for set initial data

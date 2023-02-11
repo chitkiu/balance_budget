@@ -19,22 +19,52 @@ class BudgetsScreen extends CommonScaffoldWithButtonScreen<BudgetsController> {
   Widget body(BuildContext context) {
     return Obx(() {
       var budgets = controller.budgets;
-      return ListView.builder(
+      return ListView.separated(
         itemBuilder: (context, index) {
           var budget = budgets[index];
           if (budget is TotalBudgetUIModel) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            return Column(
               children: [
-                Text(budget.name),
-                Text("${budget.spendSum}/${budget.totalSum}"),
+                const Text("Total",
+                    style: TextStyle(fontWeight: FontWeight.w500)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(budget.name),
+                    Text("${budget.spendSum}/${budget.totalSum}"),
+                  ],
+                )
               ],
+            );
+          } else if (budget is CategoryBudgetUIModel) {
+            return Column(
+              children: [
+                const Text("Single category",
+                    style: TextStyle(fontWeight: FontWeight.w500)),
+                Text(budget.name),
+                _categoryInfo(budget.categoryInfoUIModel),
+              ],
+            );
+          } else if (budget is TotalBudgetWithCategoryUIModel) {
+            return Column(
+              children: <Widget>[
+                const Text("Multi category",
+                    style: TextStyle(fontWeight: FontWeight.w500)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(budget.name),
+                    Text("${budget.spendSum}/${budget.totalSum}"),
+                  ],
+                )
+              ] + budget.categoriesInfoUIModel.map(_categoryInfo).toList(),
             );
           } else {
             return const Placeholder();
           }
         },
         itemCount: budgets.length,
+        separatorBuilder: (context, index) => const Divider(),
       );
     });
   }
@@ -42,6 +72,16 @@ class BudgetsScreen extends CommonScaffoldWithButtonScreen<BudgetsController> {
   @override
   void onButtonPress() {
     // controller.onAddClick();
+  }
+
+  Widget _categoryInfo(CategoryInfoUIModel model) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(model.categoryName),
+        Text("${model.spendSum}/${model.totalSum}"),
+      ],
+    );
   }
 
 }

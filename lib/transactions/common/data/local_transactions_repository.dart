@@ -55,7 +55,7 @@ class LocalTransactionsRepository {
     create(
         100,
         TransactionType.income,
-        allCategories[0].id,
+        allCategories.where((p0) => p0.transactionType == TransactionType.income).first.id,
         allAccounts[1].id,
         DateTime.now().subtract(const Duration(days: 3)),
         null
