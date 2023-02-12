@@ -1,20 +1,18 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
-import 'home_screen/ui/home_screen.dart';
+import 'auth_gate.dart';
+import 'firebase_options.dart';
 
 void main() async {
   //TODO Will be use when add login
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Parse().initialize(
-  //     keyParseApplicationId,
-  //     keyParseServerUrl,
-  //     clientKey: keyClientKey,
-  //     autoSendSessionId: true
-  // );
-
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform
+  );
   runApp(const MyApp());
 }
 
@@ -30,14 +28,14 @@ class MyApp extends StatelessWidget {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         theme: ThemeData(useMaterial3: true),
-        home: const HomeScreen(),
+        home: const AuthGate(),
       );
     } else {
       return GetCupertinoApp(
         onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: const HomeScreen(),
+        home: const AuthGate(),
       );
     }
   }

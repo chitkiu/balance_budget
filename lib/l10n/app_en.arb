@@ -1,5 +1,6 @@
 {
   "appTitle": "Balance Budget",
+  "signInWithoutRegistration": "Sign in without registration",
   "transactionsTabName": "Transactions",
   "budgetTabName": "Budgets",
   "settingsTabName": "Settings",

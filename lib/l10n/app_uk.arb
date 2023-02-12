@@ -1,5 +1,6 @@
 {
   "appTitle": "Balance Budget",
+  "signInWithoutRegistration": "Вхід без реєстрації",
   "transactionsTabName": "Транзакції",
   "budgetTabName": "Бюджети",
   "settingsTabName": "Налаштування",

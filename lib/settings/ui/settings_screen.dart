@@ -1,3 +1,4 @@
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
@@ -30,6 +31,7 @@ class SettingsScreen extends GetView<SettingsController> {
           onPressed: controller.onManageCategoriesClick,
           child: Text(Get.localisation.manageCategoriesButtonText),
         ),
+        const SignOutButton(),
       ],
     );
   }

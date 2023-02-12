@@ -9,7 +9,12 @@
 .history
 .svn/
 migrate_working_dir/
-lib/secure_key.dart
+
+# Firebase project info file
+lib/firebase_options.dart
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+ios/firebase_app_id_file.json
 
 # IntelliJ related
 *.iml
