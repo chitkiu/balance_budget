@@ -19,7 +19,7 @@ class AuthGate extends StatelessWidget {
           return ui.SignInScreen(
             providers: [
               ui.EmailAuthProvider(),
-              // ui.OAuthProvider(),
+              // GoogleProvider(clientId: '')
             ],
             footerBuilder: (context, action) {
               return PlatformTextButton(

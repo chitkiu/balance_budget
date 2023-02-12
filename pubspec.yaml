@@ -25,6 +25,7 @@ dependencies:
   firebase_database: ^10.0.10
   json_serializable: ^6.6.1
   json_annotation: ^4.8.0
+  firebase_ui_oauth_google: ^1.0.17
 
 dev_dependencies:
   flutter_test:
