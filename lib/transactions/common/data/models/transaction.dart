@@ -7,7 +7,7 @@ part 'transaction.g.dart';
 @JsonSerializable()
 class Transaction {
   @JsonKey(includeFromJson: false)
-  late final String? _id;
+  String? _id;
   final double sum;
   final TransactionType transactionType;
   final String categoryId;
@@ -15,7 +15,7 @@ class Transaction {
   final DateTime time;
   final String? comment;
 
-  String get id => _id!;
+  String get id => _id ?? '';
 
   Transaction(
       {required this.sum,

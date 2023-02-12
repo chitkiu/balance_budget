@@ -71,7 +71,7 @@ class BudgetsScreen extends CommonScaffoldWithButtonScreen<BudgetsController> {
 
   @override
   void onButtonPress() {
-    // controller.onAddClick();
+    controller.onAddClick();
   }
 
   Widget _categoryInfo(CategoryInfoUIModel model) {

@@ -8,12 +8,12 @@ part 'category.g.dart';
 @JsonSerializable()
 class Category {
   @JsonKey(includeFromJson: false)
-  late final String? _id;
+  String? _id;
 
   final String title;
   final TransactionType transactionType;
 
-  String get id => _id!;
+  String get id => _id ?? '';
 
   // final IconData? icon;
 

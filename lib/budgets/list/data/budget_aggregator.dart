@@ -12,6 +12,7 @@ import '../../common/data/local_budget_repository.dart';
 import '../../common/data/models/budget.dart';
 import '../../common/data/models/budget_date.dart';
 import '../../common/data/models/budget_repeat_type.dart';
+import '../../common/data/models/category_budget_info.dart';
 import '../domain/calculators/date_period_validation.dart';
 import 'models/rich_budget.dart';
 
@@ -33,7 +34,7 @@ class BudgetAggregator {
         _transactionRepo.transactions,
         _accountRepo.accounts,
         _categoryRepo.categories,
-        _budgetRepo.budgets.stream, (transactions, accounts, categories, budgets) {
+        _budgetRepo.budgets, (transactions, accounts, categories, budgets) {
       return budgets
           .map((budget) {
             if (budget is TotalBudget) {

@@ -4,23 +4,31 @@ part 'account.g.dart';
 
 abstract class Account {
   @JsonKey(includeFromJson: false)
-  late final String? _id;
+  String? _id;
   final String name;
   final double totalBalance;
 
-  String get id => _id!;
+  String get id => _id ?? '';
 
   Account({required this.name, required this.totalBalance});
 
+  @JsonKey(
+      name: _typeName,
+      includeToJson: true
+  )
+  String get _type => runtimeType.toString();
+
+  Map<String, dynamic> toJson();
+
+  static const String _typeName = "type";
+
   static Account fromJson(MapEntry<dynamic, dynamic> json) {
-    if (json.value['creditBalance'] != null) {
+    if (json.value[_typeName] == (CreditAccount).toString()) {
       return CreditAccount.fromJson(json);
     } else {
       return DebitAccount.fromJson(json);
     }
   }
-
-  Map<String, dynamic> toJson();
 }
 
 @JsonSerializable()

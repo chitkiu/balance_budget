@@ -15,6 +15,7 @@ Map<String, dynamic> _$DebitAccountToJson(DebitAccount instance) =>
     <String, dynamic>{
       'name': instance.name,
       'totalBalance': instance.totalBalance,
+      'type': instance._type,
     };
 
 CreditAccount _$CreditAccountFromJson(Map<String, dynamic> json) =>
@@ -27,6 +28,7 @@ CreditAccount _$CreditAccountFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$CreditAccountToJson(CreditAccount instance) =>
     <String, dynamic>{
       'name': instance.name,
+      'type': instance._type,
       'ownBalance': instance.ownBalance,
       'creditBalance': instance.creditBalance,
     };

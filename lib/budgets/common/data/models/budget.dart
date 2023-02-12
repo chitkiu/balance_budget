@@ -1,24 +1,56 @@
+import 'package:json_annotation/json_annotation.dart';
+
 import 'budget_date.dart';
-import 'budget_id.dart';
 import 'budget_repeat_type.dart';
+import 'category_budget_info.dart';
+
+part 'budget.g.dart';
 
 abstract class Budget {
-  final BudgetId id;
+  @JsonKey(includeFromJson: false)
+  String? _id;
+
   final String name;
   final BudgetRepeatType repeatType;
+  @BudgetDateConverter()
   final BudgetDate startDate;
+  @BudgetDateConverter()
   final BudgetDate? endDate;
 
-  Budget(this.id, this.name, this.repeatType, this.startDate, this.endDate);
+  String get id => _id ?? '';
+
+  Budget(this.name, this.repeatType, this.startDate, this.endDate);
 
   double get totalSum;
+
+  @JsonKey(
+    name: _typeName,
+    includeToJson: true
+  )
+  String get _type => runtimeType.toString();
+
+  Map<String, dynamic> toJson();
+
+  static const String _typeName = "type";
+
+  static Budget fromJson(MapEntry<String, dynamic> entry) {
+    String? type = entry.value[_typeName];
+    if (type == (CategoryBudget).toString()) {
+      return CategoryBudget.fromJson(entry);
+    } else if (type == (TotalBudgetWithCategories).toString()) {
+      return TotalBudgetWithCategories.fromJson(entry);
+    } else {
+      return TotalBudget.fromJson(entry);
+    }
+  }
 }
 
+@JsonSerializable()
 class CategoryBudget extends Budget {
+  @CategoryBudgetInfoConverter()
   final CategoryBudgetInfo categoryInfo;
 
   CategoryBudget(
-      super.id,
       super.name,
       super.repeatType,
       super.startDate,
@@ -28,13 +60,21 @@ class CategoryBudget extends Budget {
 
   @override
   double get totalSum => categoryInfo.maxSum;
+
+  factory CategoryBudget.fromJson(MapEntry<String, dynamic> entry) =>
+      _$CategoryBudgetFromJson(entry.value).._id = entry.key;
+
+  @override
+  Map<String, dynamic> toJson() => _$CategoryBudgetToJson(this);
+
 }
 
+@JsonSerializable()
 class TotalBudgetWithCategories extends Budget {
+  @CategoryBudgetInfoConverter()
   final List<CategoryBudgetInfo> categoriesInfo;
 
   TotalBudgetWithCategories(
-      super.id,
       super.name,
       super.repeatType,
       super.startDate,
@@ -50,16 +90,24 @@ class TotalBudgetWithCategories extends Budget {
     }
     return totalSum;
   }
+
+  factory TotalBudgetWithCategories.fromJson(MapEntry<String, dynamic> entry) =>
+      _$TotalBudgetWithCategoriesFromJson(entry.value).._id = entry.key;
+
+  @override
+  Map<String, dynamic> toJson() => _$TotalBudgetWithCategoriesToJson(this);
+
 }
 
+@JsonSerializable()
 class TotalBudget extends Budget {
   @override
   final double totalSum;
 
+  @JsonKey(defaultValue: [])
   final List<String> accounts;
 
   TotalBudget(
-      super.id,
       super.name,
       super.repeatType,
       super.startDate,
@@ -67,12 +115,11 @@ class TotalBudget extends Budget {
       this.totalSum,
       this.accounts
   );
-}
 
-class CategoryBudgetInfo {
-  final String categoryId;
-  final double maxSum;
-  final List<String> accounts;
+  factory TotalBudget.fromJson(MapEntry<String, dynamic> entry) =>
+      _$TotalBudgetFromJson(entry.value).._id = entry.key;
 
-  CategoryBudgetInfo({required this.categoryId, required this.maxSum, required this.accounts});
+  @override
+  Map<String, dynamic> toJson() => _$TotalBudgetToJson(this);
+
 }

@@ -1,25 +1,30 @@
-import 'package:get/get.dart';
-import 'package:uuid/uuid.dart';
+import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 import 'models/budget.dart';
 import 'models/budget_date.dart';
-import 'models/budget_id.dart';
 import 'models/budget_repeat_type.dart';
+import 'models/category_budget_info.dart';
 
 class LocalBudgetRepository {
-  Uuid get _uuid => Get.find();
-  RxList<Budget> budgets = <Budget>[].obs;
+
+  DatabaseReference get _ref => FirebaseDatabase.instance.ref("users/${FirebaseAuth.instance.currentUser?.uid ?? '0'}/budgets");
+  // RxList<Budget> budgets = <Budget>[].obs;
+  Stream<List<Budget>> get budgets => _ref.onValue.map((event) {
+    if (event.snapshot.exists) {
+      Map<String, dynamic> dataValue = jsonDecode(jsonEncode(event.snapshot.value));
+      return dataValue.entries.map((e) => Budget.fromJson(e)).toList();
+    } else {
+      return <Budget>[];
+    }
+  });
+
 
   //TODO Remove after add normal storage
   LocalBudgetRepository() {
-/*    createTotalBudget(
-      BudgetRepeatType.oneTime,
-      BudgetRepeatType.oneTime.name,
-      1000,
-      startDate: const BudgetDate(year: 2023, month: 2, day: 8),
-      endDate: const BudgetDate(year: 2023, month: 2, day: 9),
-    );
-
+/*
     LocalCategoryRepository category = Get.find();
     var categories =
         category.categories.where((p0) => p0.transactionType == TransactionType.spend).toList();
@@ -51,7 +56,7 @@ class LocalBudgetRepository {
     BudgetDate? endDate,
     List<String>? accounts,
   }) {
-    budgets.add(TotalBudget(BudgetId(_uuid.v4()), name, repeatType,
+    _saveBudget(TotalBudget(name, repeatType,
         startDate ?? BudgetDate.fromNow(), endDate, totalSum, accounts ?? []));
   }
 
@@ -64,8 +69,7 @@ class LocalBudgetRepository {
     BudgetDate? endDate,
     List<String>? accounts,
   }) {
-    budgets.add(CategoryBudget(
-      BudgetId(_uuid.v4()),
+    _saveBudget(CategoryBudget(
       name,
       repeatType,
       startDate ?? BudgetDate.fromNow(),
@@ -81,8 +85,7 @@ class LocalBudgetRepository {
     BudgetDate? startDate,
     BudgetDate? endDate,
   }) {
-    budgets.add(TotalBudgetWithCategories(
-      BudgetId(_uuid.v4()),
+    _saveBudget(TotalBudgetWithCategories(
       name,
       repeatType,
       startDate ?? BudgetDate.fromNow(),
@@ -95,5 +98,12 @@ class LocalBudgetRepository {
       {List<String>? accounts}) {
     return CategoryBudgetInfo(
         categoryId: categoryId, maxSum: maxSum, accounts: accounts ?? []);
+  }
+
+  void _saveBudget(Budget budget) {
+    var newBudget = _ref.push();
+    newBudget.set(
+        budget.toJson()
+    );
   }
 }

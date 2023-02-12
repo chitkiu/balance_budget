@@ -1,8 +1,6 @@
-import '../../../common/data/models/budget_id.dart';
-
 abstract class BudgetUIModel {
   final String name;
-  final BudgetId id;
+  final String id;
 
   BudgetUIModel(this.name, this.id);
 }

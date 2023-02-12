@@ -1,3 +1,4 @@
+import 'package:json_annotation/json_annotation.dart';
 
 import '../../../../common/data/month_mapper.dart';
 
@@ -19,4 +20,22 @@ class BudgetDate {
       day: now.day,
     );
   }
+}
+
+class BudgetDateConverter implements JsonConverter<BudgetDate, Map<String, dynamic>> {
+  const BudgetDateConverter();
+
+  @override
+  BudgetDate fromJson(Map<String, dynamic> json) => BudgetDate(
+    year: json['year'] as int,
+    month: json['month'] as int,
+    day: json['day'] as int?,
+  );
+
+  @override
+  Map<String, dynamic> toJson(BudgetDate instance) => <String, dynamic>{
+    'year': instance.year,
+    'month': instance.month,
+    'day': instance.day,
+  };
 }
