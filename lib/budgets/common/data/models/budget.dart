@@ -1,5 +1,3 @@
-import '../../../../accounts/common/data/models/account_id.dart';
-import '../../../../categories/common/data/models/category_id.dart';
 import 'budget_date.dart';
 import 'budget_id.dart';
 import 'budget_repeat_type.dart';
@@ -58,7 +56,7 @@ class TotalBudget extends Budget {
   @override
   final double totalSum;
 
-  final List<AccountId> accounts;
+  final List<String> accounts;
 
   TotalBudget(
       super.id,
@@ -72,9 +70,9 @@ class TotalBudget extends Budget {
 }
 
 class CategoryBudgetInfo {
-  final CategoryId categoryId;
+  final String categoryId;
   final double maxSum;
-  final List<AccountId> accounts;
+  final List<String> accounts;
 
   CategoryBudgetInfo({required this.categoryId, required this.maxSum, required this.accounts});
 }

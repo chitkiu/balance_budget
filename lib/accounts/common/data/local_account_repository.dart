@@ -1,49 +1,66 @@
-import 'package:get/get.dart';
-import 'package:uuid/uuid.dart';
+import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 import 'models/account.dart';
-import 'models/account_id.dart';
 
 class LocalAccountRepository {
-  Uuid get _uuid => Get.find();
+  DatabaseReference get _ref => FirebaseDatabase.instance.ref("users/${FirebaseAuth.instance.currentUser?.uid ?? '0'}/accounts");
 
-  final RxList<Account> accounts = <Account>[].obs;
+  Stream<List<Account>> get accounts => _ref.onValue.map((event) {
+    if (event.snapshot.exists) {
+      Map<String, dynamic> dataValue = jsonDecode(jsonEncode(event.snapshot.value));
+      return dataValue.entries.map((e) => Account.fromJson(e)).toList();
+    } else {
+      return <Account>[];
+    }
+  });
 
-  //TODO Remove after add normal storage
+  //TODO Added creating default accounts (cash for example)
   LocalAccountRepository() {
-    createDebit("Mono white", 1000);
-    createCredit("Mono black", 0, 1000);
+    // createDebit("Mono white", 1000);
+    // createCredit("Mono black", 0, 1000);
   }
 
   void createDebit(String name, double totalBalance) {
-    accounts.add(DebitAccount(
-      id: AccountId(_uuid.v4()),
-      name: name,
-      totalBalance: totalBalance,
-    ));
+    var newAccount = _ref.push();
+    newAccount.set(
+        DebitAccount(
+          name: name,
+          totalBalance: totalBalance,
+        ).toJson()
+    );
+    // accounts.add(DebitAccount(
+    //   id: AccountId(_uuid.v4()),
+    //   name: name,
+    //   totalBalance: totalBalance,
+    // ));
   }
 
   void createCredit(String name, double ownBalance, double creditBalance) {
-    accounts.add(CreditAccount(
-      id: AccountId(_uuid.v4()),
-      name: name,
-      ownBalance: ownBalance,
-      creditBalance: creditBalance,
-    ));
+    var newAccount = _ref.push();
+    newAccount.set(
+        CreditAccount(
+          name: name,
+          ownBalance: ownBalance,
+          creditBalance: creditBalance,
+        ).toJson()
+    );
   }
 
-  Account? getAccountById(AccountId id) {
-    return accounts.firstWhereOrNull((element) => element.id == id);
+  Account? getAccountById(String id) {
+    // return accounts.firstWhereOrNull((element) => element.id == id);
   }
 
-  void remove(AccountId category) {
-    accounts.removeWhere((element) => element.id == category);
+  void remove(String account) {
+    // accounts.removeWhere((element) => element.id == category);
   }
 
-  void edit(AccountId id,
+  void edit(String id,
       {String? name, double? totalBalance, double? ownBalance, double? creditBalance}) {
 
-    var editAccount = accounts.firstWhereOrNull((element) => element.id == id);
+/*    var editAccount = accounts.firstWhereOrNull((element) => element.id == id);
     if (editAccount == null) {
       return;
     }
@@ -67,6 +84,6 @@ class LocalAccountRepository {
       );
     }
 
-    accounts.insert(index, newAccount!);
+    accounts.insert(index, newAccount!);*/
   }
 }

@@ -1,7 +1,5 @@
-import '../../../../accounts/common/data/models/account_id.dart';
-
 class TransactionAccountUIModel {
-  final AccountId accountId;
+  final String accountId;
   final String title;
   final bool isSelected;
 

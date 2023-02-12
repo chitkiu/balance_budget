@@ -19,7 +19,7 @@ class AccountsController extends GetxController {
   @override
   void onReady() {
     _listener?.cancel();
-    _listener = _accountRepo.accounts.listenAndPump((event) {
+    _listener = _accountRepo.accounts.listen((event) {
       accounts.value = event.map(_mapper.map).toList();
     });
 

@@ -11,8 +11,9 @@ void main() async {
   //TODO Will be use when add login
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform
+      options: DefaultFirebaseOptions.currentPlatform
   );
+
   runApp(const MyApp());
 }
 

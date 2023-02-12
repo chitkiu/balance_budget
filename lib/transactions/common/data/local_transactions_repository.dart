@@ -1,84 +1,43 @@
-import 'package:get/get.dart';
-import 'package:uuid/uuid.dart';
+import 'dart:convert';
 
-import '../../../accounts/common/data/local_account_repository.dart';
-import '../../../accounts/common/data/models/account_id.dart';
-import '../../../categories/common/data/local_category_repository.dart';
-import '../../../categories/common/data/models/category_id.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart' hide Transaction;
+
 import '../../../common/data/models/transaction_type.dart';
 import 'models/transaction.dart';
-import 'models/transaction_id.dart';
 
 class LocalTransactionsRepository {
-  Uuid get _uuid => Get.find();
+  DatabaseReference get _ref => FirebaseDatabase.instance.ref("users/${FirebaseAuth.instance.currentUser?.uid ?? '0'}/transactions");
 
-  final RxList<Transaction> transactions = <Transaction>[].obs;
+  Stream<List<Transaction>> get transactions => _ref.onValue.map((event) {
+    if (event.snapshot.exists) {
+      Map<String, dynamic> dataValue = jsonDecode(jsonEncode(event.snapshot.value));
+      return dataValue.entries.map((e) => Transaction.fromJson(e)).toList();
+    } else {
+      return <Transaction>[];
+    }
+  });
 
-  //TODO Remove after add normal storage
-  LocalTransactionsRepository() {
-    LocalCategoryRepository category = Get.find();
-    var allCategories = category.categories;
-    LocalAccountRepository accountRepository = Get.find();
-    var allAccounts = accountRepository.accounts;
-    create(
-        1.1,
-        TransactionType.spend,
-        allCategories[0].id,
-        allAccounts[0].id,
-        DateTime.now(),
-        null
-    );
-    create(
-        1.2,
-        TransactionType.spend,
-        allCategories[0].id,
-        allAccounts[0].id,
-        DateTime.now(),
-        null
-    );
-    create(
-        2.2,
-        TransactionType.spend,
-        allCategories[1].id,
-        allAccounts[1].id,
-        DateTime.now().subtract(const Duration(days: 2)),
-        null
-    );
-    create(
-        2.3,
-        TransactionType.spend,
-        allCategories[0].id,
-        allAccounts[1].id,
-        DateTime.now().subtract(const Duration(days: 2)),
-        null
-    );
-    create(
-        100,
-        TransactionType.income,
-        allCategories.where((p0) => p0.transactionType == TransactionType.income).first.id,
-        allAccounts[1].id,
-        DateTime.now().subtract(const Duration(days: 3)),
-        null
+  void create(double sum, TransactionType transactionType, String categoryId, String accountId, DateTime time, String? comment) {
+    var newTransaction = _ref.push();
+    newTransaction.set(
+        Transaction(
+          sum: sum,
+          transactionType: transactionType,
+          categoryId: categoryId,
+          accountId: accountId,
+          time: time,
+          comment: comment,
+        ).toJson()
     );
   }
 
-  void create(double sum, TransactionType transactionType, CategoryId categoryId, AccountId accountId, DateTime time, String? comment) {
-    transactions.add(Transaction(
-      id: TransactionId(_uuid.v4()),
-      sum: sum,
-      transactionType: transactionType,
-      categoryId: categoryId,
-      accountId: accountId,
-      time: time,
-      comment: comment,
-    ));
+  void remove(String spend) {
+    // transactions.removeWhere((element) => element.id == spend);
   }
 
-  void remove(TransactionId spend) {
-    transactions.removeWhere((element) => element.id == spend);
-  }
-
-  void edit(TransactionId spend, double? sum, CategoryId? categoryId, DateTime? time, String? comment) {
+  void edit(String spend, double? sum, String? categoryId, DateTime? time, String? comment) {
+/*
     var editSpend =
         transactions.firstWhereOrNull((element) => element.id == spend);
     if (editSpend == null) {
@@ -89,5 +48,6 @@ class LocalTransactionsRepository {
     transactions.removeAt(index);
 
     transactions.insert(index, editSpend.copyWith(sum: sum, categoryId: categoryId, time: time, comment: comment));
+*/
   }
 }

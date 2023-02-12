@@ -19,7 +19,7 @@ class CategoriesController extends GetxController {
   @override
   void onReady() {
     _listener?.cancel();
-    _listener = _categoryRepo.categories.listenAndPump((event) {
+    _listener = _categoryRepo.categories.listen((event) {
       categories.value = event.map(_mapper.map).toList();
     });
 

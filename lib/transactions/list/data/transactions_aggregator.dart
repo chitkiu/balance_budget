@@ -8,27 +8,29 @@ import 'models/rich_transaction_model.dart';
 
 class TransactionsAggregator {
   LocalCategoryRepository get _categoryRepository => Get.find();
+
   LocalTransactionsRepository get _transactionsRepository => Get.find();
+
   LocalAccountRepository get _accountRepository => Get.find();
 
   const TransactionsAggregator();
 
   Stream<List<RichTransactionModel>> transactions() {
     return CombineLatestStream.combine3(
-      _categoryRepository.categories.stream,
-      _transactionsRepository.transactions.stream,
-      _accountRepository.accounts.stream,
-      (categories, spends, accounts) {
-        return spends
+      _categoryRepository.categories,
+      _transactionsRepository.transactions,
+      _accountRepository.accounts,
+      (categories, transactions, accounts) {
+        return transactions
             .map((e) {
-              var category = categories
-                  .firstWhereOrNull((element) => element.id == e.categoryId);
+              var category =
+                  categories.firstWhereOrNull((element) => element.id == e.categoryId);
               if (category == null) {
                 return null;
               }
 
-              var account = accounts
-                  .firstWhereOrNull((element) => element.id == e.accountId);
+              var account =
+                  accounts.firstWhereOrNull((element) => element.id == e.accountId);
               if (account == null) {
                 return null;
               }

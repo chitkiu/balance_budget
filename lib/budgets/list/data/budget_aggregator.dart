@@ -3,7 +3,6 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../../accounts/common/data/local_account_repository.dart';
 import '../../../accounts/common/data/models/account.dart';
-import '../../../accounts/common/data/models/account_id.dart';
 import '../../../categories/common/data/local_category_repository.dart';
 import '../../../categories/common/data/models/category.dart';
 import '../../../common/data/models/transaction_type.dart';
@@ -31,9 +30,9 @@ class BudgetAggregator {
 
   Stream<List<RichBudget>> budgets() {
     return CombineLatestStream.combine4(
-        _transactionRepo.transactions.stream,
-        _accountRepo.accounts.stream,
-        _categoryRepo.categories.stream,
+        _transactionRepo.transactions,
+        _accountRepo.accounts,
+        _categoryRepo.categories,
         _budgetRepo.budgets.stream, (transactions, accounts, categories, budgets) {
       return budgets
           .map((budget) {
@@ -146,7 +145,7 @@ class BudgetAggregator {
     );
   }
 
-  bool _isCorrectAccount(List<AccountId> accounts, AccountId id) {
+  bool _isCorrectAccount(List<String> accounts, String id) {
     return accounts.isEmpty || accounts.contains(id);
   }
 }

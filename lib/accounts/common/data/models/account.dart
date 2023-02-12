@@ -1,47 +1,69 @@
-import 'account_id.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'account.g.dart';
 
 abstract class Account {
-  final AccountId id;
+  @JsonKey(includeFromJson: false)
+  late final String? _id;
   final String name;
   final double totalBalance;
 
-  Account({required this.id, required this.name, required this.totalBalance});
+  String get id => _id!;
+
+  Account({required this.name, required this.totalBalance});
+
+  static Account fromJson(MapEntry<dynamic, dynamic> json) {
+    if (json.value['creditBalance'] != null) {
+      return CreditAccount.fromJson(json);
+    } else {
+      return DebitAccount.fromJson(json);
+    }
+  }
+
+  Map<String, dynamic> toJson();
 }
 
+@JsonSerializable()
 class DebitAccount extends Account {
-  DebitAccount(
-      {required AccountId id,
-      required String name,
-      required double totalBalance})
-      : super(id: id, name: name, totalBalance: totalBalance);
+  DebitAccount({required String name, required double totalBalance})
+      : super(name: name, totalBalance: totalBalance);
+
+  factory DebitAccount.fromJson(MapEntry<dynamic, dynamic> json) =>
+      _$DebitAccountFromJson(json.value).._id = json.key;
+
+  @override
+  Map<String, dynamic> toJson() => _$DebitAccountToJson(this);
 
   DebitAccount copyWith({String? name, double? totalBalance}) {
     return DebitAccount(
-      id: this.id,
       name: name ?? this.name,
       totalBalance: totalBalance ?? this.totalBalance,
-    );
+    ).._id = _id;
   }
 }
 
+@JsonSerializable()
 class CreditAccount extends Account {
   final double ownBalance;
   final double creditBalance;
 
   CreditAccount(
-      {required AccountId id,
-      required String name,
+      {required String name,
       required this.ownBalance,
       required this.creditBalance})
-      : super(id: id, name: name, totalBalance: ownBalance + creditBalance);
+      : super(name: name, totalBalance: ownBalance + creditBalance);
 
-  CreditAccount copyWith(
-      {String? name, double? ownBalance, double? creditBalance}) {
+  factory CreditAccount.fromJson(MapEntry<dynamic, dynamic> json) =>
+      _$CreditAccountFromJson(json.value).._id = json.key;
+
+  @override
+  Map<String, dynamic> toJson() => _$CreditAccountToJson(this);
+
+  CreditAccount copyWith({String? name, double? ownBalance, double? creditBalance}) {
     return CreditAccount(
-      id: this.id,
       name: name ?? this.name,
       ownBalance: ownBalance ?? this.ownBalance,
       creditBalance: creditBalance ?? this.creditBalance,
-    );
+    ).._id = _id;
   }
 }

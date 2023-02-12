@@ -1,7 +1,5 @@
-import '../../../../categories/common/data/models/category_id.dart';
-
 class TransactionCategoryUIModel {
-  final CategoryId categoryId;
+  final String categoryId;
   final String title;
   final bool isSelected;
 

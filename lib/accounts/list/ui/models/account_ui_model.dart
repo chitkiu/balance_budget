@@ -1,8 +1,6 @@
-import '../../../common/data/models/account_id.dart';
-
 class AccountUIModel {
   final String name;
-  final AccountId id;
+  final String id;
 
   AccountUIModel(this.name, this.id);
 }
