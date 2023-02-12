@@ -20,5 +20,11 @@
   "addAccountTypeSelector": "Виберіть тип аккаунту",
   "addAccountTotalBalanceHint": "Загальний баланс",
   "addAccountOwnBalanceHint": "Власний баланс",
-  "addAccountCreditBalance": "Кредитний баланс"
+  "addAccountCreditBalance": "Кредитний баланс",
+  "today": "Сьогодні",
+  "yesterday": "Вчора",
+  "customDate": "Інша дата",
+  "fullDateTimeString": "Дата: {DAY}/{MONTH}/{YEAR} {HOUR}:{MINUTE}",
+  "dateString": "Вибрана дата: {DAY}/{MONTH}/{YEAR}",
+  "timeString": "Вибраний час: {HOUR}:{MINUTE}"
 }

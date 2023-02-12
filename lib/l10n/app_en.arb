@@ -20,5 +20,11 @@
   "addAccountTypeSelector": "Select account type",
   "addAccountTotalBalanceHint": "Total balance",
   "addAccountOwnBalanceHint": "Own balance",
-  "addAccountCreditBalance": "Credit balance"
+  "addAccountCreditBalance": "Credit balance",
+  "today": "Today",
+  "yesterday": "Yesterday",
+  "customDate": "Custom date",
+  "fullDateTimeString": "Date: {DAY}/{MONTH}/{YEAR} {HOUR}:{MINUTE}",
+  "dateString": "Selected date: {DAY}/{MONTH}/{YEAR}",
+  "timeString": "Selected time: {HOUR}:{MINUTE}"
 }

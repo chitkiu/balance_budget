@@ -12,6 +12,7 @@ import '../../../categories/list/domain/categories_binding.dart';
 import '../../../categories/list/ui/categories_screen.dart';
 import '../../../common/data/models/transaction_type.dart';
 import '../../common/data/local_transactions_repository.dart';
+import '../ui/models/date_selection_type.dart';
 import '../ui/models/select_date_ui_model.dart';
 import '../ui/models/transaction_account_ui_model.dart';
 import '../ui/models/transaction_category_ui_model.dart';
@@ -127,24 +128,21 @@ class AddTransactionController extends GetxController {
     selectedAccount.value = account.accountId;
   }
 
-  void selectYesterday() {
-    selectedDate.value = SelectDayUIModel(
-      DateTime.now().subtract(const Duration(days: 1)),
-      isToday: false,
-      isYesterday: true,
-    );
-  }
-
-  void selectToday() {
-    selectedDate.value = SelectDayUIModel.now();
-  }
-
-  void selectCustomDay(DateTime dateTime) {
-    selectedDate.value = SelectDayUIModel(
-      dateTime,
-      isToday: false,
-      isYesterday: false,
-    );
+  void selectDateByType(
+      DateSelectionType type,
+      DateTime? date,
+  ) {
+    switch (type) {
+      case DateSelectionType.yesterday:
+        _selectYesterday();
+        break;
+      case DateSelectionType.today:
+        _selectToday();
+        break;
+      case DateSelectionType.customDate:
+        _selectCustomDay(date!);
+        break;
+    }
   }
 
   void onManageCategoriesClick() {
@@ -169,5 +167,31 @@ class AddTransactionController extends GetxController {
       time.hour,
       time.minute
     );
+  }
+
+  void _selectYesterday() {
+    selectedDate.value = SelectDayUIModel(
+      DateTime.now().subtract(const Duration(days: 1)),
+      isToday: false,
+      isYesterday: true,
+    );
+  }
+
+  void _selectToday() {
+    selectedDate.value = SelectDayUIModel.now();
+  }
+
+  void _selectCustomDay(DateTime dateTime) {
+    DateTime now = DateTime.now();
+    selectedDate.value = SelectDayUIModel(
+      dateTime,
+      isToday: _isSameDate(now, dateTime),
+      isYesterday: _isSameDate(now.subtract(const Duration(days: 1)), dateTime),
+    );
+  }
+
+  bool _isSameDate(DateTime first, DateTime second) {
+    return first.year == second.year && first.month == second.month &&
+        first.day == second.day;
   }
 }
