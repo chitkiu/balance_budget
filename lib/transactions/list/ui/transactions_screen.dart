@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
 import '../../../translator_extension.dart';
 import '../domain/transactions_controller.dart';
@@ -11,8 +11,7 @@ import 'models/transaction_ui_model.dart';
 class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsController> {
   TransactionsScreen({Key? key}) : super(
       Get.localisation.transactionsTabName,
-      cupertinoIcon: CupertinoIcons.add,
-      materialIcon: Icons.add,
+      icon: CommonIcons.add,
       key: key
   );
 
@@ -41,11 +40,10 @@ class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsCont
         bool isExpanded = value == true;
         IconData titleIcon;
 
-        //TODO Add cross-platform icons
         if (isExpanded) {
-          titleIcon = Icons.keyboard_arrow_up_sharp;
+          titleIcon = CommonIcons.arrowUp;
         } else {
-          titleIcon = Icons.keyboard_arrow_down_sharp;
+          titleIcon = CommonIcons.arrowDown;
         }
         return Column(
           children: [

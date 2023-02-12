@@ -1,14 +1,19 @@
+import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../common/data/models/transaction_type.dart';
+import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
+import '../../../common/ui/common_ui_settings.dart';
 import '../../../translator_extension.dart';
 import '../domain/add_category_controller.dart';
 
 class AddCategoryScreen extends CommonScaffoldWithButtonScreen<AddCategoryController> {
-  AddCategoryScreen({super.key}) : super(Get.localisation.addCategory);
+  AddCategoryScreen({super.key}) : super(
+    Get.localisation.addCategory,
+    icon: CommonIcons.check,
+  );
 
   final TextEditingController _nameController = TextEditingController();
 
@@ -34,25 +39,23 @@ class AddCategoryScreen extends CommonScaffoldWithButtonScreen<AddCategoryContro
 
         const SizedBox(height: 8,),
         Text(Get.localisation.transactionTypeHint),
-        //TODO Make it cross-platform
-        Material(
-          child: Obx(() {
-            return DropdownButton(
-              items: TransactionType.values.map((e) {
-                return DropdownMenuItem<TransactionType>(
-                  value: e,
-                  child: Text(e.name),
-                );
-              }).toList(),
-              value: controller.selectedType.value,
-              onChanged: (value) {
-                if (value != null) {
-                  controller.selectedType.value = value;
-                }
-              },
-            );
-          }),
-        ),
+        Obx(() {
+          return PlatformDropdownButton(
+            items: TransactionType.values.map((e) {
+              return DropdownMenuItem<TransactionType>(
+                value: e,
+                child: Text(e.name),
+              );
+            }).toList(),
+            value: controller.selectedType.value,
+            onChanged: (value) {
+              if (value != null) {
+                controller.selectedType.value = value;
+              }
+            },
+            cupertino: cupertinoDropdownButtonData,
+          );
+        })
       ],
     );
   }

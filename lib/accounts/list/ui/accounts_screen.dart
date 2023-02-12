@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
 import '../../../translator_extension.dart';
 import '../domain/accounts_controller.dart';
@@ -9,8 +10,7 @@ import '../domain/accounts_controller.dart';
 class AccountsScreen extends CommonScaffoldWithButtonScreen<AccountsController> {
   AccountsScreen({Key? key}) : super(
       Get.localisation.accountsTitle,
-      cupertinoIcon: CupertinoIcons.add,
-      materialIcon: Icons.add,
+      icon: CommonIcons.add,
       key: key
   );
 

@@ -11,7 +11,7 @@ import 'models/category_budget_info.dart';
 class LocalBudgetRepository {
 
   DatabaseReference get _ref => FirebaseDatabase.instance.ref("users/${FirebaseAuth.instance.currentUser?.uid ?? '0'}/budgets");
-  // RxList<Budget> budgets = <Budget>[].obs;
+
   Stream<List<Budget>> get budgets => _ref.onValue.map((event) {
     if (event.snapshot.exists) {
       Map<String, dynamic> dataValue = jsonDecode(jsonEncode(event.snapshot.value));
@@ -20,33 +20,6 @@ class LocalBudgetRepository {
       return <Budget>[];
     }
   });
-
-
-  //TODO Remove after add normal storage
-  LocalBudgetRepository() {
-/*
-    LocalCategoryRepository category = Get.find();
-    var categories =
-        category.categories.where((p0) => p0.transactionType == TransactionType.spend).toList();
-
-    createCategoryBudget(
-      BudgetRepeatType.oneTime,
-      BudgetRepeatType.oneTime.name,
-      1000,
-      categories.first.id,
-      startDate: const BudgetDate(year: 2023, month: 2, day: 8),
-    );
-
-    createTotalBudgetWithCategories(
-      BudgetRepeatType.oneTime,
-      BudgetRepeatType.oneTime.name,
-      [
-        createCategoryInfo(categories.first.id, 500),
-        createCategoryInfo(categories[1].id, 1000),
-      ],
-      // startDate: const BudgetDate(year: 2023, month: 2, day: 8),
-    );*/
-  }
 
   void createTotalBudget(
     BudgetRepeatType repeatType,

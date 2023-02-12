@@ -25,6 +25,10 @@ dependencies:
   json_serializable: ^6.6.1
   json_annotation: ^4.8.0
   firebase_ui_oauth_google: ^1.0.17
+  enough_platform_widgets:
+    git:
+      url: https://github.com/chitkiu/enough_platform_widgets.git
+      ref: add_size_for_cupertino_dropdown
 
 dev_dependencies:
   flutter_test:

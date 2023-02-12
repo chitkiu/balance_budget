@@ -9,7 +9,6 @@ import 'auth_gate.dart';
 import 'firebase_options.dart';
 
 void main() async {
-  //TODO Will be use when add login
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform

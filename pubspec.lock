@@ -177,6 +177,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
+  cupertino_progress_bar:
+    dependency: transitive
+    description:
+      name: cupertino_progress_bar
+      sha256: "4962a7c6db9b94d1c19462ad6036fdf20db43defa4114c908a3c4cbef1b3a2e0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
+  cupertino_stepper:
+    dependency: transitive
+    description:
+      name: cupertino_stepper
+      sha256: "124690b8b23db7b43fc6d547688e42a9f3d73c8f46d0b210568e98a04b5645b2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
   dart_style:
     dependency: transitive
     description:
@@ -201,6 +217,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.17"
+  enough_platform_widgets:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: add_size_for_cupertino_dropdown
+      resolved-ref: "39065243b86514df80e39ccdbe42ddafd47b4fcf"
+      url: "https://github.com/chitkiu/enough_platform_widgets.git"
+    source: git
+    version: "0.6.0"
   fake_async:
     dependency: transitive
     description:

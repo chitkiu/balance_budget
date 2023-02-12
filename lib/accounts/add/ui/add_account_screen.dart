@@ -1,14 +1,19 @@
+import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
+import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
+import '../../../common/ui/common_ui_settings.dart';
 import '../../../translator_extension.dart';
 import '../domain/add_account_controller.dart';
 import 'models/account_type.dart';
 
 class AddAccountScreen extends CommonScaffoldWithButtonScreen<AddAccountController> {
-  AddAccountScreen({super.key}) : super(Get.localisation.addAccountTitle);
+  AddAccountScreen({super.key}) : super(
+    Get.localisation.addAccountTitle,
+    icon: CommonIcons.check,
+  );
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _totalBalanceController = TextEditingController();
@@ -36,25 +41,23 @@ class AddAccountScreen extends CommonScaffoldWithButtonScreen<AddAccountControll
         ),
         const SizedBox(height: 8,),
         Text(Get.localisation.addAccountTypeSelector),
-        //TODO Make it cross-platform
-        Material(
-          child: Obx(() {
-            return DropdownButton(
-              items: AccountType.values.map((e) {
-                return DropdownMenuItem<AccountType>(
-                  value: e,
-                  child: Text(e.name),
-                );
-              }).toList(),
-              value: controller.accountType.value,
-              onChanged: (value) {
-                if (value != null) {
-                  controller.accountType.value = value;
-                }
-              },
-            );
-          }),
-        ),
+        Obx(() {
+          return PlatformDropdownButton(
+            items: AccountType.values.map((e) {
+              return DropdownMenuItem<AccountType>(
+                value: e,
+                child: Text(e.name),
+              );
+            }).toList(),
+            value: controller.accountType.value,
+            onChanged: (value) {
+              if (value != null) {
+                controller.accountType.value = value;
+              }
+            },
+            cupertino: cupertinoDropdownButtonData,
+          );
+        }),
         Obx(() {
           AccountType accountType = controller.accountType.value;
           switch (accountType) {

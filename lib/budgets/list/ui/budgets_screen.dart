@@ -1,17 +1,16 @@
-import 'package:balance_budget/budgets/list/ui/models/budget_ui_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
 import '../../../translator_extension.dart';
 import '../domain/budgets_controller.dart';
+import 'models/budget_ui_model.dart';
 
 class BudgetsScreen extends CommonScaffoldWithButtonScreen<BudgetsController> {
   BudgetsScreen({Key? key}) : super(
       Get.localisation.budgetTabName,
-      cupertinoIcon: CupertinoIcons.add,
-      materialIcon: Icons.add,
+      icon: CommonIcons.add,
       key: key
   );
 
