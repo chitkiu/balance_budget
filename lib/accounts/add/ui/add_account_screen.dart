@@ -37,22 +37,24 @@ class AddAccountScreen extends CommonScaffoldWithButtonScreen<AddAccountControll
         const SizedBox(height: 8,),
         Text(Get.localisation.addAccountTypeSelector),
         //TODO Make it cross-platform
-        Obx(() {
-          return DropdownButton(
-            items: AccountType.values.map((e) {
-              return DropdownMenuItem<AccountType>(
-                value: e,
-                child: Text(e.name),
-              );
-            }).toList(),
-            value: controller.accountType.value,
-            onChanged: (value) {
-              if (value != null) {
-                controller.accountType.value = value;
-              }
-            },
-          );
-        }),
+        Material(
+          child: Obx(() {
+            return DropdownButton(
+              items: AccountType.values.map((e) {
+                return DropdownMenuItem<AccountType>(
+                  value: e,
+                  child: Text(e.name),
+                );
+              }).toList(),
+              value: controller.accountType.value,
+              onChanged: (value) {
+                if (value != null) {
+                  controller.accountType.value = value;
+                }
+              },
+            );
+          }),
+        ),
         Obx(() {
           AccountType accountType = controller.accountType.value;
           switch (accountType) {

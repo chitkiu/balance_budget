@@ -35,22 +35,24 @@ class AddCategoryScreen extends CommonScaffoldWithButtonScreen<AddCategoryContro
         const SizedBox(height: 8,),
         Text(Get.localisation.transactionTypeHint),
         //TODO Make it cross-platform
-        Obx(() {
-          return DropdownButton(
-            items: TransactionType.values.map((e) {
-              return DropdownMenuItem<TransactionType>(
-                value: e,
-                child: Text(e.name),
-              );
-            }).toList(),
-            value: controller.selectedType.value,
-            onChanged: (value) {
-              if (value != null) {
-                controller.selectedType.value = value;
-              }
-            },
-          );
-        }),
+        Material(
+          child: Obx(() {
+            return DropdownButton(
+              items: TransactionType.values.map((e) {
+                return DropdownMenuItem<TransactionType>(
+                  value: e,
+                  child: Text(e.name),
+                );
+              }).toList(),
+              value: controller.selectedType.value,
+              onChanged: (value) {
+                if (value != null) {
+                  controller.selectedType.value = value;
+                }
+              },
+            );
+          }),
+        ),
       ],
     );
   }

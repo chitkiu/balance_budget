@@ -31,7 +31,9 @@ abstract class CommonScaffoldWithButtonScreen<T> extends GetView<T> {
           );
         },
       ),
-      body: body(context),
+      body: SafeArea(
+        child: body(context),
+      ),
       material: (context, platform) {
         return MaterialScaffoldData(
             floatingActionButton: FloatingActionButton(

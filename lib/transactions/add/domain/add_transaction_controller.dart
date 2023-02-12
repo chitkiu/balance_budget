@@ -1,7 +1,8 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:rxdart/rxdart.dart' as rxd;
 
 import '../../../accounts/common/data/local_account_repository.dart';
 import '../../../accounts/list/domain/accounts_binding.dart';
@@ -11,6 +12,7 @@ import '../../../categories/list/domain/categories_binding.dart';
 import '../../../categories/list/ui/categories_screen.dart';
 import '../../../common/data/models/transaction_type.dart';
 import '../../common/data/local_transactions_repository.dart';
+import '../ui/models/select_date_ui_model.dart';
 import '../ui/models/transaction_account_ui_model.dart';
 import '../ui/models/transaction_category_ui_model.dart';
 import 'mappers/transaction_account_ui_mapper.dart';
@@ -34,6 +36,10 @@ class AddTransactionController extends GetxController {
 
   Rxn<String> selectedAccount = Rxn();
 
+  Rx<SelectDayUIModel> selectedDate = SelectDayUIModel.now().obs;
+
+  Rx<TimeOfDay> selectedTime = TimeOfDay.now().obs;
+
   var selectedType = TransactionType.spend.obs;
 
   StreamSubscription? _subscription;
@@ -44,7 +50,7 @@ class AddTransactionController extends GetxController {
     _subscription?.cancel();
 
     //TODO Move to separate class
-    _subscription = CombineLatestStream.combine3(
+    _subscription = rxd.CombineLatestStream.combine3(
       _categoryRepo.categories,
       selectedCategory.stream,
       selectedType.stream,
@@ -58,7 +64,7 @@ class AddTransactionController extends GetxController {
     selectedType.refresh();
 
     _accountSubscription?.cancel();
-    _accountSubscription = CombineLatestStream.combine2(
+    _accountSubscription = rxd.CombineLatestStream.combine2(
       _accountRepo.accounts,
       selectedAccount.stream,
       _spendAccountUIMapper.map,
@@ -106,7 +112,7 @@ class AddTransactionController extends GetxController {
         selectedType.value,
         categoryId,
         accountId,
-        DateTime.now(),
+        _combineDateAndTime(selectedDate.value.dateTime, selectedTime.value),
         currentComment
     );
 
@@ -121,6 +127,26 @@ class AddTransactionController extends GetxController {
     selectedAccount.value = account.accountId;
   }
 
+  void selectYesterday() {
+    selectedDate.value = SelectDayUIModel(
+      DateTime.now().subtract(const Duration(days: 1)),
+      isToday: false,
+      isYesterday: true,
+    );
+  }
+
+  void selectToday() {
+    selectedDate.value = SelectDayUIModel.now();
+  }
+
+  void selectCustomDay(DateTime dateTime) {
+    selectedDate.value = SelectDayUIModel(
+      dateTime,
+      isToday: false,
+      isYesterday: false,
+    );
+  }
+
   void onManageCategoriesClick() {
     Get.to(
       () => CategoriesScreen(),
@@ -132,6 +158,16 @@ class AddTransactionController extends GetxController {
     Get.to(
       () => AccountsScreen(),
       binding: AccountsBinding(),
+    );
+  }
+
+  DateTime _combineDateAndTime(DateTime date, TimeOfDay time) {
+    return DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute
     );
   }
 }
