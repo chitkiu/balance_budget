@@ -1,6 +1,11 @@
 class AccountUIModel {
-  final String name;
   final String id;
+  final String name;
+  final String balance;
 
-  AccountUIModel(this.name, this.id);
+  AccountUIModel({
+    required this.id,
+    required this.name,
+    required this.balance
+  });
 }

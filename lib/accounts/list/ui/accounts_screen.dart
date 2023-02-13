@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:balance_budget/accounts/list/ui/models/account_ui_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,16 +18,12 @@ class AccountsScreen extends CommonScaffoldWithButtonScreen<AccountsController> 
   Widget body(BuildContext context) {
     return Obx(() {
       var accounts = controller.accounts;
-      return ListView.builder(
+      return ListView.separated(
         itemBuilder: (context, index) {
-          var account = accounts[index];
-          return Row(
-            children: [
-              Text(account.name)
-            ],
-          );
+          return _getAccountWidget(accounts[index]);
         },
         itemCount: accounts.length,
+        separatorBuilder: (context, index) => const Divider(),
       );
     });
   }
@@ -35,6 +31,21 @@ class AccountsScreen extends CommonScaffoldWithButtonScreen<AccountsController> 
   @override
   void onButtonPress() {
     controller.onAddClick();
+  }
+
+  Widget _getAccountWidget(AccountUIModel account) {
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 6),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(account.name,
+                style: const TextStyle(fontWeight: FontWeight.w500)),
+            Text(account.balance,
+                style: const TextStyle(fontWeight: FontWeight.w500)),
+          ],
+        )
+    );
   }
 
 }

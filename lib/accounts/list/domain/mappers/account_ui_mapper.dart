@@ -4,8 +4,9 @@ import '../../ui/models/account_ui_model.dart';
 class AccountUIMapper {
   AccountUIModel map(Account account) {
     return AccountUIModel(
-      account.name,
-      account.id,
+      id: account.id,
+      name: account.name,
+      balance: account.totalBalance.toString(),
     );
   }
 }
