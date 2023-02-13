@@ -1,11 +1,9 @@
-import 'package:enough_platform_widgets/enough_platform_widgets.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
-import '../../../common/ui/common_ui_settings.dart';
 import '../../../translator_extension.dart';
 import '../domain/transactions_controller.dart';
 import 'models/grouped_transactions_ui_model.dart';
@@ -82,10 +80,10 @@ class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsCont
   }
 
   Widget _transactionItem(TransactionUIModel transaction) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -97,25 +95,81 @@ class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsCont
                     style: const TextStyle(fontWeight: FontWeight.w500)),
               ],
             ),
-            PlatformIconButton(
-              icon: Icon(Icons.more_horiz), //TODO Made cross-platform
-              onPressed: () async {
-                //TODO Replace to call context menu for choose action
-                await confirmBeforeAction(
-                  () async {
-                    await controller.deleteTransaction(transaction.id);
-                  },
-                  title: Get.localisation.confirmToDeleteTitle,
-                  subTitle: Get.localisation.confirmToDeleteText,
-                  confirmAction: Get.localisation.yes,
-                  cancelAction: Get.localisation.no,
-                );
-              },
-            )
+            _additionalInfo(transaction.accountName, CommonIcons.wallet),
+            if (transaction.comment != null)
+              _additionalInfo(transaction.comment!, CommonIcons.note),
           ],
         ),
-        Text(transaction.time),
-        if (transaction.comment != null) Text("Comment: ${transaction.comment}"),
+    );
+  }
+
+  //TODO Maybe remove later
+/*  Widget _moreButton(TransactionUIModel transaction) {
+    if (PlatformInfo.isCupertino) {
+      return PullDownButton(
+        itemBuilder: (context) {
+          return [
+            PullDownMenuItem(
+              onTap: () => _requestDeleteTransaction(transaction),
+              title: Get.localisation.delete,
+              itemTheme: const PullDownMenuItemTheme(
+                textStyle: TextStyle(
+                  color: Colors.red
+                )
+              ),
+              icon: CupertinoIcons.trash,
+              iconColor: Colors.red,
+            )
+          ];
+        },
+        buttonBuilder: (context, showMenu) {
+          return CupertinoButton(
+            onPressed: showMenu,
+            padding: EdgeInsets.zero,
+            child: const Icon(CupertinoIcons.ellipsis_circle),
+          );
+        },
+      );
+    } else {
+      return PopupMenuButton(
+        itemBuilder: (BuildContext context) {
+          return [
+            PopupMenuItem(
+              child: Text(Get.localisation.delete),
+              onTap: () => _requestDeleteTransaction(transaction),
+            )
+          ];
+        },
+      );
+    }
+  }
+
+  Future<void> _requestDeleteTransaction(TransactionUIModel transaction) async {
+    await confirmBeforeAction(
+          () async {
+        await controller.deleteTransaction(transaction.id);
+      },
+      title: Get.localisation.confirmToDeleteTitle,
+      subTitle: Get.localisation.confirmToDeleteText,
+      confirmAction: Get.localisation.yes,
+      cancelAction: Get.localisation.no,
+    );
+  }*/
+
+  Widget _additionalInfo(String text, IconData icon) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          size: 14,
+        ),
+        const SizedBox(width: 6),
+        Text(
+          text,
+          style: const TextStyle(
+              fontSize: 14
+          ),
+        )
       ],
     );
   }

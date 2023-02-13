@@ -220,12 +220,11 @@ packages:
   enough_platform_widgets:
     dependency: "direct main"
     description:
-      path: "."
-      ref: add_size_for_cupertino_dropdown
-      resolved-ref: "39065243b86514df80e39ccdbe42ddafd47b4fcf"
-      url: "https://github.com/chitkiu/enough_platform_widgets.git"
-    source: git
-    version: "0.6.0"
+      name: enough_platform_widgets
+      sha256: "13ca98cc448937416d2d91c1fbce90f6302096794df1c8a5891baf81bd493035"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.1"
   fake_async:
     dependency: transitive
     description:
@@ -670,6 +669,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.1"
+  pull_down_button:
+    dependency: "direct main"
+    description:
+      name: pull_down_button
+      sha256: "7286f6c7e09967fd2eff080eead3521958ca1db7e39e4ef27134be39aa39355c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.1"
   quiver:
     dependency: transitive
     description:

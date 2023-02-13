@@ -27,6 +27,7 @@
   "fullDateTimeString": "Дата: {DAY}/{MONTH}/{YEAR} {HOUR}:{MINUTE}",
   "dateString": "Вибрана дата: {DAY}/{MONTH}/{YEAR}",
   "timeString": "Вибраний час: {HOUR}:{MINUTE}",
+  "delete": "Видалити",
   "confirmToDeleteTitle": "Ви впевненні що хочете видалити?",
   "confirmToDeleteText": "Це неможливо відмінити!",
   "yes": "Так",
