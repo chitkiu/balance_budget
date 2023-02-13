@@ -6,11 +6,10 @@ abstract class Account {
   @JsonKey(includeFromJson: false)
   String? _id;
   final String name;
-  final double totalBalance;
 
   String get id => _id ?? '';
 
-  Account({required this.name, required this.totalBalance});
+  Account({required this.name});
 
   @JsonKey(
       name: _typeName,
@@ -33,8 +32,7 @@ abstract class Account {
 
 @JsonSerializable()
 class DebitAccount extends Account {
-  DebitAccount({required String name, required double totalBalance})
-      : super(name: name, totalBalance: totalBalance);
+  DebitAccount({required String name}) : super(name: name);
 
   factory DebitAccount.fromJson(MapEntry<dynamic, dynamic> json) =>
       _$DebitAccountFromJson(json.value).._id = json.key;
@@ -42,24 +40,18 @@ class DebitAccount extends Account {
   @override
   Map<String, dynamic> toJson() => _$DebitAccountToJson(this);
 
-  DebitAccount copyWith({String? name, double? totalBalance}) {
+  DebitAccount copyWith({String? name}) {
     return DebitAccount(
       name: name ?? this.name,
-      totalBalance: totalBalance ?? this.totalBalance,
     ).._id = _id;
   }
 }
 
 @JsonSerializable()
 class CreditAccount extends Account {
-  final double ownBalance;
   final double creditBalance;
 
-  CreditAccount(
-      {required String name,
-      required this.ownBalance,
-      required this.creditBalance})
-      : super(name: name, totalBalance: ownBalance + creditBalance);
+  CreditAccount({required String name, required this.creditBalance}) : super(name: name);
 
   factory CreditAccount.fromJson(MapEntry<dynamic, dynamic> json) =>
       _$CreditAccountFromJson(json.value).._id = json.key;
@@ -70,7 +62,6 @@ class CreditAccount extends Account {
   CreditAccount copyWith({String? name, double? ownBalance, double? creditBalance}) {
     return CreditAccount(
       name: name ?? this.name,
-      ownBalance: ownBalance ?? this.ownBalance,
       creditBalance: creditBalance ?? this.creditBalance,
     ).._id = _id;
   }

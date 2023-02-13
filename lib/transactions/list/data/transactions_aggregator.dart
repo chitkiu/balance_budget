@@ -26,7 +26,11 @@ class TransactionsAggregator {
               var category =
                   categories.firstWhereOrNull((element) => element.id == e.categoryId);
               if (category == null) {
-                return null;
+                category =
+                    categories.firstWhereOrNull((element) => element.transactionType == e.transactionType);
+                if (category == null) {
+                  return null;
+                }
               }
 
               var account =

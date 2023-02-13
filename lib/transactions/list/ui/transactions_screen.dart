@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -74,8 +73,16 @@ class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsCont
   }
 
   Widget _transactionItems(List<TransactionUIModel> transactions) {
+    List<Widget> children = [];
+    Divider divider = const Divider();
+    for (int i = 0; i < transactions.length; i++) {
+      children.add(_transactionItem(transactions[i]));
+      if (i < transactions.length - 1) {
+        children.add(divider);
+      }
+    }
     return Column(
-      children: transactions.map(_transactionItem).toList(),
+      children: children,
     );
   }
 

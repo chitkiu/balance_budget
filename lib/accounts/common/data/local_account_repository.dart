@@ -2,11 +2,16 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:get/get.dart';
 
+import '../../../common/data/models/transaction_type.dart';
+import '../../../transactions/common/data/local_transactions_repository.dart';
 import 'models/account.dart';
 
 class LocalAccountRepository {
   DatabaseReference get _ref => FirebaseDatabase.instance.ref("users/${FirebaseAuth.instance.currentUser?.uid ?? '0'}/accounts");
+
+  LocalTransactionsRepository get _transactionRepo => Get.find();
 
   Stream<List<Account>> get accounts => _ref.onValue.map((event) {
     if (event.snapshot.exists) {
@@ -23,29 +28,40 @@ class LocalAccountRepository {
     // createCredit("Mono black", 0, 1000);
   }
 
-  void createDebit(String name, double totalBalance) {
+  Future<void> createDebit(String name, double totalBalance) async {
     var newAccount = _ref.push();
     newAccount.set(
         DebitAccount(
           name: name,
-          totalBalance: totalBalance,
         ).toJson()
     );
-    // accounts.add(DebitAccount(
-    //   id: AccountId(_uuid.v4()),
-    //   name: name,
-    //   totalBalance: totalBalance,
-    // ));
+
+    _transactionRepo.create(
+        totalBalance,
+        TransactionType.setInitialBalance,
+        null,
+        newAccount.key ?? '',
+        DateTime.now(),
+        null
+    );
   }
 
-  void createCredit(String name, double ownBalance, double creditBalance) {
+  Future<void> createCredit(String name, double ownBalance, double creditBalance) async {
     var newAccount = _ref.push();
     newAccount.set(
         CreditAccount(
           name: name,
-          ownBalance: ownBalance,
           creditBalance: creditBalance,
         ).toJson()
+    );
+
+    _transactionRepo.create(
+        ownBalance,
+        TransactionType.setInitialBalance,
+        null,
+        newAccount.key ?? '',
+        DateTime.now(),
+        null
     );
   }
 

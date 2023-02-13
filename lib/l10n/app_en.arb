@@ -31,5 +31,6 @@
   "confirmToDeleteTitle": "Are you sure to delete?",
   "confirmToDeleteText": "It's can be undone!",
   "yes": "Yes",
-  "no": "No"
+  "no": "No",
+  "addInitialBudgetCategoryTitle": "Add initial balance"
 }

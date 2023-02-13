@@ -10,7 +10,7 @@ Transaction _$TransactionFromJson(Map<String, dynamic> json) => Transaction(
       sum: (json['sum'] as num).toDouble(),
       transactionType:
           $enumDecode(_$TransactionTypeEnumMap, json['transactionType']),
-      categoryId: json['categoryId'] as String,
+      categoryId: json['categoryId'] as String?,
       accountId: json['accountId'] as String,
       time: DateTime.parse(json['time'] as String),
       comment: json['comment'] as String?,
@@ -27,6 +27,7 @@ Map<String, dynamic> _$TransactionToJson(Transaction instance) =>
     };
 
 const _$TransactionTypeEnumMap = {
+  TransactionType.setInitialBalance: 'setInitialBalance',
   TransactionType.spend: 'spend',
   TransactionType.income: 'income',
 };

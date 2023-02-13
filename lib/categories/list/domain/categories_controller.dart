@@ -20,7 +20,10 @@ class CategoriesController extends GetxController {
   void onReady() {
     _listener?.cancel();
     _listener = _categoryRepo.categories.listen((event) {
-      categories.value = event.map(_mapper.map).toList();
+      categories.value = event
+          .where((element) => !element.transactionType.isInternal)
+          .map(_mapper.map)
+          .toList();
     });
 
     super.onReady();

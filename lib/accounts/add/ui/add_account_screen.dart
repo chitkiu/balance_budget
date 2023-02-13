@@ -125,8 +125,8 @@ class AddAccountScreen extends CommonScaffoldWithButtonScreen<AddAccountControll
   }
 
   @override
-  void onButtonPress() {
-    controller.onSaveAccount(
+  void onButtonPress() async {
+    await controller.onSaveAccount(
       title: _nameController.text,
       totalBalance: _totalBalanceController.text,
       ownBalance: _ownBalanceController.text,

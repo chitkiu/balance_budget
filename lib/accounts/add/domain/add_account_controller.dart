@@ -9,18 +9,18 @@ class AddAccountController extends GetxController {
   Rx<AccountType> accountType = AccountType.debit.obs;
 
   //TODO Add error, split to methods
-  void onSaveAccount(
+  Future<void> onSaveAccount(
       {required String title,
       String? totalBalance,
       String? ownBalance,
-      String? creditBalance}) {
+      String? creditBalance}) async {
     switch (accountType.value) {
       case AccountType.debit:
         if (totalBalance != null) {
           if (double.tryParse(totalBalance) == null) {
             return;
           }
-          _accountRepo.createDebit(title, double.parse(totalBalance));
+          await _accountRepo.createDebit(title, double.parse(totalBalance));
         }
         break;
       case AccountType.credit:
@@ -31,7 +31,7 @@ class AddAccountController extends GetxController {
           if (double.tryParse(creditBalance) == null) {
             return;
           }
-          _accountRepo.createCredit(
+          await _accountRepo.createCredit(
               title,
               double.parse(ownBalance),
               double.parse(creditBalance),

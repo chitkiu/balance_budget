@@ -18,11 +18,15 @@ class LocalTransactionsRepository {
     }
   });
 
-  void create(double sum, TransactionType transactionType, String categoryId, String accountId, DateTime time, String? comment) {
+  void create(double sum, TransactionType transactionType, String? categoryId, String accountId, DateTime time, String? comment) {
     var newTransaction = _ref.push();
+    var finalSum = sum;
+    if (transactionType == TransactionType.spend) {
+      finalSum = -finalSum;
+    }
     newTransaction.set(
         Transaction(
-          sum: sum,
+          sum: finalSum,
           transactionType: transactionType,
           categoryId: categoryId,
           accountId: accountId,

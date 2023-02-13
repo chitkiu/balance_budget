@@ -3,17 +3,27 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 
 import '../../../common/data/models/transaction_type.dart';
+import '../../../translator_extension.dart';
 import 'models/category.dart';
 
 class LocalCategoryRepository {
+  final List<Category> _localCategories = [
+    Category(
+      title: Get.localisation.addInitialBudgetCategoryTitle,
+      transactionType: TransactionType.setInitialBalance,
+    )
+  ];
+
   DatabaseReference get _ref => FirebaseDatabase.instance.ref("users/${FirebaseAuth.instance.currentUser?.uid ?? '0'}/categories");
 
   Stream<List<Category>> get categories => _ref.onValue.map((event) {
     if (event.snapshot.exists) {
       Map<String, dynamic> dataValue = jsonDecode(jsonEncode(event.snapshot.value));
-      return dataValue.entries.map((e) => Category.fromJson(e)).toList();
+      return dataValue.entries.map((e) => Category.fromJson(e)).toList()
+        ..addAll(_localCategories);
     } else {
       return <Category>[];
     }
@@ -37,9 +47,23 @@ class LocalCategoryRepository {
     );
   }
 
-  Category? getCategoryById(String id) {
+  Future<Category?> getCategoryById(String id) async {
+    var item = await _ref.child(id).get();
+    if (item.exists) {
+      Map<String, dynamic> dataValue = jsonDecode(jsonEncode(item.value));
+      return Category.fromJson(dataValue.entries.first);
+    }
     return null;
-    // return categories.firstWhereOrNull((element) => element.id == id);
+  }
+
+  Future<List<Category>> getCategoriesByType(TransactionType type) async {
+    var result = await _ref.orderByChild('transactionType').equalTo(type.name).get();
+    if (result.exists) {
+      Map<String, dynamic> dataValue = jsonDecode(jsonEncode(result.value));
+      return dataValue.entries.map((e) => Category.fromJson(e)).toList();
+    } else {
+      return [];
+    }
   }
 
   void remove(String category) {

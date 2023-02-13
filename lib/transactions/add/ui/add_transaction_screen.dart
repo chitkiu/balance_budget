@@ -49,7 +49,7 @@ class AddTransactionScreen
           Text(Get.localisation.transactionTypeHint),
           Obx(() {
             return PlatformDropdownButton(
-              items: TransactionType.values.map((e) {
+              items: TransactionType.visibleTypes.map((e) {
                 return DropdownMenuItem<TransactionType>(
                   value: e,
                   child: Text(e.name),

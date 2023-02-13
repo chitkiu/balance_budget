@@ -2,7 +2,6 @@ import 'package:intl/intl.dart';
 
 import '../../../../accounts/common/data/models/account.dart';
 import '../../../../categories/common/data/models/category.dart';
-import '../../../../common/data/models/transaction_type.dart';
 import '../../../common/data/models/transaction.dart';
 import '../../data/models/rich_transaction_model.dart';
 import '../../ui/models/grouped_transactions_ui_model.dart';
@@ -12,13 +11,9 @@ class TransactionsUIMapper {
   final DateFormat _format = DateFormat('dd-MM-yyyy');
 
   TransactionUIModel map(Transaction transaction, Category category, Account account) {
-    var sumPrefix = "-";
-    if (transaction.transactionType == TransactionType.income) {
-      sumPrefix = "+";
-    }
     return TransactionUIModel(
       id: transaction.id,
-      sum: sumPrefix+transaction.sum.toString(),
+      sum: transaction.sum.toString(),
       categoryName: category.title,
       accountName: account.name,
       time: transaction.time.toString(),

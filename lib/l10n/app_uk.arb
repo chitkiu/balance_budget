@@ -31,5 +31,6 @@
   "confirmToDeleteTitle": "Ви впевненні що хочете видалити?",
   "confirmToDeleteText": "Це неможливо відмінити!",
   "yes": "Так",
-  "no": "Ні"
+  "no": "Ні",
+  "addInitialBudgetCategoryTitle": "Налаштований стандартний баланс"
 }

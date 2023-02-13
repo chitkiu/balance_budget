@@ -10,7 +10,7 @@ class Transaction {
   String? _id;
   final double sum;
   final TransactionType transactionType;
-  final String categoryId;
+  final String? categoryId;
   final String accountId;
   final DateTime time;
   final String? comment;
@@ -20,7 +20,7 @@ class Transaction {
   Transaction(
       {required this.sum,
       required this.transactionType,
-      required this.categoryId,
+      this.categoryId,
       required this.accountId,
       required this.time,
       this.comment});
