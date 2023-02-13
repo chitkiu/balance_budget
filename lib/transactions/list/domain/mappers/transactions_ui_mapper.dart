@@ -11,29 +11,30 @@ import '../../ui/models/transaction_ui_model.dart';
 class TransactionsUIMapper {
   final DateFormat _format = DateFormat('dd-MM-yyyy');
 
-  TransactionUIModel map(Transaction spend, Category category, Account account) {
+  TransactionUIModel map(Transaction transaction, Category category, Account account) {
     var sumPrefix = "-";
-    if (spend.transactionType == TransactionType.income) {
+    if (transaction.transactionType == TransactionType.income) {
       sumPrefix = "+";
     }
     return TransactionUIModel(
-      sum: sumPrefix+spend.sum.toString(),
+      id: transaction.id,
+      sum: sumPrefix+transaction.sum.toString(),
       categoryName: category.title,
       accountName: account.name,
-      time: spend.time.toString(),
-      comment: spend.comment,
+      time: transaction.time.toString(),
+      comment: transaction.comment,
     );
   }
 
-  TransactionUIModel mapFromRich(RichTransactionModel richSpend) {
-    return map(richSpend.transaction, richSpend.category, richSpend.account);
+  TransactionUIModel mapFromRich(RichTransactionModel richTransaction) {
+    return map(richTransaction.transaction, richTransaction.category, richTransaction.account);
   }
 
-  List<GroupedTransactionsUIModel> mapGroup(List<RichTransactionModel> richSpend) {
-    richSpend.sort(_compare);
+  List<GroupedTransactionsUIModel> mapGroup(List<RichTransactionModel> richTransactions) {
+    richTransactions.sort(_compare);
 
     Map<String, List<RichTransactionModel>> items =
-        _groupBy(richSpend, (p0) => _format.format(p0.transaction.time));
+        _groupBy(richTransactions, (p0) => _format.format(p0.transaction.time));
 
     return items.entries.map((e) {
       var items = e.value;

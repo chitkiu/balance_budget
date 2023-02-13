@@ -32,11 +32,12 @@ class LocalTransactionsRepository {
     );
   }
 
-  void remove(String spend) {
-    // transactions.removeWhere((element) => element.id == spend);
+  Future<void> remove(String transactionId) async {
+    var localRef = _ref.child(transactionId);
+    await localRef.remove();
   }
 
-  void edit(String spend, double? sum, String? categoryId, DateTime? time, String? comment) {
+  void edit(String transactionId, double? sum, String? categoryId, DateTime? time, String? comment) {
 /*
     var editSpend =
         transactions.firstWhereOrNull((element) => element.id == spend);

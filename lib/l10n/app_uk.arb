@@ -26,5 +26,9 @@
   "customDate": "Інша дата",
   "fullDateTimeString": "Дата: {DAY}/{MONTH}/{YEAR} {HOUR}:{MINUTE}",
   "dateString": "Вибрана дата: {DAY}/{MONTH}/{YEAR}",
-  "timeString": "Вибраний час: {HOUR}:{MINUTE}"
+  "timeString": "Вибраний час: {HOUR}:{MINUTE}",
+  "confirmToDeleteTitle": "Ви впевненні що хочете видалити?",
+  "confirmToDeleteText": "Це неможливо відмінити!",
+  "yes": "Так",
+  "no": "Ні"
 }

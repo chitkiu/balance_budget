@@ -26,5 +26,9 @@
   "customDate": "Custom date",
   "fullDateTimeString": "Date: {DAY}/{MONTH}/{YEAR} {HOUR}:{MINUTE}",
   "dateString": "Selected date: {DAY}/{MONTH}/{YEAR}",
-  "timeString": "Selected time: {HOUR}:{MINUTE}"
+  "timeString": "Selected time: {HOUR}:{MINUTE}",
+  "confirmToDeleteTitle": "Are you sure to delete?",
+  "confirmToDeleteText": "It's can be undone!",
+  "yes": "Yes",
+  "no": "No"
 }

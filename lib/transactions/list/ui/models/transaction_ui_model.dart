@@ -1,4 +1,5 @@
 class TransactionUIModel {
+  final String id;
   final String sum;
   final String categoryName;
   final String accountName;
@@ -6,7 +7,8 @@ class TransactionUIModel {
   final String? comment;
 
   TransactionUIModel(
-      {required this.sum,
+      {required this.id,
+      required this.sum,
       required this.categoryName,
       required this.accountName,
       required this.time,
