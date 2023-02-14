@@ -36,5 +36,7 @@
   "addInitialBudgetCategoryTitle": "Налаштований стандартний баланс",
 
   "month_selector": "Choose a month",
-  "year_selector": "Choose a year"
+  "year_selector": "Choose a year",
+
+  "noTransactions": "У Вас немає транзакцій!"
 }

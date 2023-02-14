@@ -26,9 +26,7 @@ dependencies:
   json_annotation: ^4.8.0
   firebase_ui_oauth_google: ^1.0.17
   enough_platform_widgets: ^0.7.1
-  pull_down_button: ^0.5.1
   flutter_timeline_calendar: ^1.0.3
-  scoped_model: ^2.0.0
 
 dev_dependencies:
   flutter_test:

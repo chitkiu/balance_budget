@@ -36,5 +36,7 @@
   "addInitialBudgetCategoryTitle": "Add initial balance",
 
   "month_selector": "Choose a month",
-  "year_selector": "Choose a year"
+  "year_selector": "Choose a year",
+
+  "noTransactions": "You don't have transaction"
 }

@@ -9,55 +9,73 @@ import '../domain/transactions_controller.dart';
 import 'models/transaction_ui_model.dart';
 
 class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsController> {
-  TransactionsScreen({Key? key})
-      : super(Get.localisation.transactionsTabName, icon: CommonIcons.add, key: key);
 
-  final Rx<DateTime> dateTime = DateTime.now().obs;
+  final Rx<DateTime> _selectedDateTime = DateTime.now().obs;
+
+  TransactionsScreen({super.key}) : super(Get.localisation.transactionsTabName, icon: CommonIcons.add);
 
   @override
   Widget body(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        TimelineCalendar(
-          calendarType: CalendarType.GREGORIAN,
-          calendarLanguage: "en",
-          calendarOptions: CalendarOptions(
-            viewType: ViewType.DAILY,
-            toggleViewType: true,
-            headerMonthElevation: 10,
-            headerMonthShadowColor: Colors.black26,
-            headerMonthBackColor: Colors.transparent,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          //TODO Rewrite using something that can make smooth hiding
+          TimelineCalendar(
+            calendarType: CalendarType.GREGORIAN,
+            calendarLanguage: "en",
+            calendarOptions: CalendarOptions(
+              viewType: ViewType.DAILY,
+              toggleViewType: true,
+              headerMonthElevation: 0,
+              headerMonthShadowColor: Colors.black26,
+              headerMonthBackColor: Colors.transparent,
+            ),
+            dayOptions: DayOptions(
+                compactMode: true,
+                weekDaySelectedColor: const Color(0xff3AC3E2)
+            ),
+            headerOptions: HeaderOptions(
+                weekDayStringType: WeekDayStringTypes.SHORT,
+                monthStringType: MonthStringTypes.FULL,
+                backgroundColor: Colors.white /*const Color(0xff3AC3E2)*/,
+                headerTextColor: Colors.black
+            ),
+            onChangeDateTime: _updateDateTime,
+            onMonthChanged: _updateDateTime,
+            onYearChanged: _updateDateTime,
+            onDateTimeReset: _updateDateTime,
           ),
-          dayOptions: DayOptions(
-              compactMode: true, weekDaySelectedColor: const Color(0xff3AC3E2)),
-          headerOptions: HeaderOptions(
-              weekDayStringType: WeekDayStringTypes.SHORT,
-              monthStringType: MonthStringTypes.FULL,
-              backgroundColor: Colors.white /*const Color(0xff3AC3E2)*/,
-              headerTextColor: Colors.black),
-          onChangeDateTime: (datetime) {
-            dateTime.value = DateTime(datetime.year, datetime.month, datetime.day);
-          },
-        ),
-        Expanded(child: Obx(() {
-          var transactions = controller.getItemsFromMonth(dateTime.value);
-
-          return ListView.separated(
-              itemBuilder: (context, index) {
-                return _transactionItem(transactions[index]);
-              },
-              separatorBuilder: (context, index) => const Divider(),
-              itemCount: transactions.length,
-          );
-        }))
-      ],
+          Obx(() {
+            var items = controller.getItemsFromMonth(_selectedDateTime.value);
+            if (items.isEmpty) {
+              return Center(
+                child: Text(Get.localisation.noTransactions),
+              );
+            }
+            return _transactionItems(items);
+          })
+        ],
+      ),
     );
   }
 
   @override
   void onButtonPress() {
     controller.addTransaction();
+  }
+
+  Widget _transactionItems(List<TransactionUIModel> transactions) {
+    List<Widget> children = [];
+    Divider divider = const Divider();
+    for (int i = 0; i < transactions.length; i++) {
+      children.add(_transactionItem(transactions[i]));
+      if (i < transactions.length - 1) {
+        children.add(divider);
+      }
+    }
+    return Column(
+      children: children,
+    );
   }
 
   Widget _transactionItem(TransactionUIModel transaction) {
@@ -83,59 +101,6 @@ class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsCont
     );
   }
 
-  //TODO Maybe remove later
-/*  Widget _moreButton(TransactionUIModel transaction) {
-    if (PlatformInfo.isCupertino) {
-      return PullDownButton(
-        itemBuilder: (context) {
-          return [
-            PullDownMenuItem(
-              onTap: () => _requestDeleteTransaction(transaction),
-              title: Get.localisation.delete,
-              itemTheme: const PullDownMenuItemTheme(
-                textStyle: TextStyle(
-                  color: Colors.red
-                )
-              ),
-              icon: CupertinoIcons.trash,
-              iconColor: Colors.red,
-            )
-          ];
-        },
-        buttonBuilder: (context, showMenu) {
-          return CupertinoButton(
-            onPressed: showMenu,
-            padding: EdgeInsets.zero,
-            child: const Icon(CupertinoIcons.ellipsis_circle),
-          );
-        },
-      );
-    } else {
-      return PopupMenuButton(
-        itemBuilder: (BuildContext context) {
-          return [
-            PopupMenuItem(
-              child: Text(Get.localisation.delete),
-              onTap: () => _requestDeleteTransaction(transaction),
-            )
-          ];
-        },
-      );
-    }
-  }
-
-  Future<void> _requestDeleteTransaction(TransactionUIModel transaction) async {
-    await confirmBeforeAction(
-          () async {
-        await controller.deleteTransaction(transaction.id);
-      },
-      title: Get.localisation.confirmToDeleteTitle,
-      subTitle: Get.localisation.confirmToDeleteText,
-      confirmAction: Get.localisation.yes,
-      cancelAction: Get.localisation.no,
-    );
-  }*/
-
   Widget _additionalInfo(String text, IconData icon) {
     return Row(
       children: [
@@ -150,5 +115,9 @@ class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsCont
         )
       ],
     );
+  }
+
+  void _updateDateTime(CalendarDateTime dateTime) {
+    _selectedDateTime.value = DateTime(dateTime.year, dateTime.month, dateTime.day);
   }
 }
