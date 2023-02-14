@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../common/data/models/transaction_type.dart';
-import '../../../translator_extension.dart';
+import '../../../common/getx_extensions.dart';
 import 'models/category.dart';
 
 class LocalCategoryRepository {
@@ -25,7 +25,7 @@ class LocalCategoryRepository {
       return dataValue.entries.map((e) => Category.fromJson(e)).toList()
         ..addAll(_localCategories);
     } else {
-      return <Category>[];
+      return _localCategories;
     }
   });
 

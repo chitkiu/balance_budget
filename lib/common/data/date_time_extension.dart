@@ -13,4 +13,14 @@ extension DTExtension on DateTime {
 
   int get semiYear => MonthMapper.monthToSemiYear(month);
 
+  DateTime removeSeconds() {
+    return DateTime(
+        year,
+        month,
+        day,
+        hour,
+        minute
+    );
+  }
+
 }

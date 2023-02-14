@@ -2,6 +2,7 @@
   "appTitle": "Balance Budget",
   "signInWithoutRegistration": "Sign in without registration",
   "transactionsTabName": "Transactions",
+  "accountsTabName": "Accounts",
   "budgetTabName": "Budgets",
   "settingsTabName": "Settings",
   "addTransactionTitle": "Add transaction",

@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import '../../../../common/data/models/epoch_date_time_converter.dart';
 import '../../../../common/data/models/transaction_type.dart';
 
 part 'transaction.g.dart';
@@ -12,7 +13,10 @@ class Transaction {
   final TransactionType transactionType;
   final String? categoryId;
   final String accountId;
+  @EpochDateTimeConverter()
   final DateTime time;
+  @EpochDateTimeConverter()
+  final DateTime creationTime;
   final String? comment;
 
   String get id => _id ?? '';
@@ -23,6 +27,7 @@ class Transaction {
       this.categoryId,
       required this.accountId,
       required this.time,
+      required this.creationTime,
       this.comment});
 
   factory Transaction.fromJson(MapEntry<dynamic, dynamic> json) =>
@@ -36,6 +41,7 @@ class Transaction {
       String? categoryId,
       String? accountId,
       DateTime? time,
+      DateTime? creationTime,
       String? comment}) {
     return Transaction(
       sum: sum ?? this.sum,
@@ -44,11 +50,12 @@ class Transaction {
       accountId: accountId ?? this.accountId,
       time: time ?? this.time,
       comment: comment ?? this.comment,
+      creationTime: creationTime ?? this.creationTime,
     ).._id = _id;
   }
 
   @override
   String toString() {
-    return 'Transaction{id: $id, sum: $sum, transactionType: $transactionType, categoryId: $categoryId, accountId: $accountId, time: $time, comment: $comment}';
+    return 'Transaction{_id: $_id, sum: $sum, transactionType: $transactionType, categoryId: $categoryId, accountId: $accountId, time: $time, creationTime: $creationTime, comment: $comment}';
   }
 }

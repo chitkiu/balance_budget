@@ -1,11 +1,11 @@
-import 'package:balance_budget/accounts/list/ui/models/account_ui_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
-import '../../../translator_extension.dart';
 import '../domain/accounts_controller.dart';
+import 'models/account_ui_model.dart';
 
 class AccountsScreen extends CommonScaffoldWithButtonScreen<AccountsController> {
   AccountsScreen({Key? key}) : super(

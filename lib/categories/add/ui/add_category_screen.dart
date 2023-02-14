@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../common/data/models/transaction_type.dart';
+import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
 import '../../../common/ui/common_ui_settings.dart';
-import '../../../translator_extension.dart';
 import '../domain/add_category_controller.dart';
 
 class AddCategoryScreen extends CommonScaffoldWithButtonScreen<AddCategoryController> {

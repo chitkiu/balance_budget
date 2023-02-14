@@ -31,6 +31,7 @@ class LocalTransactionsRepository {
           categoryId: categoryId,
           accountId: accountId,
           time: time,
+          creationTime: DateTime.now(),
           comment: comment,
         ).toJson()
     );

@@ -26,8 +26,6 @@ class TransactionsUIMapper {
   }
 
   List<GroupedTransactionsUIModel> mapGroup(List<RichTransactionModel> richTransactions) {
-    richTransactions.sort(_compare);
-
     Map<String, List<RichTransactionModel>> items =
         _groupBy(richTransactions, (p0) => _format.format(p0.transaction.time));
 
@@ -42,7 +40,11 @@ class TransactionsUIMapper {
   }
 
   int _compare(RichTransactionModel a, RichTransactionModel b) {
-    return b.transaction.time.compareTo(a.transaction.time);
+    var result = b.transaction.time.compareTo(a.transaction.time);
+    if (result == 0) {
+      return b.transaction.creationTime.compareTo(a.transaction.creationTime);
+    }
+    return result;
   }
 
   Map<T, List<S>> _groupBy<S, T>(Iterable<S> values, T Function(S) key) {

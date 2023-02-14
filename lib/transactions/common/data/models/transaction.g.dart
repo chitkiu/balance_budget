@@ -12,7 +12,9 @@ Transaction _$TransactionFromJson(Map<String, dynamic> json) => Transaction(
           $enumDecode(_$TransactionTypeEnumMap, json['transactionType']),
       categoryId: json['categoryId'] as String?,
       accountId: json['accountId'] as String,
-      time: DateTime.parse(json['time'] as String),
+      time: const EpochDateTimeConverter().fromJson(json['time'] as int),
+      creationTime:
+          const EpochDateTimeConverter().fromJson(json['creationTime'] as int),
       comment: json['comment'] as String?,
     );
 
@@ -22,7 +24,9 @@ Map<String, dynamic> _$TransactionToJson(Transaction instance) =>
       'transactionType': _$TransactionTypeEnumMap[instance.transactionType]!,
       'categoryId': instance.categoryId,
       'accountId': instance.accountId,
-      'time': instance.time.toIso8601String(),
+      'time': const EpochDateTimeConverter().toJson(instance.time),
+      'creationTime':
+          const EpochDateTimeConverter().toJson(instance.creationTime),
       'comment': instance.comment,
     };
 

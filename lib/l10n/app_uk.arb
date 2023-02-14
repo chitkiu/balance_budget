@@ -2,6 +2,7 @@
   "appTitle": "Balance Budget",
   "signInWithoutRegistration": "Вхід без реєстрації",
   "transactionsTabName": "Транзакції",
+  "accountsTabName": "Аккаунти",
   "budgetTabName": "Бюджети",
   "settingsTabName": "Налаштування",
   "addTransactionTitle": "Додати транзакцію",

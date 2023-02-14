@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
-import '../../../translator_extension.dart';
+import '../../../common/getx_extensions.dart';
 import 'models/date_selection_type.dart';
 import 'models/select_date_ui_model.dart';
 

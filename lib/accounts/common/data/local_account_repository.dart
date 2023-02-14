@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:get/get.dart';
 
+import '../../../common/data/date_time_extension.dart';
 import '../../../common/data/models/transaction_type.dart';
 import '../../../transactions/common/data/local_transactions_repository.dart';
 import 'models/account.dart';
@@ -36,14 +37,7 @@ class LocalAccountRepository {
         ).toJson()
     );
 
-    _transactionRepo.create(
-        totalBalance,
-        TransactionType.setInitialBalance,
-        null,
-        newAccount.key ?? '',
-        DateTime.now(),
-        null
-    );
+    _createInitialTransaction(newAccount.key, totalBalance);
   }
 
   Future<void> createCredit(String name, double ownBalance, double creditBalance) async {
@@ -55,14 +49,7 @@ class LocalAccountRepository {
         ).toJson()
     );
 
-    _transactionRepo.create(
-        ownBalance,
-        TransactionType.setInitialBalance,
-        null,
-        newAccount.key ?? '',
-        DateTime.now(),
-        null
-    );
+    _createInitialTransaction(newAccount.key, ownBalance);
   }
 
   Account? getAccountById(String id) {
@@ -101,5 +88,16 @@ class LocalAccountRepository {
     }
 
     accounts.insert(index, newAccount!);*/
+  }
+
+  void _createInitialTransaction(String? key, double sum) {
+    _transactionRepo.create(
+        sum,
+        TransactionType.setInitialBalance,
+        null,
+        key ?? '',
+        DateTime.now().removeSeconds(),
+        null
+    );
   }
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
-import '../../../translator_extension.dart';
 import '../domain/transactions_controller.dart';
 import 'models/grouped_transactions_ui_model.dart';
 import 'models/transaction_ui_model.dart';

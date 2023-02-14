@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
-import '../../translator_extension.dart';
+import '../../common/getx_extensions.dart';
 import '../domain/settings_controller.dart';
 
 class SettingsScreen extends GetView<SettingsController> {
@@ -23,10 +23,6 @@ class SettingsScreen extends GetView<SettingsController> {
   Widget _body(BuildContext context) {
     return ListView(
       children: [
-        PlatformElevatedButton(
-          onPressed: controller.onManageAccountsClick,
-          child: Text(Get.localisation.manageAccountsButtonText),
-        ),
         PlatformElevatedButton(
           onPressed: controller.onManageCategoriesClick,
           child: Text(Get.localisation.manageCategoriesButtonText),

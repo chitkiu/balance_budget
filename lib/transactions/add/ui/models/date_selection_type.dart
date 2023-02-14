@@ -1,5 +1,6 @@
-import 'package:balance_budget/translator_extension.dart';
 import 'package:get/get.dart';
+
+import '../../../../common/getx_extensions.dart';
 
 enum DateSelectionType {
   yesterday,

@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
-import '../../../translator_extension.dart';
 import '../domain/categories_controller.dart';
 
 class CategoriesScreen extends CommonScaffoldWithButtonScreen<CategoriesController> {

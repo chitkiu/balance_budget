@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
-import '../../../translator_extension.dart';
 import '../domain/budgets_controller.dart';
 import 'models/budget_ui_model.dart';
 
