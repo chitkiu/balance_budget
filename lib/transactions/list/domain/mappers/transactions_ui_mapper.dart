@@ -26,13 +26,17 @@ class TransactionsUIMapper {
   }
 
   List<GroupedTransactionsUIModel> mapGroup(List<RichTransactionModel> richTransactions) {
-    Map<String, List<RichTransactionModel>> items =
-        _groupBy(richTransactions, (p0) => _format.format(p0.transaction.time));
+    Map<DateTime, List<RichTransactionModel>> items =
+        _groupBy(richTransactions, (p0) {
+          var date = p0.transaction.time;
+          return DateTime(date.year, date.month, date.day);
+        });
 
     return items.entries.map((e) {
       var items = e.value;
       items.sort(_compare);
       return GroupedTransactionsUIModel(
+        _format.format(e.key),
         e.key,
         items.map(mapFromRich).toList(),
       );

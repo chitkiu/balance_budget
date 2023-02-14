@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
+import '../../../common/ui/month_selector/month_selector.dart';
 import '../domain/transactions_controller.dart';
 import 'models/grouped_transactions_ui_model.dart';
 import 'models/transaction_ui_model.dart';
@@ -17,15 +18,31 @@ class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsCont
 
   @override
   Widget body(BuildContext context) {
-    return Obx(() {
-      var transactions = controller.transactions;
-      return ListView.builder(
-        itemBuilder: (context, index) {
-          return _groupedItems(transactions[index]);
-        },
-        itemCount: transactions.length,
-      );
-    });
+    return ObxValue(
+          (dateTime) {
+            var transactions = controller.getItemsFromMonth(dateTime.value);
+            return Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                MonthSelector(
+                    onYearChanged: (selectedYear) => dateTime.value = selectedYear,
+                    onMonthChanged: (selectedMonth) => dateTime.value = selectedMonth,
+                    onDateTimeReset: () => dateTime.value = DateTime.now(),
+                    data: MonthSelectorTheme(selectedDateTime: dateTime.value)
+                ),
+                Expanded(
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        return _groupedItems(transactions[index]);
+                      },
+                      itemCount: transactions.length,
+                    )
+                )
+              ],
+            );
+          },
+      DateTime.now().obs,
+    );
   }
 
   @override

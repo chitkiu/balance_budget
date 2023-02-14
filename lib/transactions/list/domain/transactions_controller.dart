@@ -34,6 +34,13 @@ class TransactionsController extends GetxController {
     super.onClose();
   }
 
+  List<GroupedTransactionsUIModel> getItemsFromMonth(DateTime dateTime) {
+    return transactions.where((item) {
+      return item.dateTime.year == dateTime.year &&
+          item.dateTime.month == dateTime.month;
+    }).toList();
+  }
+
   void addTransaction() {
     Get.to(
       () => AddTransactionScreen(),
