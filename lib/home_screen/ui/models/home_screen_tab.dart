@@ -7,8 +7,8 @@ import '../../../common/ui/common_icons.dart';
 
 enum HomeScreenTab {
   transactions,
-  accounts,
   budget,
+  accounts,
   settings;
 }
 

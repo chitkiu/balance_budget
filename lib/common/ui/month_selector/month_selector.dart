@@ -70,16 +70,16 @@ class MonthSelector extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      showModalBottomSheet(
-                        backgroundColor: Colors.transparent,
-                        context: context,
-                        builder: (_) {
+                      _showBottomSheet(
+                        context,
+                            (_) {
                           return LocalSelectMonth(
                             onHeaderChanged: onMonthChanged,
                             monthStyle: data.dialogTheme,
                             currentDate: data.selectedDateTime,
                           );
                         },
+                        backgroundColor: Colors.transparent,
                       );
                     },
                     child: Container(
@@ -97,16 +97,16 @@ class MonthSelector extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      showModalBottomSheet(
-                        backgroundColor: Colors.transparent,
-                        context: context,
-                        builder: (_) {
+                      _showBottomSheet(
+                        context,
+                            (_) {
                           return LocalSelectYear(
                             onHeaderChanged: onYearChanged,
                             yearStyle: data.dialogTheme,
                             currentDateTime: data.selectedDateTime,
                           );
                         },
+                        backgroundColor: Colors.transparent,
                       );
                     },
                     child: Text(
@@ -180,5 +180,20 @@ class MonthSelector extends StatelessWidget {
     DateFormat format = DateFormat('yyyy');
 
     return format.format(data.selectedDateTime);
+  }
+
+  //TODO Maybe made it cross-platform
+  void _showBottomSheet(
+      BuildContext context,
+      WidgetBuilder builder,
+      {
+        Color? backgroundColor = Colors.transparent,
+      }
+  ) {
+    showModalBottomSheet(
+      backgroundColor: backgroundColor,
+      context: context,
+      builder: builder,
+    );
   }
 }
