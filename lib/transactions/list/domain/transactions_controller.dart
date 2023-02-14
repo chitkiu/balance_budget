@@ -6,7 +6,7 @@ import '../../add/domain/add_transaction_binding.dart';
 import '../../add/ui/add_transaction_screen.dart';
 import '../../common/data/local_transactions_repository.dart';
 import '../data/transactions_aggregator.dart';
-import '../ui/models/grouped_transactions_ui_model.dart';
+import '../ui/models/transaction_ui_model.dart';
 import 'mappers/transactions_ui_mapper.dart';
 
 class TransactionsController extends GetxController {
@@ -14,14 +14,14 @@ class TransactionsController extends GetxController {
   TransactionsAggregator get _transactionsAggregator => Get.find();
 
   final TransactionsUIMapper _transactionsUIMapper = TransactionsUIMapper();
-  RxList<GroupedTransactionsUIModel> transactions = <GroupedTransactionsUIModel>[].obs;
+  RxList<TransactionUIModel> transactions = <TransactionUIModel>[].obs;
   StreamSubscription? _spendListener;
 
   @override
   void onReady() {
     _spendListener?.cancel();
     _spendListener = _transactionsAggregator.transactions().listen((event) {
-      transactions.value = _transactionsUIMapper.mapGroup(event);
+      transactions.value = event.map(_transactionsUIMapper.mapFromRich).toList();
     });
 
     super.onReady();
@@ -34,10 +34,11 @@ class TransactionsController extends GetxController {
     super.onClose();
   }
 
-  List<GroupedTransactionsUIModel> getItemsFromMonth(DateTime dateTime) {
+  List<TransactionUIModel> getItemsFromMonth(DateTime dateTime) {
     return transactions.where((item) {
       return item.dateTime.year == dateTime.year &&
-          item.dateTime.month == dateTime.month;
+          item.dateTime.month == dateTime.month &&
+          item.dateTime.day == dateTime.day;
     }).toList();
   }
 

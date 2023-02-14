@@ -4,6 +4,7 @@ class TransactionUIModel {
   final String categoryName;
   final String accountName;
   final String time;
+  final DateTime dateTime;
   final String? comment;
 
   TransactionUIModel(
@@ -12,5 +13,6 @@ class TransactionUIModel {
       required this.categoryName,
       required this.accountName,
       required this.time,
+      required this.dateTime,
       this.comment});
 }

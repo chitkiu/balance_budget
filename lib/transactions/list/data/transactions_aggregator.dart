@@ -21,7 +21,7 @@ class TransactionsAggregator {
       _transactionsRepository.transactions,
       _accountRepository.accounts,
       (categories, transactions, accounts) {
-        return transactions
+        var newTransactions = transactions
             .map((e) {
               var category =
                   categories.firstWhereOrNull((element) => element.id == e.categoryId);
@@ -43,7 +43,20 @@ class TransactionsAggregator {
             })
             .whereType<RichTransactionModel>()
             .toList();
+
+        newTransactions.sort(_compare);
+
+        return newTransactions;
       },
     );
+  }
+
+  //TODO Move somewhere
+  int _compare(RichTransactionModel a, RichTransactionModel b) {
+    var result = b.transaction.time.compareTo(a.transaction.time);
+    if (result == 0) {
+      return b.transaction.creationTime.compareTo(a.transaction.creationTime);
+    }
+    return result;
   }
 }
