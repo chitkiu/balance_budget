@@ -33,5 +33,8 @@
   "confirmToDeleteText": "It's can be undone!",
   "yes": "Yes",
   "no": "No",
-  "addInitialBudgetCategoryTitle": "Add initial balance"
+  "addInitialBudgetCategoryTitle": "Add initial balance",
+
+  "month_selector": "Choose a month",
+  "year_selector": "Choose a year"
 }
