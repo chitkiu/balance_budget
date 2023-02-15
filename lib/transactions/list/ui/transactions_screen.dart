@@ -79,33 +79,34 @@ class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsCont
   }
 
   Widget _transactionItem(TransactionUIModel transaction) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: GestureDetector(
+    return GestureDetector(
+        behavior: HitTestBehavior.translucent,
         onTap: () => controller.onItemClick(transaction),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Text(transaction.categoryName,
-                    style: const TextStyle(fontWeight: FontWeight.w500)),
-                Text(transaction.sum,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                      color: transaction.sumColor
-                    )
-                ),
-              ],
-            ),
-            _additionalInfo(transaction.accountName, CommonIcons.wallet),
-            if (transaction.comment != null)
-              _additionalInfo(transaction.comment!, CommonIcons.note),
-          ],
-        ),
-      ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text(transaction.categoryName,
+                      style: const TextStyle(fontWeight: FontWeight.w500)),
+                  Text(transaction.sum,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: transaction.sumColor
+                      )
+                  ),
+                ],
+              ),
+              _additionalInfo(transaction.accountName, CommonIcons.wallet),
+              if (transaction.comment != null)
+                _additionalInfo(transaction.comment!, CommonIcons.note),
+            ],
+          ),
+        )
     );
   }
 
