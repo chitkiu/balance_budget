@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import '../../add/domain/add_transaction_binding.dart';
 import '../../add/ui/add_transaction_screen.dart';
 import '../../common/data/local_transactions_repository.dart';
+import '../../info/domain/transaction_info_binding.dart';
+import '../../info/ui/transaction_info_screen.dart';
 import '../data/transactions_aggregator.dart';
 import '../ui/models/transaction_ui_model.dart';
 import 'mappers/transactions_ui_mapper.dart';
@@ -51,6 +53,13 @@ class TransactionsController extends GetxController {
 
   Future<void> deleteTransaction(String id) async {
     await _transactionsRepo.remove(id);
+  }
+
+  void onItemClick(TransactionUIModel transaction) {
+    Get.to(
+      () => TransactionInfoScreen(transaction),
+      binding: TransactionInfoBinding(),
+    );
   }
 
 }

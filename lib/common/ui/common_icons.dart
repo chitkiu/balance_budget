@@ -11,6 +11,8 @@ class CommonIcons {
 
   static IconData get check => _isCupertino ? CupertinoIcons.checkmark : Icons.check;
 
+  static IconData get edit => _isCupertino ? CupertinoIcons.pencil : Icons.edit;
+
   static IconData get dollarCircle => _isCupertino ? CupertinoIcons.money_dollar_circle_fill : Icons.monetization_on;
 
   static IconData get settings => _isCupertino ? CupertinoIcons.settings : Icons.settings;

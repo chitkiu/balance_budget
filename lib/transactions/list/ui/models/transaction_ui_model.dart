@@ -7,7 +7,7 @@ class TransactionUIModel {
   final DateTime dateTime;
   final String? comment;
 
-  TransactionUIModel(
+  const TransactionUIModel(
       {required this.id,
       required this.sum,
       required this.categoryName,
