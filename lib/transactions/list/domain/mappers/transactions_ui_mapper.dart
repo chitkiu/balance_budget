@@ -1,3 +1,6 @@
+import 'package:balance_budget/common/data/models/transaction_type.dart';
+import 'package:flutter/material.dart';
+
 import '../../../../accounts/common/data/models/account.dart';
 import '../../../../categories/common/data/models/category.dart';
 import '../../../common/data/models/transaction.dart';
@@ -9,6 +12,8 @@ class TransactionsUIMapper {
     return TransactionUIModel(
       id: transaction.id,
       sum: transaction.sum.toString(),
+      sumColor: (transaction.transactionType == TransactionType.spend) ? Colors.redAccent : Colors.green,
+      type: transaction.transactionType.name,
       categoryName: category.title,
       accountName: account.name,
       time: transaction.time.toString(),

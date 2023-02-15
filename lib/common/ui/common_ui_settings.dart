@@ -9,7 +9,7 @@ CupertinoDropdownButtonData cupertinoDropdownButtonData(BuildContext context, Pl
   );
 }
 
-Future<void> confirmBeforeAction(
+Future<void> confirmBeforeActionDialog(
     Future<void> Function() action,
 {
   String? title,

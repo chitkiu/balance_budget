@@ -1,42 +1,50 @@
 {
   "appTitle": "Balance Budget",
+
   "signInWithoutRegistration": "Вхід без реєстрації",
+
   "transactionsTabName": "Транзакції",
-  "accountsTabName": "Аккаунти",
   "budgetTabName": "Бюджети",
+  "accountsTabName": "Аккаунти",
   "settingsTabName": "Налаштування",
+
   "addTransactionTitle": "Додати транзакцію",
   "addTransactionSumHint": "Сума",
   "addTransactionCategoryHint": "Категорія:",
   "addTransactionAccountHint": "Аккаунт:",
+  "addTransactionCommentHint": "Коментар",
+
   "manageAccountsButtonText": "Управління аккаунтами",
   "manageCategoriesButtonText": "Управління категоріями",
-  "addTransactionCommentHint": "Коментар",
-  "transactionTypeHint": "Тип",
-  "addAccountTitle": "Додати аккаунт",
-  "addCategory": "Додати категорію",
-  "nameHint": "Назва",
+
+  "accountsTitle": "Аккаунти",
+
   "categoriesTitle": "Категорії",
-  "accountsTitle": "Аккаунт",
+  "addCategoryTitle": "Додати категорію",
+
+  "transactionTypeHint": "Тип",
+  "nameHint": "Назва",
+
+  "addAccountTitle": "Додати аккаунт",
   "addAccountTypeSelector": "Виберіть тип аккаунту",
   "addAccountTotalBalanceHint": "Загальний баланс",
   "addAccountOwnBalanceHint": "Власний баланс",
-  "addAccountCreditBalance": "Кредитний баланс",
+  "addAccountCreditLimit": "Кредитний ліміт",
+
   "today": "Сьогодні",
   "yesterday": "Вчора",
   "customDate": "Інша дата",
   "fullDateTimeString": "Дата: {DAY}/{MONTH}/{YEAR} {HOUR}:{MINUTE}",
   "dateString": "Вибрана дата: {DAY}/{MONTH}/{YEAR}",
   "timeString": "Вибраний час: {HOUR}:{MINUTE}",
+
   "delete": "Видалити",
   "confirmToDeleteTitle": "Ви впевненні що хочете видалити?",
   "confirmToDeleteText": "Це неможливо відмінити!",
   "yes": "Так",
   "no": "Ні",
-  "addInitialBudgetCategoryTitle": "Налаштований стандартний баланс",
 
-  "month_selector": "Choose a month",
-  "year_selector": "Choose a year",
+  "addInitialBudgetCategoryTitle": "Налаштований стандартний баланс",
 
   "noTransactions": "У Вас немає транзакцій!",
 

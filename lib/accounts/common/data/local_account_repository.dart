@@ -97,7 +97,8 @@ class LocalAccountRepository {
         null,
         key ?? '',
         DateTime.now().removeSeconds(),
-        null
+        null,
+      skipZeroSum: false
     );
   }
 }

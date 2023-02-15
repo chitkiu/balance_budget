@@ -1,8 +1,13 @@
-import 'package:balance_budget/common/ui/common_icons.dart';
-import 'package:balance_budget/transactions/list/ui/models/transaction_ui_model.dart';
 import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+
+import '../../../common/getx_extensions.dart';
+import '../../../common/ui/common_icons.dart';
+import '../../../common/ui/common_ui_settings.dart';
+import '../../list/ui/models/transaction_ui_model.dart';
+import '../domain/transaction_info_controller.dart';
 
 class TransactionInfoScreen extends StatefulWidget {
   final TransactionUIModel model;
@@ -14,6 +19,7 @@ class TransactionInfoScreen extends StatefulWidget {
 }
 
 class _TransactionInfoScreenState extends State<TransactionInfoScreen> {
+  TransactionInfoController get controller => Get.find();
 
   bool _isInEditMode = false;
 
@@ -30,20 +36,35 @@ class _TransactionInfoScreenState extends State<TransactionInfoScreen> {
         ],
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text("Sum:",
-              style: const TextStyle(fontWeight: FontWeight.w500)),
+          Text("Sum:", style: const TextStyle(fontWeight: FontWeight.w500)),
           Text(widget.model.sum),
-          Text("Category:",
-              style: const TextStyle(fontWeight: FontWeight.w500)),
+          Text("Type:", style: const TextStyle(fontWeight: FontWeight.w500)),
+          Text(widget.model.type),
+          Text("Category:", style: const TextStyle(fontWeight: FontWeight.w500)),
           Text(widget.model.categoryName),
-          Text("Account:",
-              style: const TextStyle(fontWeight: FontWeight.w500)),
+          Text("Account:", style: const TextStyle(fontWeight: FontWeight.w500)),
           Text(widget.model.accountName),
-          Text("Time:",
-              style: const TextStyle(fontWeight: FontWeight.w500)),
+          Text("Time:", style: const TextStyle(fontWeight: FontWeight.w500)),
           Text(widget.model.time),
 
+          if (!_isInEditMode)
+            PlatformTextButton(
+              child: Text(Get.localisation.delete),
+              onPressed: () async {
+                await confirmBeforeActionDialog(
+                  () async {
+                    await controller.deleteTransaction(widget.model.id);
+                    Get.back();
+                  },
+                  title: Get.localisation.confirmToDeleteTitle,
+                  subTitle: Get.localisation.confirmToDeleteText,
+                  confirmAction: Get.localisation.yes,
+                  cancelAction: Get.localisation.no,
+                );
+              },
+            )
         ],
       ),
     );

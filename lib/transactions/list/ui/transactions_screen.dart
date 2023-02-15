@@ -92,7 +92,12 @@ class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsCont
               children: [
                 Text(transaction.categoryName,
                     style: const TextStyle(fontWeight: FontWeight.w500)),
-                Text(transaction.sum, style: const TextStyle(fontWeight: FontWeight.w500)),
+                Text(transaction.sum,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                      color: transaction.sumColor
+                    )
+                ),
               ],
             ),
             _additionalInfo(transaction.accountName, CommonIcons.wallet),

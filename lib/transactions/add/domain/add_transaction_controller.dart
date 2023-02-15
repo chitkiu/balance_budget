@@ -23,7 +23,7 @@ class AddTransactionController extends GetxController {
   final TransactionCategoryUIMapper _spendCategoryUIMapper = TransactionCategoryUIMapper();
   final TransactionAccountUIMapper _spendAccountUIMapper = TransactionAccountUIMapper();
 
-  LocalTransactionsRepository get _spendRepo => Get.find();
+  LocalTransactionsRepository get _transactionsRepo => Get.find();
 
   LocalCategoryRepository get _categoryRepo => Get.find();
 
@@ -108,7 +108,7 @@ class AddTransactionController extends GetxController {
       return;
     }
 
-    _spendRepo.create(
+    var addTransactionResult = _transactionsRepo.create(
         double.parse(sum),
         selectedType.value,
         categoryId,
@@ -117,7 +117,9 @@ class AddTransactionController extends GetxController {
         currentComment
     );
 
-    Get.back();
+    if (addTransactionResult) {
+      Get.back();
+    }
   }
 
   void selectCategory(TransactionCategoryUIModel category) {

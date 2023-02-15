@@ -19,15 +19,14 @@ class LocalTransactionsRepository {
         }
       });
 
-  void create(double sum, TransactionType transactionType, String? categoryId,
-      String accountId, DateTime time, String? comment) {
-    var newTransaction = _ref.push();
-    var finalSum = sum;
-    if (transactionType == TransactionType.spend) {
-      finalSum = -finalSum;
+  bool create(double sum, TransactionType transactionType, String? categoryId,
+      String accountId, DateTime time, String? comment, {bool skipZeroSum = true}) {
+    if (skipZeroSum && sum <= 0) {
+      return false;
     }
+    var newTransaction = _ref.push();
     newTransaction.set(Transaction(
-      sum: finalSum,
+      sum: sum,
       transactionType: transactionType,
       categoryId: categoryId,
       accountId: accountId,
@@ -35,6 +34,8 @@ class LocalTransactionsRepository {
       creationTime: DateTime.now(),
       comment: comment,
     ).toJson());
+
+    return true;
   }
 
   Future<void> remove(String transactionId) async {

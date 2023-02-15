@@ -1,42 +1,50 @@
 {
   "appTitle": "Balance Budget",
+
   "signInWithoutRegistration": "Sign in without registration",
+
   "transactionsTabName": "Transactions",
-  "accountsTabName": "Accounts",
   "budgetTabName": "Budgets",
+  "accountsTabName": "Accounts",
   "settingsTabName": "Settings",
+
   "addTransactionTitle": "Add transaction",
   "addTransactionSumHint": "Sum",
   "addTransactionCategoryHint": "Category:",
   "addTransactionAccountHint": "Account:",
+  "addTransactionCommentHint": "Comment",
+
   "manageAccountsButtonText": "Manage accounts",
   "manageCategoriesButtonText": "Manage categories",
-  "addTransactionCommentHint": "Comment",
-  "transactionTypeHint": "Type",
-  "addAccountTitle": "Add account",
-  "addCategory": "Add category",
-  "nameHint": "Name",
-  "categoriesTitle": "Categories",
+
   "accountsTitle": "Accounts",
+
+  "categoriesTitle": "Categories",
+  "addCategoryTitle": "Add category",
+
+  "transactionTypeHint": "Type",
+  "nameHint": "Name",
+
+  "addAccountTitle": "Add account",
   "addAccountTypeSelector": "Select account type",
   "addAccountTotalBalanceHint": "Total balance",
   "addAccountOwnBalanceHint": "Own balance",
-  "addAccountCreditBalance": "Credit balance",
+  "addAccountCreditLimit": "Credit limit",
+
   "today": "Today",
   "yesterday": "Yesterday",
   "customDate": "Custom date",
   "fullDateTimeString": "Date: {DAY}/{MONTH}/{YEAR} {HOUR}:{MINUTE}",
   "dateString": "Selected date: {DAY}/{MONTH}/{YEAR}",
   "timeString": "Selected time: {HOUR}:{MINUTE}",
+
   "delete": "Delete",
   "confirmToDeleteTitle": "Are you sure to delete?",
   "confirmToDeleteText": "It's can be undone!",
   "yes": "Yes",
   "no": "No",
-  "addInitialBudgetCategoryTitle": "Add initial balance",
 
-  "month_selector": "Choose a month",
-  "year_selector": "Choose a year",
+  "addInitialBudgetCategoryTitle": "Add initial balance",
 
   "noTransactions": "You don't have transaction",
 

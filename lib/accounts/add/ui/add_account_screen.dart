@@ -106,13 +106,13 @@ class AddAccountScreen extends CommonScaffoldWithButtonScreen<AddAccountControll
                     material: (context, platform) {
                       return MaterialTextFieldData(
                           decoration: InputDecoration(
-                              labelText: Get.localisation.addAccountCreditBalance
+                              labelText: Get.localisation.addAccountCreditLimit
                           )
                       );
                     },
                     cupertino: (context, platform) {
                       return CupertinoTextFieldData(
-                          placeholder: Get.localisation.addAccountCreditBalance
+                          placeholder: Get.localisation.addAccountCreditLimit
                       );
                     },
                   ),

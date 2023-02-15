@@ -11,7 +11,7 @@ import '../domain/add_category_controller.dart';
 
 class AddCategoryScreen extends CommonScaffoldWithButtonScreen<AddCategoryController> {
   AddCategoryScreen({super.key}) : super(
-    Get.localisation.addCategory,
+    Get.localisation.addCategoryTitle,
     icon: CommonIcons.check,
   );
 

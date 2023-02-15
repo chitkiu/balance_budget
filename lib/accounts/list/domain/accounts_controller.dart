@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:balance_budget/common/data/models/transaction_type.dart';
 import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -60,7 +61,11 @@ class AccountsController extends GetxController {
     var filteredTransaction = transactions.where((element) => element.accountId == account.id);
     var totalSum = 0.0;
     for (var value in filteredTransaction) {
-      totalSum += value.sum;
+      if (value.transactionType == TransactionType.spend) {
+        totalSum -= value.sum;
+      } else {
+        totalSum += value.sum;
+      }
     }
 
     return totalSum;

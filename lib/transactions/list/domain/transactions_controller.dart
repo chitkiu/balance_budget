@@ -51,10 +51,6 @@ class TransactionsController extends GetxController {
     );
   }
 
-  Future<void> deleteTransaction(String id) async {
-    await _transactionsRepo.remove(id);
-  }
-
   void onItemClick(TransactionUIModel transaction) {
     Get.to(
       () => TransactionInfoScreen(transaction),
