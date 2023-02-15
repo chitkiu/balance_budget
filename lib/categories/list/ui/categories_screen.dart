@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,15 +17,21 @@ class CategoriesScreen extends CommonScaffoldWithButtonScreen<CategoriesControll
   Widget body(BuildContext context) {
     return Obx(() {
       var categories = controller.categories;
-      return ListView.builder(
+      return ListView.separated(
         itemBuilder: (context, index) {
           var category = categories[index];
-          return Row(
-            children: [
-              Text(category.name)
-            ],
+          return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 6),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(category.name,
+                      style: const TextStyle(fontWeight: FontWeight.w500)),
+                ],
+              )
           );
         },
+        separatorBuilder: (context, index) => const Divider(),
         itemCount: categories.length,
       );
     });

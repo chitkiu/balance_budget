@@ -38,5 +38,9 @@
   "month_selector": "Choose a month",
   "year_selector": "Choose a year",
 
-  "noTransactions": "You don't have transaction"
+  "noTransactions": "You don't have transaction",
+
+  "totalBalance": "Total balance",
+  "ownBalance": "Own balance",
+  "creditLimit": "Credit limit"
 }

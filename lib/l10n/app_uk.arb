@@ -38,5 +38,9 @@
   "month_selector": "Choose a month",
   "year_selector": "Choose a year",
 
-  "noTransactions": "У Вас немає транзакцій!"
+  "noTransactions": "У Вас немає транзакцій!",
+
+  "totalBalance": "Загальний баланс",
+  "ownBalance": "Власний баланс",
+  "creditLimit": "Кредитний ліміт"
 }

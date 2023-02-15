@@ -34,15 +34,64 @@ class AccountsScreen extends CommonScaffoldWithButtonScreen<AccountsController> 
   }
 
   Widget _getAccountWidget(AccountUIModel account) {
+    if (account is CreditAccountUIModel) {
+      return _creditAccountWidget(account);
+    } else {
+      return _defaultAccountWidget(account);
+    }
+  }
+
+  Widget _defaultAccountWidget(AccountUIModel account) {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 6),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(account.name,
                 style: const TextStyle(fontWeight: FontWeight.w500)),
-            Text(account.balance,
+            const SizedBox(height: 4,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(Get.localisation.totalBalance),
+                Text(account.balance),
+              ],
+            )
+          ],
+        )
+    );
+  }
+
+  Widget _creditAccountWidget(CreditAccountUIModel account) {
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 6),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(account.name,
                 style: const TextStyle(fontWeight: FontWeight.w500)),
+            const SizedBox(height: 4,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(Get.localisation.totalBalance),
+                Text(account.balance),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(Get.localisation.ownBalance),
+                Text(account.ownSum),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(Get.localisation.creditLimit),
+                Text(account.creditSum),
+              ],
+            )
           ],
         )
     );
