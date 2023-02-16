@@ -29,25 +29,21 @@ class _TransactionInfoScreenState extends State<TransactionInfoScreen> {
       appBar: PlatformAppBar(
         title: Text("Transaction info"),
         trailingActions: [
-          GestureDetector(
-            onTap: _changeEditMode,
-            child: Icon(_isInEditMode ? CommonIcons.check : CommonIcons.edit),
-          )
+          if (widget.model.canEdit)
+            GestureDetector(
+              onTap: _changeEditMode,
+              child: Icon(_isInEditMode ? CommonIcons.check : CommonIcons.edit),
+            )
         ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text("Sum:", style: const TextStyle(fontWeight: FontWeight.w500)),
-          Text(widget.model.sum),
-          Text("Type:", style: const TextStyle(fontWeight: FontWeight.w500)),
-          Text(widget.model.type),
-          Text("Category:", style: const TextStyle(fontWeight: FontWeight.w500)),
-          Text(widget.model.categoryName),
-          Text("Account:", style: const TextStyle(fontWeight: FontWeight.w500)),
-          Text(widget.model.accountName),
-          Text("Time:", style: const TextStyle(fontWeight: FontWeight.w500)),
-          Text(widget.model.time),
+          if (widget.model is CommonTransactionUIModel)
+            ..._commonWidgets(widget.model as CommonTransactionUIModel),
+
+          if (widget.model is SetBalanceTransactionUIModel)
+            ..._setBalanceWidgets(widget.model as SetBalanceTransactionUIModel),
 
           if (!_isInEditMode)
             PlatformTextButton(
@@ -71,8 +67,47 @@ class _TransactionInfoScreenState extends State<TransactionInfoScreen> {
   }
 
   void _changeEditMode() {
-    setState(() {
-      _isInEditMode = !_isInEditMode;
-    });
+    if (widget.model.canEdit) {
+      setState(() {
+        _isInEditMode = !_isInEditMode;
+      });
+    }
   }
+
+  List<Widget> _commonWidgets(CommonTransactionUIModel model) {
+    return [
+      Text(Get.localisation.transactionInfoSumPrefix,
+          style: const TextStyle(fontWeight: FontWeight.w500)),
+      Text(model.sum),
+
+      Text(Get.localisation.transactionInfoCategoryPrefix,
+          style: const TextStyle(fontWeight: FontWeight.w500)),
+      Text(model.categoryName),
+
+      Text(Get.localisation.transactionInfoAccountPrefix,
+          style: const TextStyle(fontWeight: FontWeight.w500)),
+      Text(model.accountName),
+
+      Text(Get.localisation.transactionInfoTimePrefix,
+          style: const TextStyle(fontWeight: FontWeight.w500)),
+      Text(model.time),
+    ];
+  }
+
+  List<Widget> _setBalanceWidgets(SetBalanceTransactionUIModel model) {
+    return [
+      Text(Get.localisation.transactionInfoSumPrefix,
+          style: const TextStyle(fontWeight: FontWeight.w500)),
+      Text(model.sum),
+
+      Text(Get.localisation.transactionInfoAccountPrefix,
+          style: const TextStyle(fontWeight: FontWeight.w500)),
+      Text(model.accountName),
+
+      Text(Get.localisation.transactionInfoTimePrefix,
+          style: const TextStyle(fontWeight: FontWeight.w500)),
+      Text(model.time),
+    ];
+  }
+
 }

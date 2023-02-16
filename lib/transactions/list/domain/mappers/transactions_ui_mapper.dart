@@ -9,16 +9,37 @@ import '../../ui/models/transaction_ui_model.dart';
 
 class TransactionsUIMapper {
   TransactionUIModel map(Transaction transaction, Category category, Account account) {
-    return TransactionUIModel(
+    switch (transaction.transactionType) {
+
+      case TransactionType.setInitialBalance:
+        return _mapSetBalanceModel(transaction, category, account);
+      case TransactionType.spend:
+      case TransactionType.income:
+        return _mapCommonModel(transaction, category, account);
+    }
+  }
+
+  TransactionUIModel _mapCommonModel(Transaction transaction, Category category, Account account) {
+    return CommonTransactionUIModel(
       id: transaction.id,
       sum: transaction.sum.toString(),
       sumColor: (transaction.transactionType == TransactionType.spend) ? Colors.redAccent : Colors.green,
-      type: transaction.transactionType.name,
       categoryName: category.title,
       accountName: account.name,
       time: transaction.time.toString(),
       dateTime: transaction.time,
       comment: transaction.comment,
+    );
+  }
+
+  TransactionUIModel _mapSetBalanceModel(Transaction transaction, Category category, Account account) {
+    return SetBalanceTransactionUIModel(
+      id: transaction.id,
+      sum: transaction.sum.toString(),
+      sumColor: (transaction.transactionType == TransactionType.spend) ? Colors.redAccent : Colors.green,
+      accountName: account.name,
+      time: transaction.time.toString(),
+      dateTime: transaction.time,
     );
   }
 
