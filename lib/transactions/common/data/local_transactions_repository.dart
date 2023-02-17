@@ -19,6 +19,16 @@ class LocalTransactionsRepository {
         }
       });
 
+  Stream<Transaction?> getTransactionById(String id) {
+    return _ref.child(id).onValue.map((event) {
+      if (event.snapshot.exists) {
+        Map<String, dynamic> dataValue = jsonDecode(jsonEncode(event.snapshot.value));
+        return Transaction.fromJson(dataValue.entries.first);
+      }
+      return null;
+    });
+  }
+
   bool create(double sum, TransactionType transactionType, String? categoryId,
       String accountId, DateTime time, String? comment, {bool skipZeroSum = true}) {
     if (skipZeroSum && sum <= 0) {

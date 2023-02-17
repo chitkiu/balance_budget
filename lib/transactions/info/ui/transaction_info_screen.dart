@@ -10,9 +10,9 @@ import '../../list/ui/models/transaction_ui_model.dart';
 import '../domain/transaction_info_controller.dart';
 
 class TransactionInfoScreen extends StatefulWidget {
-  final TransactionUIModel model;
+  final String transactionId;
 
-  const TransactionInfoScreen(this.model, {Key? key}) : super(key: key);
+  const TransactionInfoScreen(this.transactionId, {Key? key}) : super(key: key);
 
   @override
   State<TransactionInfoScreen> createState() => _TransactionInfoScreenState();
@@ -29,60 +29,71 @@ class _TransactionInfoScreenState extends State<TransactionInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: Text(Get.localisation.transactionInfoTitle),
-        trailingActions: [
-          if (widget.model.canEdit)
-            GestureDetector(
-              onTap: _changeEditMode,
-              child: Icon(_isInEditMode ? CommonIcons.check : CommonIcons.edit),
-            )
-        ],
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (widget.model is CommonTransactionUIModel)
-            ..._commonWidgets(widget.model as CommonTransactionUIModel),
+    return StreamBuilder(
+      stream: controller.transactionById(widget.transactionId),
+      builder: (context, snapshot) {
+        if (snapshot.hasData && snapshot.data != null) {
+          var model = snapshot.data!;
+          return PlatformScaffold(
+            appBar: PlatformAppBar(
+              title: Text(Get.localisation.transactionInfoTitle),
+              trailingActions: [
+                if (model.canEdit)
+                  GestureDetector(
+                    onTap: () => _changeEditMode(model),
+                    child: Icon(_isInEditMode ? CommonIcons.check : CommonIcons.edit),
+                  )
+              ],
+            ),
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (model is CommonTransactionUIModel)
+                  ..._commonWidgets(model),
 
-          if (widget.model is SetBalanceTransactionUIModel)
-            ..._setBalanceWidgets(widget.model as SetBalanceTransactionUIModel),
+                if (model is SetBalanceTransactionUIModel)
+                  ..._setBalanceWidgets(model),
 
-          if (!_isInEditMode)
-            PlatformTextButton(
-              child: Text(Get.localisation.delete),
-              onPressed: () async {
-                await confirmBeforeActionDialog(
-                  () async {
-                    await controller.deleteTransaction(widget.model.id);
-                    Get.back();
-                  },
-                  title: Get.localisation.confirmToDeleteTitle,
-                  subTitle: Get.localisation.confirmToDeleteText,
-                  confirmAction: Get.localisation.yes,
-                  cancelAction: Get.localisation.no,
-                );
-              },
-            )
-        ],
-      ),
+                if (!_isInEditMode)
+                  PlatformTextButton(
+                    child: Text(Get.localisation.delete),
+                    onPressed: () async {
+                      await confirmBeforeActionDialog(
+                            () async {
+                          await controller.deleteTransaction(model.id);
+                          Get.back();
+                        },
+                        title: Get.localisation.confirmToDeleteTitle,
+                        subTitle: Get.localisation.confirmToDeleteText,
+                        confirmAction: Get.localisation.yes,
+                        cancelAction: Get.localisation.no,
+                      );
+                    },
+                  )
+              ],
+            ),
+          );
+        } else {
+          //TODO Add loader
+          return const Placeholder();
+        }
+      },
     );
   }
 
-  void _changeEditMode() {
-    if (widget.model.canEdit) {
+  void _changeEditMode(TransactionUIModel model) {
+    if (model.canEdit) {
       if (_isInEditMode) {
         controller.editTransaction(
-            widget.model.id,
+            model.id,
             newSum: _sumController.text,
             newComment: _commentController.text,
         );
         _sumController.clear();
         _commentController.clear();
       } else {
-        _sumController.text = widget.model.sum;
-        _commentController.text = widget.model.comment ?? '';
+        _sumController.text = model.sum;
+        _commentController.text = model.comment ?? '';
       }
       setState(() {
         _isInEditMode = !_isInEditMode;
