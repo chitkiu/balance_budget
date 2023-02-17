@@ -19,6 +19,10 @@ class TransactionInfoScreen extends StatefulWidget {
 }
 
 class _TransactionInfoScreenState extends State<TransactionInfoScreen> {
+
+  final TextEditingController _sumController = TextEditingController();
+  final TextEditingController _commentController = TextEditingController();
+
   TransactionInfoController get controller => Get.find();
 
   bool _isInEditMode = false;
@@ -27,7 +31,7 @@ class _TransactionInfoScreenState extends State<TransactionInfoScreen> {
   Widget build(BuildContext context) {
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Text("Transaction info"),
+        title: Text(Get.localisation.transactionInfoTitle),
         trailingActions: [
           if (widget.model.canEdit)
             GestureDetector(
@@ -68,6 +72,18 @@ class _TransactionInfoScreenState extends State<TransactionInfoScreen> {
 
   void _changeEditMode() {
     if (widget.model.canEdit) {
+      if (_isInEditMode) {
+        controller.editTransaction(
+            widget.model.id,
+            newSum: _sumController.text,
+            newComment: _commentController.text,
+        );
+        _sumController.clear();
+        _commentController.clear();
+      } else {
+        _sumController.text = widget.model.sum;
+        _commentController.text = widget.model.comment ?? '';
+      }
       setState(() {
         _isInEditMode = !_isInEditMode;
       });
@@ -78,7 +94,12 @@ class _TransactionInfoScreenState extends State<TransactionInfoScreen> {
     return [
       Text(Get.localisation.transactionInfoSumPrefix,
           style: const TextStyle(fontWeight: FontWeight.w500)),
-      Text(model.sum),
+      if (!_isInEditMode)
+        Text(model.sum, style: TextStyle(color: model.sumColor),),
+      if (_isInEditMode)
+        PlatformTextField(
+          controller: _sumController,
+        ),
 
       Text(Get.localisation.transactionInfoCategoryPrefix,
           style: const TextStyle(fontWeight: FontWeight.w500)),
@@ -91,6 +112,16 @@ class _TransactionInfoScreenState extends State<TransactionInfoScreen> {
       Text(Get.localisation.transactionInfoTimePrefix,
           style: const TextStyle(fontWeight: FontWeight.w500)),
       Text(model.time),
+
+      if (model.comment != null || _isInEditMode)
+        Text(Get.localisation.transactionInfoCommentPrefix,
+            style: const TextStyle(fontWeight: FontWeight.w500)),
+      if (model.comment != null && !_isInEditMode)
+        Text(model.comment ?? ''),
+      if (_isInEditMode)
+        PlatformTextField(
+          controller: _commentController,
+        ),
     ];
   }
 

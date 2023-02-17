@@ -14,10 +14,12 @@
   "addTransactionAccountHint": "Account:",
   "addTransactionCommentHint": "Comment",
 
+  "transactionInfoTitle": "Transaction info",
   "transactionInfoSumPrefix": "Sum:",
   "transactionInfoCategoryPrefix": "Category:",
   "transactionInfoAccountPrefix": "Account:",
   "transactionInfoTimePrefix": "Time:",
+  "transactionInfoCommentPrefix": "Comment:",
 
   "manageAccountsButtonText": "Manage accounts",
   "manageCategoriesButtonText": "Manage categories",

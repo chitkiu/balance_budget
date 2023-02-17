@@ -53,9 +53,12 @@ class LocalTransactionsRepository {
       var transaction = Transaction.fromJson(
           MapEntry(transactionId, jsonDecode(jsonEncode(dbTransaction.value))));
 
-      data.set(transaction
-          .copyWith(sum: sum, categoryId: categoryId, time: time, comment: comment)
-          .toJson());
+      var newTransaction = transaction
+          .copyWith(sum: sum, categoryId: categoryId, time: time, comment: comment);
+
+      if (newTransaction != transaction) {
+        data.set(newTransaction.toJson());
+      }
     }
   }
 }

@@ -14,10 +14,12 @@
   "addTransactionAccountHint": "Аккаунт:",
   "addTransactionCommentHint": "Коментар",
 
+  "transactionInfoTitle": "Інформація про транзакцію",
   "transactionInfoSumPrefix": "Сума:",
   "transactionInfoCategoryPrefix": "Категорія:",
   "transactionInfoAccountPrefix": "Аккаунт:",
   "transactionInfoTimePrefix": "Час:",
+  "transactionInfoCommentPrefix": "Коментар:",
 
   "manageAccountsButtonText": "Управління аккаунтами",
   "manageCategoriesButtonText": "Управління категоріями",

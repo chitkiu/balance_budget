@@ -43,16 +43,48 @@ class Transaction {
       DateTime? time,
       DateTime? creationTime,
       String? comment}) {
+    var finalComment = this.comment;
+    if (comment == '') {
+      finalComment = null;
+    } else if (comment?.isNotEmpty == true) {
+      finalComment = comment;
+    }
     return Transaction(
       sum: sum ?? this.sum,
       transactionType: transactionType ?? this.transactionType,
       categoryId: categoryId ?? this.categoryId,
       accountId: accountId ?? this.accountId,
       time: time ?? this.time,
-      comment: comment ?? this.comment,
+      comment: finalComment,
       creationTime: creationTime ?? this.creationTime,
     ).._id = _id;
   }
+
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Transaction &&
+          runtimeType == other.runtimeType &&
+          _id == other._id &&
+          sum == other.sum &&
+          transactionType == other.transactionType &&
+          categoryId == other.categoryId &&
+          accountId == other.accountId &&
+          time == other.time &&
+          creationTime == other.creationTime &&
+          comment == other.comment;
+
+  @override
+  int get hashCode =>
+      _id.hashCode ^
+      sum.hashCode ^
+      transactionType.hashCode ^
+      categoryId.hashCode ^
+      accountId.hashCode ^
+      time.hashCode ^
+      creationTime.hashCode ^
+      comment.hashCode;
 
   @override
   String toString() {

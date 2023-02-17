@@ -8,4 +8,17 @@ class TransactionInfoController extends GetxController {
   Future<void> deleteTransaction(String id) async {
     await _transactionsRepo.remove(id);
   }
+
+  Future<void> editTransaction(String id, {
+    required String newSum,
+    required String newComment,
+  }) async {
+    var newDoubleSum = double.tryParse(newSum);
+
+    await _transactionsRepo.edit(
+        id,
+      sum: newDoubleSum,
+      comment: newComment.trim(),
+    );
+  }
 }
