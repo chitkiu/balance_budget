@@ -15,6 +15,7 @@
   "addTransactionCommentHint": "Коментар",
 
   "transactionInfoTitle": "Інформація про транзакцію",
+  "transactionInfoEditTitle": "Редагування транзакції",
   "transactionInfoSumPrefix": "Сума:",
   "transactionInfoCategoryPrefix": "Категорія:",
   "transactionInfoAccountPrefix": "Аккаунт:",

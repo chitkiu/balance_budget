@@ -15,6 +15,7 @@
   "addTransactionCommentHint": "Comment",
 
   "transactionInfoTitle": "Transaction info",
+  "transactionInfoEditTitle": "Edit transaction",
   "transactionInfoSumPrefix": "Sum:",
   "transactionInfoCategoryPrefix": "Category:",
   "transactionInfoAccountPrefix": "Account:",
