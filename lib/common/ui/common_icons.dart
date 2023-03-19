@@ -1,11 +1,18 @@
-import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'common_ui_settings.dart';
 
 class CommonIcons {
   CommonIcons._();
 
-  static final _isCupertino = PlatformInfo.isCupertino;
+  static bool get _isCupertino => CommonUI.isCupertino;
+
+  static IconData get ok =>
+      _isCupertino ? CupertinoIcons.check_mark : Icons.done;
+
+  static IconData get cancel =>
+      _isCupertino ? CupertinoIcons.clear : Icons.cancel;
 
   static IconData get add => _isCupertino ? CupertinoIcons.add : Icons.add;
 

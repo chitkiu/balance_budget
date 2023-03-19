@@ -1,6 +1,6 @@
 import 'package:balance_budget/transactions/add/ui/date_time_selector_widget.dart';
-import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../common/data/models/transaction_type.dart';
@@ -8,6 +8,7 @@ import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
 import '../../../common/ui/common_ui_settings.dart';
+import '../../../common/ui/platform_dropdown_button.dart';
 import '../domain/add_transaction_controller.dart';
 
 class AddTransactionScreen
@@ -93,7 +94,7 @@ class AddTransactionScreen
                       children: [
                         Text(element.title),
                         if (element.isSelected)
-                          Icon(CommonPlatformIcons.ok)
+                          Icon(CommonIcons.ok)
                       ],
                     ),
                   );
@@ -130,7 +131,7 @@ class AddTransactionScreen
                       children: [
                         Text(element.title),
                         if (element.isSelected)
-                          Icon(CommonPlatformIcons.ok)
+                          Icon(CommonIcons.ok)
                       ],
                     ),
                   );

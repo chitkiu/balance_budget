@@ -1,6 +1,20 @@
-import 'package:enough_platform_widgets/enough_platform_widgets.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
+
+import 'dialog_helper.dart';
+import 'platform_dropdown_button.dart';
+
+class CommonUI {
+
+  CommonUI._();
+
+  static final bool isCupertino =
+  (defaultTargetPlatform == TargetPlatform.iOS ||
+      defaultTargetPlatform == TargetPlatform.macOS);
+
+}
 
 CupertinoDropdownButtonData cupertinoDropdownButtonData(BuildContext context, PlatformTarget platform) {
   return CupertinoDropdownButtonData(
