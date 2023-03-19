@@ -28,10 +28,11 @@ class TransactionsUIMapper {
     return CommonTransactionUIModel(
       id: transaction.id,
       sum: _sumFormat(transaction.sum),
+      sumDouble: transaction.sum,
       sumColor: (transaction.transactionType == TransactionType.spend) ? Colors.redAccent : Colors.green,
       categoryName: category.title,
       accountName: account.name,
-      time: _dateFormat(transaction.time),
+      formattedDate: _dateFormat(transaction.time),
       dateTime: transaction.time,
       comment: transaction.comment,
     );
@@ -41,8 +42,9 @@ class TransactionsUIMapper {
     return SetBalanceTransactionUIModel(
       id: transaction.id,
       sum: _sumFormat(transaction.sum),
+      sumDouble: transaction.sum,
       accountName: account.name,
-      time: _dateFormat(transaction.time),
+      formattedDate: _dateFormat(transaction.time),
       dateTime: transaction.time,
     );
   }

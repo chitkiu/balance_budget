@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_icons.dart';
@@ -119,12 +120,14 @@ class TransactionInfoScreen extends GetView<TransactionInfoController> {
     );
   }
 
+  final NumberFormat _sumFormatter = NumberFormat("#.##");
+
   void _updateControllers(TransactionUIModel model, bool isInEditMode) {
     if (isInEditMode) {
       _sumController.clear();
       _commentController.clear();
     } else {
-      _sumController.text = model.sum;
+      _sumController.text = _sumFormatter.format(model.sumDouble);
       _commentController.text = model.comment ?? '';
     }
   }
@@ -159,7 +162,7 @@ class TransactionInfoScreen extends GetView<TransactionInfoController> {
       Text(model.accountName),
       Text(Get.localisation.transactionInfoTimePrefix,
           style: const TextStyle(fontWeight: FontWeight.w500)),
-      Text(model.time),
+      Text(model.formattedDate),
       if (model.comment != null || isInEditMode)
         Text(Get.localisation.transactionInfoCommentPrefix,
             style: const TextStyle(fontWeight: FontWeight.w500)),
@@ -181,7 +184,7 @@ class TransactionInfoScreen extends GetView<TransactionInfoController> {
       Text(model.accountName),
       Text(Get.localisation.transactionInfoTimePrefix,
           style: const TextStyle(fontWeight: FontWeight.w500)),
-      Text(model.time),
+      Text(model.formattedDate),
     ];
   }
 }
