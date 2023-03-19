@@ -64,32 +64,34 @@ class TransactionInfoScreen extends GetView<TransactionInfoController> {
                 child: Icon(CommonIcons.cancel),
               ),
             ),
-            body: Obx(() {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  if (model is CommonTransactionUIModel)
-                    ..._commonWidgets(model, _isInEditMode.value),
-                  if (model is SetBalanceTransactionUIModel) ..._setBalanceWidgets(model),
-                  if (!_isInEditMode.value)
-                    PlatformTextButton(
-                      child: Text(Get.localisation.delete),
-                      onPressed: () async {
-                        await confirmBeforeActionDialog(
-                          () async {
-                            await controller.deleteTransaction(model.id);
-                            Get.back();
-                          },
-                          title: Get.localisation.confirmToDeleteTitle,
-                          subTitle: Get.localisation.confirmToDeleteText,
-                          confirmAction: Get.localisation.yes,
-                          cancelAction: Get.localisation.no,
-                        );
-                      },
-                    )
-                ],
-              );
-            }),
+            body: SafeArea(
+              child: Obx(() {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (model is CommonTransactionUIModel)
+                      ..._commonWidgets(model, _isInEditMode.value),
+                    if (model is SetBalanceTransactionUIModel) ..._setBalanceWidgets(model),
+                    if (!_isInEditMode.value)
+                      PlatformTextButton(
+                        child: Text(Get.localisation.delete),
+                        onPressed: () async {
+                          await confirmBeforeActionDialog(
+                                () async {
+                              await controller.deleteTransaction(model.id);
+                              Get.back();
+                            },
+                            title: Get.localisation.confirmToDeleteTitle,
+                            subTitle: Get.localisation.confirmToDeleteText,
+                            confirmAction: Get.localisation.yes,
+                            cancelAction: Get.localisation.no,
+                          );
+                        },
+                      )
+                  ],
+                );
+              }),
+            ),
           );
         } else {
           return PlatformScaffold(

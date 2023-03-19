@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:intl/intl.dart';
+
+final DateFormat _monthFormat = DateFormat("MMMM");
 
 class CalendarHeader extends StatelessWidget {
   final DateTime date;
@@ -28,7 +32,7 @@ class CalendarHeader extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconButton(
+            PlatformIconButton(
               onPressed: () {
                 if (onPrevClick != null) {
                   onPrevClick!();
@@ -44,10 +48,9 @@ class CalendarHeader extends StatelessWidget {
                   onTitleClick!();
                 }
               },
-              //TODO Add month name
-              child: Text("Date ${date.month}"),
+              child: Text(_monthFormat.format(date)),
             ),
-            IconButton(
+            PlatformIconButton(
               onPressed: () {
                 if (onNextClick != null) {
                   onNextClick!();
@@ -95,7 +98,7 @@ class CalendarHeader extends StatelessWidget {
             child: Center(
               child: Text(
                 "${date.day}",
-                style: TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.black),
               ),
             ),
           ),

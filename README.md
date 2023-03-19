@@ -2,10 +2,10 @@
 
 Cross-platform app for budget planning and finance tracking
 
-## Getting Started
+### Getting Started
 
 For build app you need to setup your firebase project using [this official tutorial](https://firebase.google.com/docs/flutter/setup)
 
-## Used resources
+### Used resources
 
-For MonthSelector I copy and rewrite part of [this plugin](https://github.com/ALAlliancetek/flutter_timeline_calendar) 
+For Calendar2 I copy and rewrite part of [this plugin](http://pub.dev/packages/calendar_view) 
