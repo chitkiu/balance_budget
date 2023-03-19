@@ -58,5 +58,7 @@
 
   "totalBalance": "Total balance",
   "ownBalance": "Own balance",
-  "creditLimit": "Credit limit"
+  "creditLimit": "Credit limit",
+
+  "loading": "Loading..."
 }

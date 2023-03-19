@@ -98,8 +98,14 @@ class TransactionInfoScreen extends GetView<TransactionInfoController> {
             }),
           );
         } else {
-          //TODO Add loader
-          return const Placeholder();
+          return PlatformScaffold(
+            appBar: PlatformAppBar(
+              title: Text(Get.localisation.loading),
+            ),
+            body: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
         }
       },
     );
