@@ -1,24 +1,13 @@
 import 'package:balance_budget/common/data/date_time_extension.dart';
 import 'package:flutter/material.dart';
 
-import 'day_page_header.dart';
-import 'event_scroll_configuration.dart';
+import 'calendar_header.dart';
 
 typedef ContentBuilder = Widget Function(DateTime date);
 
 typedef CalendarPageChangeCallBack = void Function(DateTime date, int page);
 
-class Calendar extends StatefulWidget {
-
-  /// A function to generate the DateString in the calendar title.
-  /// Useful for I18n
-  final String Function(DateTime)? dateStringBuilder;
-
-  /// Builds day title bar.
-  final ContentBuilder? dayTitleBuilder;
-
-  /// This callback will run whenever page will change.
-  final CalendarPageChangeCallBack? onPageChange;
+class Calendar2 extends StatefulWidget {
 
   /// Determines the lower boundary user can scroll.
   ///
@@ -46,25 +35,18 @@ class Calendar extends StatefulWidget {
   /// Background colour of day view page.
   final Color? backgroundColor;
 
-  /// Style for DayView header.
-  final HeaderStyle headerStyle;
-
   /// Display full day event builder.
   final ContentBuilder contentPerDayBuilder;
 
   /// Main widget for day view.
-  const Calendar({
+  const Calendar2({
     Key? key,
-    this.dateStringBuilder,
     this.pageTransitionDuration = const Duration(milliseconds: 300),
     this.pageTransitionCurve = Curves.ease,
     this.minDay,
     this.maxDay,
     this.initialDay,
-    this.onPageChange,
-    this.dayTitleBuilder,
     this.backgroundColor = Colors.white,
-    this.headerStyle = const HeaderStyle(),
     required this.contentPerDayBuilder,
   }) : super(key: key);
 
@@ -72,8 +54,7 @@ class Calendar extends StatefulWidget {
   DayViewState createState() => DayViewState();
 }
 
-class DayViewState extends State<Calendar> {
-  late double _width;
+class DayViewState extends State<Calendar2> {
   late DateTime _currentDate;
   late DateTime _maxDate;
   late DateTime _minDate;
@@ -81,10 +62,6 @@ class DayViewState extends State<Calendar> {
   late int _currentIndex;
 
   late PageController _pageController;
-
-  late ContentBuilder _dayTitleBuilder;
-
-  final _scrollConfiguration = EventScrollConfiguration();
 
   @override
   void initState() {
@@ -97,11 +74,10 @@ class DayViewState extends State<Calendar> {
     _regulateCurrentDate();
 
     _pageController = PageController(initialPage: _currentIndex);
-    _assignBuilders();
   }
 
   @override
-  void didUpdateWidget(Calendar oldWidget) {
+  void didUpdateWidget(Calendar2 oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     // Update date range.
@@ -112,9 +88,6 @@ class DayViewState extends State<Calendar> {
 
       _pageController.jumpToPage(_currentIndex);
     }
-
-    // Update builders and callbacks
-    _assignBuilders();
   }
 
   @override
@@ -136,7 +109,7 @@ class DayViewState extends State<Calendar> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              _dayTitleBuilder(_currentDate),
+              _defaultDayBuilder(_currentDate),
               Expanded(
                 child: PageView.builder(
                   itemCount: _totalDays,
@@ -145,10 +118,7 @@ class DayViewState extends State<Calendar> {
                   itemBuilder: (_, index) {
                     final date = DateTime(
                         _minDate.year, _minDate.month, _minDate.day + index);
-                    return ValueListenableBuilder(
-                      valueListenable: _scrollConfiguration,
-                      builder: (_, __, ___) => widget.contentPerDayBuilder(date),
-                    );
+                    return widget.contentPerDayBuilder(date);
                   },
                 ),
               ),
@@ -157,10 +127,6 @@ class DayViewState extends State<Calendar> {
         ),
       ),
     );
-  }
-
-  void _assignBuilders() {
-    _dayTitleBuilder = widget.dayTitleBuilder ?? _defaultDayBuilder;
   }
 
   /// Sets the current date of this month.
@@ -203,12 +169,10 @@ class DayViewState extends State<Calendar> {
   /// [widget.dayTitleBuilder] is null.
   ///
   Widget _defaultDayBuilder(DateTime date) {
-    return DayPageHeader(
-      date: _currentDate,
-      dateStringBuilder: widget.dateStringBuilder,
-      onNextDay: nextPage,
-      onPreviousDay: previousPage,
-      onTitleTapped: () async {
+    return CalendarHeader(
+      date: date,
+      onTitleClick: () async {
+        //TODO Add date picker for cupertino
         final selectedDate = await showDatePicker(
           context: context,
           initialDate: date,
@@ -219,7 +183,19 @@ class DayViewState extends State<Calendar> {
         if (selectedDate == null) return;
         jumpToDate(selectedDate);
       },
-      headerStyle: widget.headerStyle,
+      onItemClick: (selectedDate) {
+        animateToDate(selectedDate);
+      },
+      onNextClick: () {
+        jumpToDate(
+          date.add(Duration(days: DateTime.daysPerWeek - date.weekday + 1))
+        );
+      },
+      onPrevClick: () {
+        jumpToDate(
+            date.subtract(Duration(days: date.weekday))
+        );
+      },
     );
   }
 
@@ -236,39 +212,7 @@ class DayViewState extends State<Calendar> {
         _currentIndex = index;
       });
     }
-    widget.onPageChange?.call(_currentDate, _currentIndex);
   }
-
-  /// Animate to next page
-  ///
-  /// Arguments [duration] and [curve] will override default values provided
-  /// as [DayView.pageTransitionDuration] and [DayView.pageTransitionCurve]
-  /// respectively.
-  ///
-  ///
-  void nextPage({Duration? duration, Curve? curve}) => _pageController.nextPage(
-    duration: duration ?? widget.pageTransitionDuration,
-    curve: curve ?? widget.pageTransitionCurve,
-  );
-
-  /// Animate to previous page
-  ///
-  /// Arguments [duration] and [curve] will override default values provided
-  /// as [DayView.pageTransitionDuration] and [DayView.pageTransitionCurve]
-  /// respectively.
-  ///
-  ///
-  void previousPage({Duration? duration, Curve? curve}) =>
-      _pageController.previousPage(
-        duration: duration ?? widget.pageTransitionDuration,
-        curve: curve ?? widget.pageTransitionCurve,
-      );
-
-  /// Returns current page number.
-  ///
-  ///
-  int get currentPage => _currentIndex;
-
   /// Jumps to page which gives day calendar for [date]
   ///
   ///
@@ -297,8 +241,4 @@ class DayViewState extends State<Calendar> {
       curve: curve ?? widget.pageTransitionCurve,
     );
   }
-
-  /// Returns the current visible date in day view.
-  DateTime get currentDate =>
-      DateTime(_currentDate.year, _currentDate.month, _currentDate.day);
 }

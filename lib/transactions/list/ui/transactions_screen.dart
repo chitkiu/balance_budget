@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_timeline_calendar/timeline/flutter_timeline_calendar.dart';
 import 'package:get/get.dart';
 
 import '../../../common/getx_extensions.dart';
@@ -10,33 +9,24 @@ import '../domain/transactions_controller.dart';
 import 'models/transaction_ui_model.dart';
 
 class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsController> {
-  final Rx<DateTime> _selectedDateTime = DateTime.now().obs;
-
   TransactionsScreen({super.key}) : super(Get.localisation.transactionsTabName, icon: CommonIcons.add);
 
   @override
   Widget body(BuildContext context) {
-    return Calendar(
+    return Calendar2(
       contentPerDayBuilder: (date) {
-        var items = controller.getItemsFromDay(date);
-        if (items.isEmpty) {
-          return Center(
-            child: Text(Get.localisation.noTransactions),
+        return Obx(() {
+          var items = controller.getItemsFromDay(date);
+          if (items.isEmpty) {
+            return Center(
+              child: Text(Get.localisation.noTransactions),
+            );
+          }
+          return SingleChildScrollView(
+            child: _transactionItems(items),
           );
-        }
-        return _transactionItems(items);
+        });
       },
-      // controller: EventController(),
-      // fullDayEventBuilder: (events, date) {
-      //   var items = controller.getItemsFromDay(date);
-      //   if (items.isEmpty) {
-      //     return Center(
-      //       child: Text(Get.localisation.noTransactions),
-      //     );
-      //   }
-      //   return _transactionItems(items);
-      // },
-      // showVerticalLine: false,
       minDay: DateTime(1990),
       maxDay: DateTime(2050),
       initialDay: DateTime.now(),
@@ -104,13 +94,5 @@ class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsCont
         )
       ],
     );
-  }
-
-  void _updateCalendarDateTime(CalendarDateTime dateTime) {
-    _selectedDateTime.value = DateTime(dateTime.year, dateTime.month, dateTime.day);
-  }
-
-  void _updateDateTime(DateTime dateTime) {
-    _selectedDateTime.value = dateTime;
   }
 }
