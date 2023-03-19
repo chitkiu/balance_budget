@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart' as rxd;
 
@@ -20,7 +19,8 @@ import 'mappers/transaction_account_ui_mapper.dart';
 import 'mappers/transaction_category_ui_mapper.dart';
 
 class AddTransactionController extends GetxController {
-  final TransactionCategoryUIMapper _spendCategoryUIMapper = TransactionCategoryUIMapper();
+  final TransactionCategoryUIMapper _spendCategoryUIMapper =
+      TransactionCategoryUIMapper();
   final TransactionAccountUIMapper _spendAccountUIMapper = TransactionAccountUIMapper();
 
   LocalTransactionsRepository get _transactionsRepo => Get.find();
@@ -38,8 +38,6 @@ class AddTransactionController extends GetxController {
   Rxn<String> selectedAccount = Rxn();
 
   Rx<SelectDayUIModel> selectedDate = SelectDayUIModel.now().obs;
-
-  Rx<TimeOfDay> selectedTime = TimeOfDay.now().obs;
 
   var selectedType = TransactionType.spend.obs;
 
@@ -108,14 +106,19 @@ class AddTransactionController extends GetxController {
       return;
     }
 
+    DateTime selected = selectedDate.value.dateTime;
+
     var addTransactionResult = _transactionsRepo.create(
         double.parse(sum),
         selectedType.value,
         categoryId,
         accountId,
-        _combineDateAndTime(selectedDate.value.dateTime, selectedTime.value),
-        currentComment
-    );
+        DateTime(
+          selected.year,
+          selected.month,
+          selected.day,
+        ),
+        currentComment);
 
     if (addTransactionResult) {
       Get.back();
@@ -131,8 +134,8 @@ class AddTransactionController extends GetxController {
   }
 
   void selectDateByType(
-      DateSelectionType type,
-      DateTime? date,
+    DateSelectionType type,
+    DateTime? date,
   ) {
     switch (type) {
       case DateSelectionType.yesterday:
@@ -161,16 +164,6 @@ class AddTransactionController extends GetxController {
     );
   }
 
-  DateTime _combineDateAndTime(DateTime date, TimeOfDay time) {
-    return DateTime(
-      date.year,
-      date.month,
-      date.day,
-      time.hour,
-      time.minute
-    );
-  }
-
   void _selectYesterday() {
     selectedDate.value = SelectDayUIModel(
       DateTime.now().subtract(const Duration(days: 1)),
@@ -193,7 +186,8 @@ class AddTransactionController extends GetxController {
   }
 
   bool _isSameDate(DateTime first, DateTime second) {
-    return first.year == second.year && first.month == second.month &&
+    return first.year == second.year &&
+        first.month == second.month &&
         first.day == second.day;
   }
 }

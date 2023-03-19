@@ -9,25 +9,18 @@ import 'models/select_date_ui_model.dart';
 
 class DateTimeSelectorWidget extends PlatformWidgetBase<Widget, Widget> {
   final Rx<SelectDayUIModel> date;
-  final Rx<TimeOfDay> time;
   final Function(DateSelectionType, DateTime?) onDateChanged;
-  final Function(TimeOfDay) onTimeChanged;
 
-  const DateTimeSelectorWidget(
-      this.date, this.time, this.onDateChanged, this.onTimeChanged,
-      {super.key});
+  const DateTimeSelectorWidget(this.date, this.onDateChanged, {super.key});
 
   @override
   Widget createCupertinoWidget(BuildContext context) {
     return Obx(() {
       var selectedDate = date.value.dateTime;
-      var selectedTime = time.value;
       return PlatformTextButton(
         child: Text(
           Get.localisation.fullDateTimeString(
               selectedDate.day,
-              selectedTime.hour,
-              selectedTime.minute,
               selectedDate.month,
               selectedDate.year
           )
@@ -36,13 +29,11 @@ class DateTimeSelectorWidget extends PlatformWidgetBase<Widget, Widget> {
           _showCupertinoDialog(
             context,
             CupertinoDatePicker(
-              initialDateTime: DateTime(selectedDate.year, selectedDate.month,
-                  selectedDate.day, selectedTime.hour, selectedTime.minute),
-              mode: CupertinoDatePickerMode.dateAndTime,
+              initialDateTime: DateTime(selectedDate.year, selectedDate.month, selectedDate.day),
+              mode: CupertinoDatePickerMode.date,
               use24hFormat: true,
               onDateTimeChanged: (DateTime newTime) {
                 onDateChanged(DateSelectionType.customDate, newTime);
-                onTimeChanged(TimeOfDay(hour: newTime.hour, minute: newTime.minute));
               },
             ),
           );
@@ -108,25 +99,6 @@ class DateTimeSelectorWidget extends PlatformWidgetBase<Widget, Widget> {
                     .toList(),
               )
             ],
-          );
-        }),
-        Obx(() {
-          var selectedTime = time.value;
-
-          return PlatformTextButton(
-            onPressed: () async {
-              var newTime = await showTimePicker(
-                context: Get.overlayContext!,
-                initialTime: TimeOfDay(hour: selectedTime.hour, minute: selectedTime.minute),
-              );
-              onTimeChanged(newTime ?? selectedTime);
-            },
-            child: Text(
-              Get.localisation.timeString(
-                  selectedTime.hour,
-                  selectedTime.minute
-              )
-            ),
           );
         }),
       ],

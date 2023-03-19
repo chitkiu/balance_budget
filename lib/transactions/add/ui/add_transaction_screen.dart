@@ -161,11 +161,7 @@ class AddTransactionScreen
           ),
           DateTimeSelectorWidget(
             controller.selectedDate,
-            controller.selectedTime,
             controller.selectDateByType,
-            (time) {
-              controller.selectedTime.value = time;
-            },
           )
         ],
       ),

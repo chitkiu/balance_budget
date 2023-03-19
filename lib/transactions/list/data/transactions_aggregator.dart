@@ -26,11 +26,7 @@ class TransactionsAggregator {
               var category =
                   categories.firstWhereOrNull((element) => element.id == e.categoryId);
               if (category == null) {
-                category =
-                    categories.firstWhereOrNull((element) => element.transactionType == e.transactionType);
-                if (category == null) {
-                  return null;
-                }
+                return null;
               }
 
               var account =
@@ -51,7 +47,6 @@ class TransactionsAggregator {
     );
   }
 
-  //TODO Move somewhere
   int _compare(RichTransactionModel a, RichTransactionModel b) {
     var result = b.transaction.time.compareTo(a.transaction.time);
     if (result == 0) {

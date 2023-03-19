@@ -1,6 +1,5 @@
-import 'dart:ui';
-
 import 'package:balance_budget/common/getx_extensions.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 abstract class TransactionUIModel {
@@ -43,10 +42,11 @@ class SetBalanceTransactionUIModel extends TransactionUIModel {
   SetBalanceTransactionUIModel(
       {required super.id,
       required super.sum,
-      required super.sumColor,
       required super.accountName,
       required super.time,
       required super.dateTime})
       : super(
-            categoryName: Get.localisation.addInitialBudgetCategoryTitle, canEdit: false);
+            categoryName: Get.localisation.addInitialBudgetCategoryTitle,
+            canEdit: false,
+            sumColor: Colors.grey);
 }

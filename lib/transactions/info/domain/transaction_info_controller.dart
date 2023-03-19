@@ -35,7 +35,7 @@ class TransactionInfoController extends GetxController {
     var newDoubleSum = double.tryParse(newSum);
 
     await _transactionsRepo.edit(
-        id,
+      id,
       sum: newDoubleSum,
       comment: newComment.trim(),
     );
