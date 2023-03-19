@@ -49,11 +49,18 @@ class TransactionsController extends GetxController {
     );
   }
 
-  void onItemClick(TransactionUIModel transaction) {
-    Get.to(
+  void onItemClick(TransactionUIModel transaction) async {
+    var binding = TransactionInfoBinding();
+    binding.dependencies();
+    await Get.bottomSheet(
+        TransactionInfoScreen(transaction.id),
+    );
+    binding.delete();
+    // showCupertinoModalPopup(context: context, builder: builder)
+    /*Get.to(
       () => TransactionInfoScreen(transaction.id),
       binding: TransactionInfoBinding(),
-    );
+    );*/
   }
 
 }

@@ -52,24 +52,17 @@ class TransactionInfoScreen extends GetView<TransactionInfoController> {
                   )
               ],
               automaticallyImplyLeading: false,
-              leading: Obx(() {
-                if (_isInEditMode.value) {
-                  return GestureDetector(
-                    onTap: () {
-                      _updateControllers(model, false);
-                      _isInEditMode.value = false;
-                    },
-                    child: Icon(CommonIcons.cancel),
-                  );
-                } else {
-                  return GestureDetector(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child: Icon(CommonIcons.back),
-                  );
-                }
-              }),
+              leading: GestureDetector(
+                onTap: () {
+                  if (_isInEditMode.value) {
+                    _updateControllers(model, false);
+                    _isInEditMode.value = false;
+                  } else {
+                    Get.back();
+                  }
+                },
+                child: Icon(CommonIcons.cancel),
+              ),
             ),
             body: Obx(() {
               return Column(
