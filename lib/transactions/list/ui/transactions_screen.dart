@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
+import '../../../common/ui/custom_calendar/calendar.dart';
 import '../domain/transactions_controller.dart';
 import 'models/transaction_ui_model.dart';
 
@@ -15,46 +16,30 @@ class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsCont
 
   @override
   Widget body(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          //TODO Rewrite using something that can make smooth hiding
-          TimelineCalendar(
-            calendarType: CalendarType.GREGORIAN,
-            calendarLanguage: "en",
-            calendarOptions: CalendarOptions(
-              viewType: ViewType.DAILY,
-              toggleViewType: true,
-              headerMonthElevation: 0,
-              headerMonthShadowColor: Colors.black26,
-              headerMonthBackColor: Colors.transparent,
-            ),
-            dayOptions: DayOptions(
-                compactMode: true,
-                weekDaySelectedColor: const Color(0xff3AC3E2)
-            ),
-            headerOptions: HeaderOptions(
-                weekDayStringType: WeekDayStringTypes.SHORT,
-                monthStringType: MonthStringTypes.FULL,
-                backgroundColor: Colors.white /*const Color(0xff3AC3E2)*/,
-                headerTextColor: Colors.black
-            ),
-            onChangeDateTime: _updateCalendarDateTime,
-            onMonthChanged: _updateCalendarDateTime,
-            onYearChanged: _updateCalendarDateTime,
-            onDateTimeReset: _updateCalendarDateTime,
-          ),
-          Obx(() {
-            var items = controller.getItemsFromMonth(_selectedDateTime.value);
-            if (items.isEmpty) {
-              return Center(
-                child: Text(Get.localisation.noTransactions),
-              );
-            }
-            return _transactionItems(items);
-          })
-        ],
-      ),
+    return Calendar(
+      contentPerDayBuilder: (date) {
+        var items = controller.getItemsFromDay(date);
+        if (items.isEmpty) {
+          return Center(
+            child: Text(Get.localisation.noTransactions),
+          );
+        }
+        return _transactionItems(items);
+      },
+      // controller: EventController(),
+      // fullDayEventBuilder: (events, date) {
+      //   var items = controller.getItemsFromDay(date);
+      //   if (items.isEmpty) {
+      //     return Center(
+      //       child: Text(Get.localisation.noTransactions),
+      //     );
+      //   }
+      //   return _transactionItems(items);
+      // },
+      // showVerticalLine: false,
+      minDay: DateTime(1990),
+      maxDay: DateTime(2050),
+      initialDay: DateTime.now(),
     );
   }
 

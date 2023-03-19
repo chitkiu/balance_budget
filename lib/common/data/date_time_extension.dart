@@ -38,4 +38,11 @@ extension DTExtension on DateTime {
     );
   }
 
+  DateTime get withoutTime => DateTime(year, month, day);
+
+  /// Gets difference of days between [date] and calling object.
+  int getDayDifference(DateTime date) => DateTime.utc(year, month, day)
+      .difference(DateTime.utc(date.year, date.month, date.day))
+      .inDays
+      .abs();
 }

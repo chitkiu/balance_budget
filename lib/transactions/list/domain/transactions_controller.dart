@@ -34,7 +34,7 @@ class TransactionsController extends GetxController {
     super.onClose();
   }
 
-  List<TransactionUIModel> getItemsFromMonth(DateTime dateTime) {
+  List<TransactionUIModel> getItemsFromDay(DateTime dateTime) {
     return transactions.where((item) {
       return item.dateTime.year == dateTime.year &&
           item.dateTime.month == dateTime.month &&
