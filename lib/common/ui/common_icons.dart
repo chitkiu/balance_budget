@@ -14,6 +14,9 @@ class CommonIcons {
   static IconData get cancel =>
       _isCupertino ? CupertinoIcons.clear : Icons.cancel;
 
+  static IconData get back =>
+      _isCupertino ? CupertinoIcons.back : Icons.arrow_back;
+
   static IconData get add => _isCupertino ? CupertinoIcons.add : Icons.add;
 
   static IconData get check => _isCupertino ? CupertinoIcons.checkmark : Icons.check;

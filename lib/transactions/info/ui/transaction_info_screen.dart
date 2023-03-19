@@ -25,7 +25,7 @@ class TransactionInfoScreen extends GetView<TransactionInfoController> {
       builder: (context, snapshot) {
         if (snapshot.hasData && snapshot.data != null) {
           var model = snapshot.data!;
-          //TODO Add cancel icon
+
           return PlatformScaffold(
             appBar: PlatformAppBar(
               title: Obx(() {
@@ -58,14 +58,14 @@ class TransactionInfoScreen extends GetView<TransactionInfoController> {
                       _updateControllers(model, false);
                       _isInEditMode.value = false;
                     },
-                    child: Icon(Icons.cancel), //TODO Add platform icon
+                    child: Icon(CommonIcons.cancel),
                   );
                 } else {
                   return GestureDetector(
                     onTap: () {
                       Get.back();
                     },
-                    child: Icon(Icons.arrow_back), //TODO Add platform icon
+                    child: Icon(CommonIcons.back),
                   );
                 }
               }),
