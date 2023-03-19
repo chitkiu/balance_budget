@@ -9,7 +9,6 @@ import '../domain/transactions_controller.dart';
 import 'models/transaction_ui_model.dart';
 
 class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsController> {
-
   final Rx<DateTime> _selectedDateTime = DateTime.now().obs;
 
   TransactionsScreen({super.key}) : super(Get.localisation.transactionsTabName, icon: CommonIcons.add);
@@ -40,10 +39,10 @@ class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsCont
                 backgroundColor: Colors.white /*const Color(0xff3AC3E2)*/,
                 headerTextColor: Colors.black
             ),
-            onChangeDateTime: _updateDateTime,
-            onMonthChanged: _updateDateTime,
-            onYearChanged: _updateDateTime,
-            onDateTimeReset: _updateDateTime,
+            onChangeDateTime: _updateCalendarDateTime,
+            onMonthChanged: _updateCalendarDateTime,
+            onYearChanged: _updateCalendarDateTime,
+            onDateTimeReset: _updateCalendarDateTime,
           ),
           Obx(() {
             var items = controller.getItemsFromMonth(_selectedDateTime.value);
@@ -95,10 +94,7 @@ class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsCont
                       style: const TextStyle(fontWeight: FontWeight.w500)),
                   Text(transaction.sum,
                       style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          color: transaction.sumColor
-                      )
-                  ),
+                          fontWeight: FontWeight.w500, color: transaction.sumColor)),
                 ],
               ),
               _additionalInfo(transaction.accountName, CommonIcons.wallet),
@@ -106,8 +102,7 @@ class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsCont
                 _additionalInfo(transaction.comment!, CommonIcons.note),
             ],
           ),
-        )
-    );
+        ));
   }
 
   Widget _additionalInfo(String text, IconData icon) {
@@ -126,7 +121,11 @@ class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsCont
     );
   }
 
-  void _updateDateTime(CalendarDateTime dateTime) {
+  void _updateCalendarDateTime(CalendarDateTime dateTime) {
     _selectedDateTime.value = DateTime(dateTime.year, dateTime.month, dateTime.day);
+  }
+
+  void _updateDateTime(DateTime dateTime) {
+    _selectedDateTime.value = dateTime;
   }
 }

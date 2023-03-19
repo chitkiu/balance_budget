@@ -20,6 +20,13 @@ extension DTExtension on DateTime {
   DateTime prevMonth() {
     return DateTime(year, month - 1, day);
   }
+  DateTime nextDay() {
+    return add(const Duration(days: 1));
+  }
+
+  DateTime prevDay() {
+    return subtract(const Duration(days: 1));
+  }
 
   DateTime removeSeconds() {
     return DateTime(
