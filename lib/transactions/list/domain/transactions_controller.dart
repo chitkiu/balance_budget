@@ -56,11 +56,6 @@ class TransactionsController extends GetxController {
         TransactionInfoScreen(transaction.id),
     );
     binding.delete();
-    // showCupertinoModalPopup(context: context, builder: builder)
-    /*Get.to(
-      () => TransactionInfoScreen(transaction.id),
-      binding: TransactionInfoBinding(),
-    );*/
   }
 
 }

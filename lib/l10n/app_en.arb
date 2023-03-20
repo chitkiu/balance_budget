@@ -59,5 +59,9 @@
   "ownBalance": "Own balance",
   "creditLimit": "Credit limit",
 
-  "loading": "Loading..."
+  "loading": "Loading...",
+
+  "cancel_bottom_sheet": "cancel",
+  "edit_bottom_sheet": "edit",
+  "save_bottom_sheet": "save"
 }

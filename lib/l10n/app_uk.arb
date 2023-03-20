@@ -59,5 +59,9 @@
   "ownBalance": "Власний баланс",
   "creditLimit": "Кредитний ліміт",
 
-  "loading": "Завантаження..."
+  "loading": "Завантаження...",
+
+  "cancel_bottom_sheet": "закрити",
+  "edit_bottom_sheet": "редагувати",
+  "save_bottom_sheet": "зберегти"
 }

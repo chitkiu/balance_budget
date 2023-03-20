@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
@@ -38,31 +39,48 @@ class TransactionInfoScreen extends GetView<TransactionInfoController> {
                 }
                 return Text(title);
               }),
+              automaticallyImplyLeading: false,
               trailingActions: [
                 if (model.canEdit)
                   GestureDetector(
-                    onTap: () {
-                      _updateOnChangeMode(model, _isInEditMode.value);
-                      _isInEditMode.value = !_isInEditMode.value;
-                    },
+                    onTap: () => _onTrailing(model),
                     child: Obx(() {
                       return Icon(
-                          _isInEditMode.value ? CommonIcons.check : CommonIcons.edit);
+                          _isInEditMode.value
+                              ? CommonIcons.check
+                              : CommonIcons.edit);
                     }),
                   )
               ],
-              automaticallyImplyLeading: false,
               leading: GestureDetector(
-                onTap: () {
-                  if (_isInEditMode.value) {
-                    _updateControllers(model, false);
-                    _isInEditMode.value = false;
-                  } else {
-                    Get.back();
-                  }
-                },
+                onTap: () => _onLeading(model),
                 child: Icon(CommonIcons.cancel),
               ),
+              cupertino: (context, platform) {
+                CupertinoButton? trailing;
+                if (model.canEdit) {
+                  trailing = CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () => _onTrailing(model),
+                    child: Obx(() {
+                        return Text(
+                          _isInEditMode.value
+                              ? Get.localisation.save_bottom_sheet
+                              : Get.localisation.edit_bottom_sheet,
+                        );
+                      },
+                    ),
+                  );
+                }
+                return CupertinoNavigationBarData(
+                    trailing: trailing,
+                    leading: CupertinoButton(
+                        padding: EdgeInsets.zero,
+                        child: Text(Get.localisation.cancel_bottom_sheet),
+                        onPressed: () => _onLeading(model)
+                    )
+                );
+              },
             ),
             body: SafeArea(
               child: Obx(() {
@@ -71,13 +89,14 @@ class TransactionInfoScreen extends GetView<TransactionInfoController> {
                   children: [
                     if (model is CommonTransactionUIModel)
                       ..._commonWidgets(model, _isInEditMode.value),
-                    if (model is SetBalanceTransactionUIModel) ..._setBalanceWidgets(model),
+                    if (model is SetBalanceTransactionUIModel)
+                      ..._setBalanceWidgets(model),
                     if (!_isInEditMode.value)
                       PlatformTextButton(
                         child: Text(Get.localisation.delete),
                         onPressed: () async {
                           await confirmBeforeActionDialog(
-                                () async {
+                            () async {
                               await controller.deleteTransaction(model.id);
                               Get.back();
                             },
@@ -181,5 +200,19 @@ class TransactionInfoScreen extends GetView<TransactionInfoController> {
           style: const TextStyle(fontWeight: FontWeight.w500)),
       Text(model.formattedDate),
     ];
+  }
+
+  void _onTrailing(TransactionUIModel model) {
+    _updateOnChangeMode(model, _isInEditMode.value);
+    _isInEditMode.value = !_isInEditMode.value;
+  }
+
+  void _onLeading(TransactionUIModel model) {
+    if (_isInEditMode.value) {
+      _updateControllers(model, false);
+      _isInEditMode.value = false;
+    } else {
+      Get.back();
+    }
   }
 }

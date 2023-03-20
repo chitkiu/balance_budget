@@ -1,10 +1,7 @@
 import 'package:balance_budget/common/data/date_time_extension.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:get/get.dart';
 
-import '../common_ui_settings.dart';
 import 'calendar_header.dart';
 
 typedef ContentBuilder = Widget Function(DateTime date);
@@ -176,71 +173,13 @@ class DayViewState extends State<Calendar2> {
     return CalendarHeader(
       date: date,
       onTitleClick: () async {
-        final selectedDate;
-        if (CommonUI.isCupertino) {
-          //TODO Code cleanup
-          selectedDate = await showCupertinoModalPopup<DateTime>(
-              context: context,
-              builder: (BuildContext context) {
-                var selectedDate = date;
-                return Container(
-                  height: 280,
-                  padding: const EdgeInsets.only(top: 6.0),
-                  // The Bottom margin is provided to align the popup above the system
-                  // navigation bar.
-                  margin: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
-                  ),
-                  // Provide a background color for the popup.
-                  color: CupertinoColors.systemBackground.resolveFrom(context),
-                  // Use a SafeArea widget to avoid system overlaps.
-                  child: SafeArea(
-                    top: false,
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            PlatformIconButton(
-                              onPressed: () {
-                                Get.back();
-                              },
-                              icon: Icon(CupertinoIcons.xmark),
-                            ),
-                            PlatformIconButton(
-                              onPressed: () {
-                                Get.back(result: selectedDate);
-                              },
-                              icon: Icon(CupertinoIcons.checkmark),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 184,
-                          child: CupertinoDatePicker(
-                            initialDateTime: date,
-                            mode: CupertinoDatePickerMode.date,
-                            use24hFormat: true,
-                            onDateTimeChanged: (DateTime newTime) {
-                              selectedDate = newTime;
-                            },
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              }
-          );
-        } else {
-          selectedDate = await showDatePicker(
-            context: context,
-            initialDate: date,
-            firstDate: _minDate,
-            lastDate: _maxDate,
-          );
-        }
+        //TODO Add translate
+        final selectedDate = await showPlatformDatePicker(
+          context: context,
+          initialDate: date,
+          firstDate: _minDate,
+          lastDate: _maxDate,
+        );
 
         if (selectedDate == null) return;
         jumpToDate(selectedDate);
