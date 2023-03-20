@@ -42,8 +42,8 @@
   "today": "Today",
   "yesterday": "Yesterday",
   "customDate": "Custom date",
-  "fullDateTimeString": "Date: {DAY}/{MONTH}/{YEAR}",
-  "dateString": "Selected date: {DAY}/{MONTH}/{YEAR}",
+  "fullDateTimeString": "Date: {DATE}",
+  "dateString": "Selected date: {DATE}",
 
   "delete": "Delete",
   "confirmToDeleteTitle": "Are you sure to delete?",

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../accounts/common/data/models/account.dart';
 import '../../../../categories/common/data/models/category.dart';
+import '../../../../common/ui/common_ui_settings.dart';
 import '../../../common/data/models/transaction.dart';
 import '../../data/models/rich_transaction_model.dart';
 import '../../ui/models/transaction_ui_model.dart';
@@ -11,7 +12,6 @@ import '../../ui/models/transaction_ui_model.dart';
 class TransactionsUIMapper {
 
   final NumberFormat _sumFormatter = NumberFormat("##0.00");
-  final _dateFormatter = DateFormat('dd/MM/yyyy');
 
   TransactionUIModel map(Transaction transaction, Category category, Account account) {
     switch (transaction.transactionType) {
@@ -54,7 +54,7 @@ class TransactionsUIMapper {
   }
 
   String _dateFormat(DateTime dateTime) {
-    return _dateFormatter.format(dateTime);
+    return CommonUI.dateFormatter.format(dateTime);
   }
 
   String _sumFormat(double sum) {

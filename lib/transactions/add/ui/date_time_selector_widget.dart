@@ -4,6 +4,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../common/getx_extensions.dart';
+import '../../../common/ui/common_ui_settings.dart';
 import 'models/date_selection_type.dart';
 import 'models/select_date_ui_model.dart';
 
@@ -20,9 +21,7 @@ class DateTimeSelectorWidget extends PlatformWidgetBase<Widget, Widget> {
       return PlatformTextButton(
         child: Text(
           Get.localisation.fullDateTimeString(
-              selectedDate.day,
-              selectedDate.month,
-              selectedDate.year
+              CommonUI.dateFormatter.format(selectedDate)
           )
         ),
         onPressed: () {
@@ -53,9 +52,7 @@ class DateTimeSelectorWidget extends PlatformWidgetBase<Widget, Widget> {
             children: [
               Text(
                   Get.localisation.dateString(
-                      selectedDate.dateTime.day,
-                      selectedDate.dateTime.month,
-                      selectedDate.dateTime.year
+                      CommonUI.dateFormatter.format(selectedDate.dateTime)
                   )
               ),
               ToggleButtons(

@@ -42,8 +42,8 @@
   "today": "Сьогодні",
   "yesterday": "Вчора",
   "customDate": "Інша дата",
-  "fullDateTimeString": "Дата: {DAY}/{MONTH}/{YEAR}",
-  "dateString": "Вибрана дата: {DAY}/{MONTH}/{YEAR}",
+  "fullDateTimeString": "Дата: {DATE}",
+  "dateString": "Вибрана дата: {DATE}",
 
   "delete": "Видалити",
   "confirmToDeleteTitle": "Ви впевненні що хочете видалити?",

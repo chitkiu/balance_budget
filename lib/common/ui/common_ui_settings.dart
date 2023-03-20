@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import 'dialog_helper.dart';
 import 'platform_dropdown_button.dart';
@@ -13,6 +14,8 @@ class CommonUI {
   static final bool isCupertino =
   (defaultTargetPlatform == TargetPlatform.iOS ||
       defaultTargetPlatform == TargetPlatform.macOS);
+
+  static final dateFormatter = DateFormat('dd/MM/yyyy');
 
 }
 
