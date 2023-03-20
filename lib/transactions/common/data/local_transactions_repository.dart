@@ -66,7 +66,7 @@ class LocalTransactionsRepository {
   }) async {
     var data = _ref.child(transactionId);
 
-    var dbTransaction = await data.get();
+    var dbTransaction = (await data.once()).snapshot;
 
     if (dbTransaction.exists) {
       var transaction = Transaction.fromJson(
