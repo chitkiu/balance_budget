@@ -1,17 +1,25 @@
+import 'package:balance_budget/common/ui/custom_calendar/calendar_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_icons.dart';
-import '../../../common/ui/common_scaffold_with_button_screen.dart';
 import '../../../common/ui/custom_calendar/calendar.dart';
 import '../domain/transactions_controller.dart';
 import 'models/transaction_ui_model.dart';
 
-class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsController> {
-  TransactionsScreen({super.key}) : super(Get.localisation.transactionsTabName, icon: CommonIcons.add);
+class TransactionsScreen extends GetView<TransactionsController> {
 
-  @override
+  final CalendarController _calendarController = CalendarController(
+      DateTime.now(),
+    minDate: DateTime(1990),
+    maxDate: DateTime(2050),
+  );
+
+  TransactionsScreen({super.key}) : super();
+
   Widget body(BuildContext context) {
     return Calendar2(
       contentPerDayBuilder: (date) {
@@ -19,17 +27,18 @@ class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsCont
           var items = controller.getItemsFromDay(date);
           if (items.isEmpty) {
             return Center(
-              child: Text(Get.localisation.noTransactions),
+              child: Text("$date"),
+              // child: Text(Get.localisation.noTransactions),
             );
           }
           return SingleChildScrollView(
-            child: _transactionItems(items),
+            child: Column(
+              children: _transactionItems(items),
+            ),
           );
         });
       },
-      minDay: DateTime(1990),
-      maxDay: DateTime(2050),
-      initialDay: DateTime.now(),
+      controller: _calendarController,
     );
   }
 
@@ -38,7 +47,45 @@ class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsCont
     controller.addTransaction();
   }
 
-  Widget _transactionItems(List<TransactionUIModel> transactions) {
+  @override
+  Widget build(BuildContext context) {
+    return PlatformScaffold(
+      body: SafeArea(
+        child: body(context),
+      ),
+      cupertino: (context, platform) {
+        return CupertinoPageScaffoldData(
+          navigationBar: CupertinoNavigationBar(
+            trailing: CupertinoButton(
+              onPressed: onButtonPress,
+              child: Icon(CommonIcons.add),
+            ),
+            middle: Text(Get.localisation.transactionsTabName),
+          )
+        );
+      },
+      material: (context, platform) {
+        return MaterialScaffoldData(
+            floatingActionButton: FloatingActionButton(
+              onPressed: onButtonPress,
+              child: Icon(CommonIcons.add),
+            ),
+          body: NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) {
+                return [
+                  SliverAppBar(
+                    title: Text(Get.localisation.transactionsTabName),
+                  )
+                ];
+              },
+              body: body(context)
+          )
+        );
+      },
+    );
+  }
+
+  List<Widget> _transactionItems(List<TransactionUIModel> transactions) {
     List<Widget> children = [];
     Divider divider = const Divider();
     for (int i = 0; i < transactions.length; i++) {
@@ -47,9 +94,7 @@ class TransactionsScreen extends CommonScaffoldWithButtonScreen<TransactionsCont
         children.add(divider);
       }
     }
-    return Column(
-      children: children,
-    );
+    return children;
   }
 
   Widget _transactionItem(TransactionUIModel transaction) {

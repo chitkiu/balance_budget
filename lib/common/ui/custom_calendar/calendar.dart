@@ -1,4 +1,5 @@
 import 'package:balance_budget/common/data/date_time_extension.dart';
+import 'package:balance_budget/common/ui/custom_calendar/calendar_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
@@ -9,21 +10,7 @@ typedef ContentBuilder = Widget Function(DateTime date);
 typedef CalendarPageChangeCallBack = void Function(DateTime date, int page);
 
 class Calendar2 extends StatefulWidget {
-
-  /// Determines the lower boundary user can scroll.
-  ///
-  /// If not provided [CalendarConstants.epochDate] is default.
-  final DateTime? minDay;
-
-  /// Determines upper boundary user can scroll.
-  ///
-  /// If not provided [CalendarConstants.maxDate] is default.
-  final DateTime? maxDay;
-
-  /// Defines initial display day.
-  ///
-  /// If not provided [DateTime.now] is default date.
-  final DateTime? initialDay;
+  final CalendarController controller;
 
   /// Page transition duration used when user try to change page using
   /// [DayViewState.nextPage] or [DayViewState.previousPage]
@@ -42,11 +29,9 @@ class Calendar2 extends StatefulWidget {
   /// Main widget for day view.
   const Calendar2({
     Key? key,
+    required this.controller,
     this.pageTransitionDuration = const Duration(milliseconds: 300),
     this.pageTransitionCurve = Curves.ease,
-    this.minDay,
-    this.maxDay,
-    this.initialDay,
     this.backgroundColor = Colors.white,
     required this.contentPerDayBuilder,
   }) : super(key: key);
@@ -56,44 +41,11 @@ class Calendar2 extends StatefulWidget {
 }
 
 class DayViewState extends State<Calendar2> {
-  late DateTime _currentDate;
-  late DateTime _maxDate;
-  late DateTime _minDate;
-  late int _totalDays;
-  late int _currentIndex;
-
-  late PageController _pageController;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _setDateRange();
-
-    _currentDate = (widget.initialDay ?? DateTime.now()).withoutTime;
-
-    _regulateCurrentDate();
-
-    _pageController = PageController(initialPage: _currentIndex);
-  }
-
-  @override
-  void didUpdateWidget(Calendar2 oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    // Update date range.
-    if (widget.minDay != oldWidget.minDay ||
-        widget.maxDay != oldWidget.maxDay) {
-      _setDateRange();
-      _regulateCurrentDate();
-
-      _pageController.jumpToPage(_currentIndex);
-    }
-  }
 
   @override
   void dispose() {
-    _pageController.dispose();
+    widget.controller.pageController.dispose();
+    widget.controller.dispose();
     super.dispose();
   }
 
@@ -110,15 +62,16 @@ class DayViewState extends State<Calendar2> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              _defaultDayBuilder(_currentDate),
+              _defaultDayBuilder(widget.controller.currentDate),
               Expanded(
                 child: PageView.builder(
-                  itemCount: _totalDays,
-                  controller: _pageController,
+                  itemCount: widget.controller.totalDays,
+                  controller: widget.controller.pageController,
                   onPageChanged: _onPageChange,
                   itemBuilder: (_, index) {
                     final date = DateTime(
-                        _minDate.year, _minDate.month, _minDate.day + index);
+                        widget.controller.minDate.year, widget.controller.minDate.month,
+                        widget.controller.minDate.day + index);
                     return widget.contentPerDayBuilder(date);
                   },
                 ),
@@ -128,42 +81,6 @@ class DayViewState extends State<Calendar2> {
         ),
       ),
     );
-  }
-
-  /// Sets the current date of this month.
-  ///
-  /// This method is used in initState and onUpdateWidget methods to
-  /// regulate current date in Month view.
-  ///
-  /// If maximum and minimum dates are change then first call _setDateRange
-  /// and then _regulateCurrentDate method.
-  ///
-  void _regulateCurrentDate() {
-    if (_currentDate.isBefore(_minDate)) {
-      _currentDate = _minDate;
-    } else if (_currentDate.isAfter(_maxDate)) {
-      _currentDate = _maxDate;
-    }
-
-    _currentIndex = _currentDate.getDayDifference(_minDate);
-  }
-
-  //TODO Move somewhere
-  static final DateTime epochDate = DateTime(1970);
-  static final DateTime maxDate = DateTime(275759);
-
-  /// Sets the minimum and maximum dates for current view.
-  void _setDateRange() {
-    _minDate = (widget.minDay ?? epochDate).withoutTime;
-    _maxDate = (widget.maxDay ?? maxDate).withoutTime;
-
-    assert(
-    !_maxDate.isBefore(_minDate),
-    "Minimum date should be less than maximum date.\n"
-        "Provided minimum date: $_minDate, maximum date: $_maxDate",
-    );
-
-    _totalDays = _maxDate.getDayDifference(_minDate) + 1;
   }
 
   /// Default view header builder. This builder will be used if
@@ -177,8 +94,8 @@ class DayViewState extends State<Calendar2> {
         final selectedDate = await showPlatformDatePicker(
           context: context,
           initialDate: date,
-          firstDate: _minDate,
-          lastDate: _maxDate,
+          firstDate: widget.controller.minDate,
+          lastDate: widget.controller.maxDate,
         );
 
         if (selectedDate == null) return;
@@ -205,23 +122,29 @@ class DayViewState extends State<Calendar2> {
   void _onPageChange(int index) {
     if (mounted) {
       setState(() {
-        _currentDate = DateTime(
-          _currentDate.year,
-          _currentDate.month,
-          _currentDate.day + (index - _currentIndex),
-        );
-        _currentIndex = index;
+        widget.controller.changeIndex(index);
       });
+      // setState(() {
+      //   DateTime currentDate = widget.controller.currentDate;
+      //   widget.controller.setDate(
+      //       DateTime(
+      //         currentDate.year,
+      //         currentDate.month,
+      //         currentDate.day + (index - widget.controller.currentIndex),
+      //       )
+      //   );
+      //   _currentIndex = index;
+      // });
     }
   }
   /// Jumps to page which gives day calendar for [date]
   ///
   ///
   void jumpToDate(DateTime date) {
-    if (date.isBefore(_minDate) || date.isAfter(_maxDate)) {
+    if (date.isBefore(widget.controller.minDate) || date.isAfter(widget.controller.maxDate)) {
       throw "Invalid date selected.";
     }
-    _pageController.jumpToPage(_minDate.getDayDifference(date));
+    widget.controller.pageController.jumpToPage(widget.controller.minDate.getDayDifference(date));
   }
 
   /// Animate to page which gives day calendar for [date].
@@ -233,11 +156,11 @@ class DayViewState extends State<Calendar2> {
   ///
   Future<void> animateToDate(DateTime date,
       {Duration? duration, Curve? curve}) async {
-    if (date.isBefore(_minDate) || date.isAfter(_maxDate)) {
+    if (date.isBefore(widget.controller.minDate) || date.isAfter(widget.controller.maxDate)) {
       throw "Invalid date selected.";
     }
-    await _pageController.animateToPage(
-      _minDate.getDayDifference(date),
+    await widget.controller.pageController.animateToPage(
+      widget.controller.minDate.getDayDifference(date),
       duration: duration ?? widget.pageTransitionDuration,
       curve: curve ?? widget.pageTransitionCurve,
     );
