@@ -36,11 +36,6 @@ class CalendarController extends ChangeNotifier {
     pageController = PageController(initialPage: _currentIndex);
   }
 
-  void setDate(DateTime newDateTime) {
-    _currentDate = newDateTime.withoutTime;
-    notifyListeners();
-  }
-
   void changeIndex(int index) {
     _currentDate = DateTime(
       currentDate.year,
@@ -50,9 +45,11 @@ class CalendarController extends ChangeNotifier {
 
     _currentIndex = index;
 
-    pageController.jumpToPage(_currentIndex);
-
     notifyListeners();
+  }
+
+  DateTime getDateFromIndex(int index) {
+    return DateTime(minDate.year, minDate.month, minDate.day + index);
   }
 
 

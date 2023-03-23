@@ -20,26 +20,46 @@ class TransactionsScreen extends GetView<TransactionsController> {
 
   TransactionsScreen({super.key}) : super();
 
-  Widget body(BuildContext context) {
+  Widget body(BuildContext context, Widget? additionalBody) {
     return Calendar2(
-      contentPerDayBuilder: (date) {
-        return Obx(() {
-          var items = controller.getItemsFromDay(date);
-          if (items.isEmpty) {
-            return Center(
-              child: Text("$date"),
-              // child: Text(Get.localisation.noTransactions),
-            );
-          }
-          return SingleChildScrollView(
-            child: Column(
-              children: _transactionItems(items),
-            ),
-          );
-        });
-      },
+      contentPerDayBuilder: _perDayContent,
       controller: _calendarController,
+      additionalBody: additionalBody,
     );
+  }
+
+  Widget _pageBody() {
+    return Expanded(
+      child: PageView.builder(
+        itemCount: _calendarController.totalDays,
+        controller: _calendarController.pageController,
+        onPageChanged: (index) {
+          _calendarController.changeIndex(index);
+        },
+        itemBuilder: (_, index) {
+          return _perDayContent(
+              _calendarController.getDateFromIndex(index)
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _perDayContent(DateTime date) {
+    return Obx(() {
+      var items = controller.getItemsFromDay(date);
+      if (items.isEmpty) {
+        return Center(
+          child: Text("$date"),
+          // child: Text(Get.localisation.noTransactions),
+        );
+      }
+      return SingleChildScrollView(
+        child: Column(
+          children: _transactionItems(items),
+        ),
+      );
+    });
   }
 
   @override
@@ -51,7 +71,7 @@ class TransactionsScreen extends GetView<TransactionsController> {
   Widget build(BuildContext context) {
     return PlatformScaffold(
       body: SafeArea(
-        child: body(context),
+        child: body(context, _pageBody()),
       ),
       cupertino: (context, platform) {
         return CupertinoPageScaffoldData(
@@ -74,11 +94,21 @@ class TransactionsScreen extends GetView<TransactionsController> {
               headerSliverBuilder: (context, innerBoxIsScrolled) {
                 return [
                   SliverAppBar(
+                    pinned: true,
+                    expandedHeight: 150.0, // TODO: check out later
                     title: Text(Get.localisation.transactionsTabName),
+                    flexibleSpace: FlexibleSpaceBar(
+                      background: Column(
+                        children: <Widget>[
+                          Padding(padding: EdgeInsets.only(top: kToolbarHeight)),
+                          body(context, null)
+                        ],
+                      ),
+                    ),
                   )
                 ];
               },
-              body: body(context)
+              body: _pageBody(),
           )
         );
       },

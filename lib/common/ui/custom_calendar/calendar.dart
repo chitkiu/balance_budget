@@ -26,6 +26,8 @@ class Calendar2 extends StatefulWidget {
   /// Display full day event builder.
   final ContentBuilder contentPerDayBuilder;
 
+  final Widget? additionalBody;
+
   /// Main widget for day view.
   const Calendar2({
     Key? key,
@@ -33,6 +35,7 @@ class Calendar2 extends StatefulWidget {
     this.pageTransitionDuration = const Duration(milliseconds: 300),
     this.pageTransitionCurve = Curves.ease,
     this.backgroundColor = Colors.white,
+    this.additionalBody,
     required this.contentPerDayBuilder,
   }) : super(key: key);
 
@@ -41,6 +44,15 @@ class Calendar2 extends StatefulWidget {
 }
 
 class DayViewState extends State<Calendar2> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    widget.controller.addListener(() {
+      setState(() {});
+    });
+  }
 
   @override
   void dispose() {
@@ -63,19 +75,8 @@ class DayViewState extends State<Calendar2> {
             mainAxisSize: MainAxisSize.min,
             children: [
               _defaultDayBuilder(widget.controller.currentDate),
-              Expanded(
-                child: PageView.builder(
-                  itemCount: widget.controller.totalDays,
-                  controller: widget.controller.pageController,
-                  onPageChanged: _onPageChange,
-                  itemBuilder: (_, index) {
-                    final date = DateTime(
-                        widget.controller.minDate.year, widget.controller.minDate.month,
-                        widget.controller.minDate.day + index);
-                    return widget.contentPerDayBuilder(date);
-                  },
-                ),
-              ),
+              if (widget.additionalBody != null)
+                ...[widget.additionalBody!]
             ],
           ),
         ),
@@ -117,26 +118,6 @@ class DayViewState extends State<Calendar2> {
     );
   }
 
-  /// Called when user change page using any gesture or inbuilt functions.
-  ///
-  void _onPageChange(int index) {
-    if (mounted) {
-      setState(() {
-        widget.controller.changeIndex(index);
-      });
-      // setState(() {
-      //   DateTime currentDate = widget.controller.currentDate;
-      //   widget.controller.setDate(
-      //       DateTime(
-      //         currentDate.year,
-      //         currentDate.month,
-      //         currentDate.day + (index - widget.controller.currentIndex),
-      //       )
-      //   );
-      //   _currentIndex = index;
-      // });
-    }
-  }
   /// Jumps to page which gives day calendar for [date]
   ///
   ///
