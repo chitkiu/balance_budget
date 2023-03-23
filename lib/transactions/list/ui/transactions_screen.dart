@@ -13,35 +13,31 @@ import 'models/transaction_ui_model.dart';
 class TransactionsScreen extends GetView<TransactionsController> {
 
   final CalendarController _calendarController = CalendarController(
-      DateTime.now(),
+    DateTime.now(),
     minDate: DateTime(1990),
     maxDate: DateTime(2050),
   );
 
   TransactionsScreen({super.key}) : super();
 
-  Widget body(BuildContext context, Widget? additionalBody) {
+  Widget _calendar() {
     return Calendar2(
-      contentPerDayBuilder: _perDayContent,
       controller: _calendarController,
-      additionalBody: additionalBody,
     );
   }
 
   Widget _pageBody() {
-    return Expanded(
-      child: PageView.builder(
-        itemCount: _calendarController.totalDays,
-        controller: _calendarController.pageController,
-        onPageChanged: (index) {
-          _calendarController.changeIndex(index);
-        },
-        itemBuilder: (_, index) {
-          return _perDayContent(
-              _calendarController.getDateFromIndex(index)
-          );
-        },
-      ),
+    return PageView.builder(
+      itemCount: _calendarController.totalDays,
+      controller: _calendarController.pageController,
+      onPageChanged: (index) {
+        _calendarController.changeIndex(index);
+      },
+      itemBuilder: (_, index) {
+        return _perDayContent(
+            _calendarController.getDateFromIndex(index)
+        );
+      },
     );
   }
 
@@ -50,8 +46,7 @@ class TransactionsScreen extends GetView<TransactionsController> {
       var items = controller.getItemsFromDay(date);
       if (items.isEmpty) {
         return Center(
-          child: Text("$date"),
-          // child: Text(Get.localisation.noTransactions),
+          child: Text(Get.localisation.noTransactions),
         );
       }
       return SingleChildScrollView(
@@ -62,32 +57,31 @@ class TransactionsScreen extends GetView<TransactionsController> {
     });
   }
 
-  @override
-  void onButtonPress() {
+  void _onButtonPress() {
     controller.addTransaction();
   }
 
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      body: SafeArea(
-        child: body(context, _pageBody()),
-      ),
       cupertino: (context, platform) {
         return CupertinoPageScaffoldData(
           navigationBar: CupertinoNavigationBar(
             trailing: CupertinoButton(
-              onPressed: onButtonPress,
+              onPressed: _onButtonPress,
               child: Icon(CommonIcons.add),
             ),
             middle: Text(Get.localisation.transactionsTabName),
-          )
+          ),
+          body: SafeArea(
+            child: _cupertinoBody(),
+          ),
         );
       },
       material: (context, platform) {
         return MaterialScaffoldData(
             floatingActionButton: FloatingActionButton(
-              onPressed: onButtonPress,
+              onPressed: _onButtonPress,
               child: Icon(CommonIcons.add),
             ),
           body: NestedScrollView(
@@ -95,13 +89,13 @@ class TransactionsScreen extends GetView<TransactionsController> {
                 return [
                   SliverAppBar(
                     pinned: true,
-                    expandedHeight: 150.0, // TODO: check out later
+                    expandedHeight: kToolbarHeight + kCalendarMaterialHeight,
                     title: Text(Get.localisation.transactionsTabName),
                     flexibleSpace: FlexibleSpaceBar(
                       background: Column(
                         children: <Widget>[
-                          Padding(padding: EdgeInsets.only(top: kToolbarHeight)),
-                          body(context, null)
+                          const Padding(padding: EdgeInsets.only(top: kToolbarHeight)),
+                          _calendar(),
                         ],
                       ),
                     ),
@@ -112,6 +106,17 @@ class TransactionsScreen extends GetView<TransactionsController> {
           )
         );
       },
+    );
+  }
+
+  Widget _cupertinoBody() {
+    return Column(
+      children: [
+        _calendar(),
+        Expanded(
+            child: _pageBody()
+        ),
+      ],
     );
   }
 

@@ -9,6 +9,9 @@ typedef ContentBuilder = Widget Function(DateTime date);
 
 typedef CalendarPageChangeCallBack = void Function(DateTime date, int page);
 
+const double kCalendarMaterialHeight = 88.0;
+const double kCalendarCupertinoHeight = 96.0;
+
 class Calendar2 extends StatefulWidget {
   final CalendarController controller;
 
@@ -20,23 +23,12 @@ class Calendar2 extends StatefulWidget {
   /// [DayViewState.nextPage] or [DayViewState.previousPage]
   final Curve pageTransitionCurve;
 
-  /// Background colour of day view page.
-  final Color? backgroundColor;
-
-  /// Display full day event builder.
-  final ContentBuilder contentPerDayBuilder;
-
-  final Widget? additionalBody;
-
   /// Main widget for day view.
   const Calendar2({
     Key? key,
     required this.controller,
     this.pageTransitionDuration = const Duration(milliseconds: 300),
     this.pageTransitionCurve = Curves.ease,
-    this.backgroundColor = Colors.white,
-    this.additionalBody,
-    required this.contentPerDayBuilder,
   }) : super(key: key);
 
   @override
@@ -45,42 +37,52 @@ class Calendar2 extends StatefulWidget {
 
 class DayViewState extends State<Calendar2> {
 
+  late final VoidCallback _listener;
+
   @override
   void initState() {
     super.initState();
 
-    widget.controller.addListener(() {
+    _listener = () {
       setState(() {});
-    });
+    };
+
+    widget.controller.addListener(_listener);
+  }
+
+  @override
+  void didUpdateWidget(Calendar2 oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.controller != oldWidget.controller) {
+      oldWidget.controller.removeListener(_listener);
+      widget.controller.addListener(_listener);
+    }
   }
 
   @override
   void dispose() {
-    widget.controller.pageController.dispose();
-    widget.controller.dispose();
     super.dispose();
+    widget.controller.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: widget.backgroundColor,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _defaultDayBuilder(widget.controller.currentDate),
-              if (widget.additionalBody != null)
-                ...[widget.additionalBody!]
-            ],
-          ),
-        ),
-      ),
+        child: PlatformWidget(
+      cupertino: (context, platform) {
+        return _build(kCalendarCupertinoHeight);
+      },
+      material: (context, platform) {
+        return _build(kCalendarMaterialHeight);
+      },
+    ));
+  }
+
+  Widget _build(double height) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: height,
+      child: _defaultDayBuilder(widget.controller.currentDate),
     );
   }
 
@@ -106,14 +108,10 @@ class DayViewState extends State<Calendar2> {
         animateToDate(selectedDate);
       },
       onNextClick: () {
-        jumpToDate(
-          date.add(Duration(days: DateTime.daysPerWeek - date.weekday + 1))
-        );
+        jumpToDate(date.add(Duration(days: DateTime.daysPerWeek - date.weekday + 1)));
       },
       onPrevClick: () {
-        jumpToDate(
-            date.subtract(Duration(days: date.weekday))
-        );
+        jumpToDate(date.subtract(Duration(days: date.weekday)));
       },
     );
   }
@@ -122,10 +120,12 @@ class DayViewState extends State<Calendar2> {
   ///
   ///
   void jumpToDate(DateTime date) {
-    if (date.isBefore(widget.controller.minDate) || date.isAfter(widget.controller.maxDate)) {
+    if (date.isBefore(widget.controller.minDate) ||
+        date.isAfter(widget.controller.maxDate)) {
       throw "Invalid date selected.";
     }
-    widget.controller.pageController.jumpToPage(widget.controller.minDate.getDayDifference(date));
+    widget.controller.pageController
+        .jumpToPage(widget.controller.minDate.getDayDifference(date));
   }
 
   /// Animate to page which gives day calendar for [date].
@@ -135,9 +135,9 @@ class DayViewState extends State<Calendar2> {
   /// respectively.
   ///
   ///
-  Future<void> animateToDate(DateTime date,
-      {Duration? duration, Curve? curve}) async {
-    if (date.isBefore(widget.controller.minDate) || date.isAfter(widget.controller.maxDate)) {
+  Future<void> animateToDate(DateTime date, {Duration? duration, Curve? curve}) async {
+    if (date.isBefore(widget.controller.minDate) ||
+        date.isAfter(widget.controller.maxDate)) {
       throw "Invalid date selected.";
     }
     await widget.controller.pageController.animateToPage(

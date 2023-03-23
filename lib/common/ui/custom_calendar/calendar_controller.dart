@@ -52,5 +52,4 @@ class CalendarController extends ChangeNotifier {
     return DateTime(minDate.year, minDate.month, minDate.day + index);
   }
 
-
 }
