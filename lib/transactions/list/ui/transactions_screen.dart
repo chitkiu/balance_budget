@@ -152,12 +152,16 @@ class TransactionsScreen extends GetView<TransactionsController> {
                           fontWeight: FontWeight.w500, color: transaction.sumColor)),
                 ],
               ),
-              _additionalInfo(transaction.accountName, CommonIcons.wallet),
+              if (transaction is TransferTransactionUIModel)
+                _additionalInfo("${transaction.toAccountName} => ${transaction.fromAccountName}", CommonIcons.wallet),
+              if (transaction is !TransferTransactionUIModel)
+                _additionalInfo(transaction.accountName, CommonIcons.wallet),
               if (transaction.comment != null)
                 _additionalInfo(transaction.comment!, CommonIcons.note),
             ],
           ),
-        ));
+        )
+    );
   }
 
   Widget _additionalInfo(String text, IconData icon) {

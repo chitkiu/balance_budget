@@ -51,7 +51,8 @@
   "yes": "Yes",
   "no": "No",
 
-  "addInitialBudgetCategoryTitle": "Add initial balance",
+  "addInitialBalanceCategoryTitle": "Add initial balance",
+  "transferCategoryTitle": "Transfer",
 
   "noTransactions": "You don't have transaction",
 

@@ -29,9 +29,15 @@ class LocalTransactionsRepository {
     });
   }
 
-  bool create(double sum, TransactionType transactionType, String? categoryId,
-      String accountId, DateTime time, String? comment,
-      {bool skipZeroSum = true}) {
+  bool create(
+      double sum,
+      TransactionType transactionType,
+      String? categoryId,
+      String accountId,
+      DateTime time,
+      String? comment,
+      {bool skipZeroSum = true, String? additionData}
+  ) {
     if (skipZeroSum && sum <= 0) {
       return false;
     }
@@ -45,6 +51,7 @@ class LocalTransactionsRepository {
       time: time,
       creationTime: DateTime.now(),
       comment: comment,
+      additionalData: additionData,
     ).toJson());
 
     return true;

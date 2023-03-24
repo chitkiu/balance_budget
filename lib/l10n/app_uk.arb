@@ -51,7 +51,8 @@
   "yes": "Так",
   "no": "Ні",
 
-  "addInitialBudgetCategoryTitle": "Налаштований стандартний баланс",
+  "addInitialBalanceCategoryTitle": "Налаштований стандартний баланс",
+  "transferCategoryTitle": "Переказ",
 
   "noTransactions": "У Вас немає транзакцій!",
 

@@ -13,14 +13,16 @@ class TransactionsUIMapper {
 
   final NumberFormat _sumFormatter = NumberFormat("##0.00");
 
-  TransactionUIModel map(Transaction transaction, Category category, Account account) {
+  TransactionUIModel map(Transaction transaction, Category category, Account fromAccount, Account? toAccount) {
     switch (transaction.transactionType) {
-
       case TransactionType.setInitialBalance:
-        return _mapSetBalanceModel(transaction, category, account);
+        return _mapSetBalanceModel(transaction, category, fromAccount);
       case TransactionType.spend:
       case TransactionType.income:
-        return _mapCommonModel(transaction, category, account);
+        return _mapCommonModel(transaction, category, fromAccount);
+      case TransactionType.transfer:
+        assert(toAccount != null);
+        return _mapTransferModel(transaction, category, fromAccount, toAccount!);
     }
   }
 
@@ -49,8 +51,29 @@ class TransactionsUIMapper {
     );
   }
 
+  TransactionUIModel _mapTransferModel(
+      Transaction transaction,
+      Category category,
+      Account fromAccount,
+      Account toAccount,
+  ) {
+    return TransferTransactionUIModel(
+      id: transaction.id,
+      sum: _sumFormat(transaction.sum),
+      sumDouble: transaction.sum,
+      fromAccountName: fromAccount.name,
+      toAccountName: toAccount.name,
+      formattedDate: _dateFormat(transaction.time),
+      dateTime: transaction.time,
+    );
+  }
+
   TransactionUIModel mapFromRich(RichTransactionModel richTransaction) {
-    return map(richTransaction.transaction, richTransaction.category, richTransaction.account);
+    if (richTransaction is RichTransferTransactionModel) {
+      return map(richTransaction.transaction, richTransaction.category, richTransaction.account, richTransaction.toAccount);
+    } else {
+      return map(richTransaction.transaction, richTransaction.category, richTransaction.account, null);
+    }
   }
 
   String _dateFormat(DateTime dateTime) {

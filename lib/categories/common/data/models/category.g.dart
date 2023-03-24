@@ -21,4 +21,5 @@ const _$TransactionTypeEnumMap = {
   TransactionType.setInitialBalance: 'setInitialBalance',
   TransactionType.spend: 'spend',
   TransactionType.income: 'income',
+  TransactionType.transfer: 'transfer',
 };

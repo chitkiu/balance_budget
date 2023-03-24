@@ -18,6 +18,9 @@ class Transaction {
   @EpochDateTimeConverter()
   final DateTime creationTime;
   final String? comment;
+  ///Added for some custom data, which can be only in some transaction
+  ///For example like transfer between wallets
+  final String? additionalData;
 
   String get id => _id ?? '';
 
@@ -28,7 +31,8 @@ class Transaction {
       required this.accountId,
       required this.time,
       required this.creationTime,
-      this.comment});
+      this.comment,
+      this.additionalData});
 
   factory Transaction.fromJson(MapEntry<dynamic, dynamic> json) =>
       _$TransactionFromJson(json.value).._id = json.key;
@@ -42,7 +46,8 @@ class Transaction {
       String? accountId,
       DateTime? time,
       DateTime? creationTime,
-      String? comment}) {
+      String? comment,
+      String? additionalData}) {
     var finalComment = this.comment;
     if (comment == '') {
       finalComment = null;
@@ -57,6 +62,7 @@ class Transaction {
       time: time ?? this.time,
       comment: finalComment,
       creationTime: creationTime ?? this.creationTime,
+      additionalData: additionalData ?? this.additionalData,
     ).._id = _id;
   }
 
@@ -73,7 +79,8 @@ class Transaction {
           accountId == other.accountId &&
           time == other.time &&
           creationTime == other.creationTime &&
-          comment == other.comment;
+          comment == other.comment &&
+          additionalData == other.additionalData;
 
   @override
   int get hashCode =>
@@ -84,10 +91,11 @@ class Transaction {
       accountId.hashCode ^
       time.hashCode ^
       creationTime.hashCode ^
-      comment.hashCode;
+      comment.hashCode ^
+      additionalData.hashCode;
 
   @override
   String toString() {
-    return 'Transaction{_id: $_id, sum: $sum, transactionType: $transactionType, categoryId: $categoryId, accountId: $accountId, time: $time, creationTime: $creationTime, comment: $comment}';
+    return 'Transaction{_id: $_id, sum: $sum, transactionType: $transactionType, categoryId: $categoryId, accountId: $accountId, time: $time, creationTime: $creationTime, comment: $comment, additionalData: $additionalData}';
   }
 }

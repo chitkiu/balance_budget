@@ -12,9 +12,13 @@ import 'models/category.dart';
 class LocalCategoryRepository {
   final List<Category> _localCategories = [
     Category(
-      title: Get.localisation.addInitialBudgetCategoryTitle,
+      title: Get.localisation.addInitialBalanceCategoryTitle,
       transactionType: TransactionType.setInitialBalance,
-    )
+    ),
+    Category(
+      title: Get.localisation.transferCategoryTitle,
+      transactionType: TransactionType.transfer,
+    ),
   ];
 
   DatabaseReference get _ref => FirebaseDatabase.instance.ref("users/${FirebaseAuth.instance.currentUser?.uid ?? '0'}/categories");

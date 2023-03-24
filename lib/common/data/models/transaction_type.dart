@@ -1,9 +1,10 @@
 enum TransactionType {
   setInitialBalance(true),
   spend(false),
-  income(false);
+  income(false),
+  transfer(false);
 
-  static Iterable<TransactionType> visibleTypes = values.where((element) => !element.isInternal);
+  static List<TransactionType> visibleTypes = values.where((element) => !element.isInternal).toList();
 
   final bool isInternal;
 

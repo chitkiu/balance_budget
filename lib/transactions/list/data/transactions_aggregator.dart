@@ -1,3 +1,4 @@
+import 'package:balance_budget/common/data/models/transaction_type.dart';
 import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -21,23 +22,33 @@ class TransactionsAggregator {
       _transactionsRepository.transactions,
       _accountRepository.accounts,
       (categories, transactions, accounts) {
-        var newTransactions = transactions
-            .map((e) {
+        List<RichTransactionModel> newTransactions = transactions
+            .map((transaction) {
               var category =
-                  categories.firstWhereOrNull((element) => element.id == e.categoryId);
-              if (category == null) {
+                  categories.firstWhereOrNull((element) => element.id == transaction.categoryId);
+              if (category == null && transaction.transactionType != TransactionType.transfer) {
                 return null;
               }
 
               var account =
-                  accounts.firstWhereOrNull((element) => element.id == e.accountId);
+                  accounts.firstWhereOrNull((element) => element.id == transaction.accountId);
               if (account == null) {
                 return null;
               }
 
-              return RichTransactionModel(e, category, account);
+              if (transaction.transactionType == TransactionType.transfer) {
+                assert(transaction.additionalData != null);
+                var toAccount = accounts.firstWhereOrNull((element) => element.id == transaction.additionalData);
+                assert(toAccount != null);
+                var category = categories.firstWhereOrNull((element) => element.transactionType == TransactionType.transfer);
+                assert(category != null);
+                return RichTransferTransactionModel(transaction, category!, account, toAccount!);
+              }
+
+              return RichTransactionModel(transaction, category!, account);
             })
-            .whereType<RichTransactionModel>()
+            .where((element) => element != null)
+            .map((e) => e!)
             .toList();
 
         newTransactions.sort(_compare);

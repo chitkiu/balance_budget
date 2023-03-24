@@ -16,6 +16,7 @@ Transaction _$TransactionFromJson(Map<String, dynamic> json) => Transaction(
       creationTime:
           const EpochDateTimeConverter().fromJson(json['creationTime'] as int),
       comment: json['comment'] as String?,
+      additionalData: json['additionalData'] as String?,
     );
 
 Map<String, dynamic> _$TransactionToJson(Transaction instance) =>
@@ -28,10 +29,12 @@ Map<String, dynamic> _$TransactionToJson(Transaction instance) =>
       'creationTime':
           const EpochDateTimeConverter().toJson(instance.creationTime),
       'comment': instance.comment,
+      'additionalData': instance.additionalData,
     };
 
 const _$TransactionTypeEnumMap = {
   TransactionType.setInitialBalance: 'setInitialBalance',
   TransactionType.spend: 'spend',
   TransactionType.income: 'income',
+  TransactionType.transfer: 'transfer',
 };

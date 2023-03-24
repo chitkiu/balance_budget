@@ -37,6 +37,8 @@ class AddTransactionController extends GetxController {
 
   Rxn<String> selectedAccount = Rxn();
 
+  Rxn<String> selectedToAccount = Rxn();
+
   Rx<SelectDayUIModel> selectedDate = SelectDayUIModel.now().obs;
 
   var selectedType = TransactionType.spend.obs;
@@ -63,13 +65,11 @@ class AddTransactionController extends GetxController {
     selectedType.refresh();
 
     _accountSubscription?.cancel();
-    _accountSubscription = rxd.CombineLatestStream.combine2(
-      _accountRepo.accounts,
-      selectedAccount.stream,
-      _spendAccountUIMapper.map,
-    ).listen((value) {
-      accountList.value = value;
-    });
+    _accountSubscription = _accountRepo.accounts
+        .map((event) => _spendAccountUIMapper.map(event))
+        .listen((value) {
+          accountList.value = value;
+        });
 
     selectedAccount.refresh();
 
@@ -97,7 +97,7 @@ class AddTransactionController extends GetxController {
     }
 
     var categoryId = selectedCategory.value;
-    if (categoryId == null) {
+    if (categoryId == null && selectedType.value != TransactionType.transfer) {
       return;
     }
 
@@ -118,7 +118,9 @@ class AddTransactionController extends GetxController {
           selected.month,
           selected.day,
         ),
-        currentComment);
+        currentComment,
+        additionData: selectedToAccount.value,
+    );
 
     if (addTransactionResult) {
       Get.back();
@@ -131,6 +133,10 @@ class AddTransactionController extends GetxController {
 
   void selectAccount(TransactionAccountUIModel account) {
     selectedAccount.value = account.accountId;
+  }
+
+  void selectToAccount(TransactionAccountUIModel account) {
+    selectedToAccount.value = account.accountId;
   }
 
   void selectDateByType(

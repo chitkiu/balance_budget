@@ -91,6 +91,8 @@ class TransactionInfoScreen extends GetView<TransactionInfoController> {
                       ..._commonWidgets(model, _isInEditMode.value),
                     if (model is SetBalanceTransactionUIModel)
                       ..._setBalanceWidgets(model),
+                    if (model is TransferTransactionUIModel)
+                      ..._transferWidgets(model),
                     if (!_isInEditMode.value)
                       PlatformTextButton(
                         child: Text(Get.localisation.delete),
@@ -196,6 +198,20 @@ class TransactionInfoScreen extends GetView<TransactionInfoController> {
       Text(Get.localisation.transactionInfoAccountPrefix,
           style: const TextStyle(fontWeight: FontWeight.w500)),
       Text(model.accountName),
+      Text(Get.localisation.transactionInfoTimePrefix,
+          style: const TextStyle(fontWeight: FontWeight.w500)),
+      Text(model.formattedDate),
+    ];
+  }
+
+  List<Widget> _transferWidgets(TransferTransactionUIModel model) {
+    return [
+      Text(Get.localisation.transactionInfoSumPrefix,
+          style: const TextStyle(fontWeight: FontWeight.w500)),
+      Text(model.sum),
+      Text(Get.localisation.transactionInfoAccountPrefix,
+          style: const TextStyle(fontWeight: FontWeight.w500)),
+      Text("${model.fromAccountName} => ${model.toAccountName}"),
       Text(Get.localisation.transactionInfoTimePrefix,
           style: const TextStyle(fontWeight: FontWeight.w500)),
       Text(model.formattedDate),

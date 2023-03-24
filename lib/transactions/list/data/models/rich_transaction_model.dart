@@ -9,3 +9,15 @@ class RichTransactionModel {
 
   RichTransactionModel(this.transaction, this.category, this.account);
 }
+
+class RichTransferTransactionModel extends RichTransactionModel {
+
+  final Account toAccount;
+
+  RichTransferTransactionModel(
+      super.transaction,
+      super.category,
+      super.account,
+      this.toAccount
+  );
+}

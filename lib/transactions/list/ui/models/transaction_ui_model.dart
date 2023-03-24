@@ -50,7 +50,26 @@ class SetBalanceTransactionUIModel extends TransactionUIModel {
       required super.formattedDate,
       required super.dateTime})
       : super(
-            categoryName: Get.localisation.addInitialBudgetCategoryTitle,
+            categoryName: Get.localisation.addInitialBalanceCategoryTitle,
             canEdit: false,
+            sumColor: Colors.grey);
+}
+
+class TransferTransactionUIModel extends TransactionUIModel {
+  final String fromAccountName;
+  final String toAccountName;
+
+  TransferTransactionUIModel(
+      {required super.id,
+      required super.sum,
+      required super.sumDouble,
+      required this.fromAccountName,
+      required this.toAccountName,
+      required super.formattedDate,
+      required super.dateTime})
+      : super(
+            categoryName: Get.localisation.transferCategoryTitle,
+            canEdit: false,
+            accountName: fromAccountName,
             sumColor: Colors.grey);
 }
