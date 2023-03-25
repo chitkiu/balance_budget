@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:balance_budget/common/data/models/transaction_type.dart';
 import 'package:get/get.dart';
 
 import '../../add/domain/add_category_binding.dart';
@@ -21,7 +22,7 @@ class CategoriesController extends GetxController {
     _listener?.cancel();
     _listener = _categoryRepo.categories.listen((event) {
       categories.value = event
-          .where((element) => !element.transactionType.isInternal)
+          .where((category) => TransactionType.canAddCategory.contains(category.transactionType))
           .map(_mapper.map)
           .toList();
     });

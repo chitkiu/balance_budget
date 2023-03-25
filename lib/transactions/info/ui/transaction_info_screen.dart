@@ -89,8 +89,6 @@ class TransactionInfoScreen extends GetView<TransactionInfoController> {
                   children: [
                     if (model is CommonTransactionUIModel)
                       ..._commonWidgets(model, _isInEditMode.value),
-                    if (model is SetBalanceTransactionUIModel)
-                      ..._setBalanceWidgets(model),
                     if (model is TransferTransactionUIModel)
                       ..._transferWidgets(model),
                     if (!_isInEditMode.value)
@@ -187,20 +185,6 @@ class TransactionInfoScreen extends GetView<TransactionInfoController> {
         PlatformTextField(
           controller: _commentController,
         ),
-    ];
-  }
-
-  List<Widget> _setBalanceWidgets(SetBalanceTransactionUIModel model) {
-    return [
-      Text(Get.localisation.transactionInfoSumPrefix,
-          style: const TextStyle(fontWeight: FontWeight.w500)),
-      Text(model.sum),
-      Text(Get.localisation.transactionInfoAccountPrefix,
-          style: const TextStyle(fontWeight: FontWeight.w500)),
-      Text(model.accountName),
-      Text(Get.localisation.transactionInfoTimePrefix,
-          style: const TextStyle(fontWeight: FontWeight.w500)),
-      Text(model.formattedDate),
     ];
   }
 

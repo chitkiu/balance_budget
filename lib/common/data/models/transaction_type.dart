@@ -1,12 +1,19 @@
 enum TransactionType {
-  setInitialBalance(true),
-  spend(false),
-  income(false),
-  transfer(false);
+  setInitialBalance,
+  spend,
+  income,
+  transfer;
 
-  static List<TransactionType> visibleTypes = values.where((element) => !element.isInternal).toList();
+  static List<TransactionType> showInTransactionList = [
+    TransactionType.spend,
+    TransactionType.income,
+    TransactionType.transfer,
+  ];
 
-  final bool isInternal;
+  static List<TransactionType> canAddCategory = [
+    TransactionType.spend,
+    TransactionType.income,
+  ];
 
-  const TransactionType(this.isInternal);
+  const TransactionType();
 }

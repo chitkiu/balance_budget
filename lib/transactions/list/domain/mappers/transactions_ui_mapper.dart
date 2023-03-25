@@ -27,17 +27,6 @@ class TransactionsUIMapper {
     );
   }
 
-  TransactionUIModel _mapSetBalanceModel(Transaction transaction, Account account) {
-    return SetBalanceTransactionUIModel(
-      id: transaction.id,
-      sum: _sumFormat(transaction.sum),
-      sumDouble: transaction.sum,
-      accountName: account.name,
-      formattedDate: _dateFormat(transaction.time),
-      dateTime: transaction.time,
-    );
-  }
-
   TransactionUIModel _mapTransferModel(
       Transaction transaction,
       Account fromAccount,
@@ -59,9 +48,6 @@ class TransactionsUIMapper {
       case TransferRichTransactionModel:
         TransferRichTransactionModel transaction = richTransaction as TransferRichTransactionModel;
         return _mapTransferModel(transaction.transaction, transaction.fromAccount, transaction.toAccount);
-
-      case SetBalanceRichTransactionModel:
-        return _mapSetBalanceModel(richTransaction.transaction, richTransaction.fromAccount);
 
       case CategoryRichTransactionModel:
         CategoryRichTransactionModel transaction = richTransaction as CategoryRichTransactionModel;

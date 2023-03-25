@@ -41,20 +41,6 @@ class CommonTransactionUIModel extends TransactionUIModel {
       : super(canEdit: true);
 }
 
-class SetBalanceTransactionUIModel extends TransactionUIModel {
-  SetBalanceTransactionUIModel(
-      {required super.id,
-      required super.sum,
-      required super.sumDouble,
-      required super.accountName,
-      required super.formattedDate,
-      required super.dateTime})
-      : super(
-            categoryName: Get.localisation.addInitialBalanceCategoryTitle,
-            canEdit: false,
-            sumColor: Colors.grey);
-}
-
 class TransferTransactionUIModel extends TransactionUIModel {
   final String fromAccountName;
   final String toAccountName;

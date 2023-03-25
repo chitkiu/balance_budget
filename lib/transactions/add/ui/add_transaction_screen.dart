@@ -186,33 +186,48 @@ class AddTransactionScreen
   }
 
   Widget _transactionTypeSelector() {
-    return Obx(() {
-      return LayoutBuilder(
+    return LayoutBuilder(
         builder: (buildContext, constraints) {
-          return ToggleButtons(
-            onPressed: (index) async {
-              var type = TransactionType.visibleTypes[index];
-              controller.selectedType.value = type;
-            },
-            isSelected: TransactionType.visibleTypes
-                .map((e) => e == controller.selectedType.value)
-                .toList(),
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
-            selectedBorderColor: Colors.green[700],
-            selectedColor: Colors.white,
-            fillColor: Colors.green[200],
-            color: Colors.green[400],
-            constraints: BoxConstraints(
-              minHeight: 40.0,
-              minWidth: (constraints.maxWidth - 8*2) / TransactionType.visibleTypes.length,
-            ),
-            children: TransactionType.visibleTypes.map((e) {
-              return Text(e.name);
-            })
-                .toList(),
-          );
-        },
-      );
-    });
+          return Obx(() {
+            return ToggleButtons(
+              onPressed: (index) async {
+                var type = TransactionType.showInTransactionList[index];
+                controller.selectedType.value = type;
+              },
+              isSelected: TransactionType.showInTransactionList
+                  .map((e) => e == controller.selectedType.value)
+                  .toList(),
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
+              selectedBorderColor: Colors.grey,
+              borderColor: Colors.grey,
+              selectedColor: Colors.white,
+              fillColor: _getBackgroundColorBySelectedType(controller.selectedType.value),
+              color: Colors.black,
+              constraints: BoxConstraints(
+                minHeight: 40.0,
+                minWidth: (constraints.maxWidth - 8 * 2) /
+                    TransactionType.showInTransactionList.length,
+              ),
+              children: TransactionType.showInTransactionList.map((e) {
+                return Text(e.name);
+              })
+                  .toList(),
+            );
+          });
+        }
+    );
+  }
+
+  Color _getBackgroundColorBySelectedType(TransactionType type) {
+    switch (type) {
+      case TransactionType.spend:
+        return Colors.redAccent;
+      case TransactionType.income:
+        return Colors.green;
+      case TransactionType.transfer:
+        return Colors.grey;
+      case TransactionType.setInitialBalance:
+        return Colors.grey;
+    }
   }
 }

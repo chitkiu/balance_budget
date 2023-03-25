@@ -16,10 +16,6 @@ class TransferRichTransactionModel extends RichTransactionModel {
   TransferRichTransactionModel(super.transaction, super.fromAccount, this.toAccount);
 }
 
-class SetBalanceRichTransactionModel extends RichTransactionModel {
-  SetBalanceRichTransactionModel(super.transaction, super.fromAccount);
-}
-
 class CategoryRichTransactionModel extends RichTransactionModel {
 
   final Category category;

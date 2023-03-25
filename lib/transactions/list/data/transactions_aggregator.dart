@@ -32,10 +32,7 @@ class TransactionsAggregator {
           }
           switch (transaction.transactionType) {
             case TransactionType.setInitialBalance:
-              return SetBalanceRichTransactionModel(
-                transaction,
-                account,
-              );
+              return null;
             case TransactionType.transfer:
               if (transaction is TransferTransaction) {
                 var toAccount = accounts.firstWhereOrNull(
