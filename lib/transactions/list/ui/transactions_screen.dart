@@ -9,7 +9,6 @@ import '../../../common/ui/custom_calendar/calendar.dart';
 import '../../../common/ui/custom_calendar/calendar_controller.dart';
 import '../domain/transactions_controller.dart';
 import 'items/transaction_item.dart';
-import 'models/transaction_ui_model.dart';
 
 class TransactionsScreen extends GetView<TransactionsController> {
 
@@ -50,10 +49,12 @@ class TransactionsScreen extends GetView<TransactionsController> {
           child: Text(Get.localisation.noTransactions),
         );
       }
-      return SingleChildScrollView(
-        child: Column(
-          children: _transactionItems(items),
-        ),
+      return ListView.separated(
+          itemBuilder: (context, index) {
+            return TransactionItem(items[index], controller.onItemClick);
+          },
+          separatorBuilder: (context, index) => const Divider(),
+          itemCount: items.length
       );
     });
   }
@@ -119,17 +120,5 @@ class TransactionsScreen extends GetView<TransactionsController> {
         ),
       ],
     );
-  }
-
-  List<Widget> _transactionItems(List<TransactionUIModel> transactions) {
-    List<Widget> children = [];
-    Divider divider = const Divider();
-    for (int i = 0; i < transactions.length; i++) {
-      children.add(TransactionItem(transactions[i], controller.onItemClick));
-      if (i < transactions.length - 1) {
-        children.add(divider);
-      }
-    }
-    return children;
   }
 }

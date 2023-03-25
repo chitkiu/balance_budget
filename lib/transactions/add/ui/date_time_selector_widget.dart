@@ -8,6 +8,7 @@ import '../../../common/ui/common_ui_settings.dart';
 import 'models/date_selection_type.dart';
 import 'models/select_date_ui_model.dart';
 
+//TODO Add ToggleButtons for cupertino
 class DateTimeSelectorWidget extends PlatformWidgetBase<Widget, Widget> {
   final Rx<SelectDayUIModel> date;
   final Function(DateSelectionType, DateTime?) onDateChanged;
@@ -55,45 +56,49 @@ class DateTimeSelectorWidget extends PlatformWidgetBase<Widget, Widget> {
                       CommonUI.dateFormatter.format(selectedDate.dateTime)
                   )
               ),
-              ToggleButtons(
-                onPressed: (index) async {
-                  var type = DateSelectionType.values[index];
-                  switch (type) {
-                    case DateSelectionType.yesterday:
-                      onDateChanged(type, null);
-                      break;
-                    case DateSelectionType.today:
-                      onDateChanged(type, null);
-                      break;
-                    case DateSelectionType.customDate:
-                      var newDate = await showPlatformDatePicker(
-                          context: context,
-                          initialDate: selectedDate.dateTime,
-                          firstDate: DateTime(1),
-                          lastDate: DateTime(9999)
-                      );
-                      onDateChanged(type, newDate ?? selectedDate.dateTime);
-                      break;
-                  }
+              LayoutBuilder(
+                builder: (buildContext, constraints) {
+                  return ToggleButtons(
+                    onPressed: (index) async {
+                      var type = DateSelectionType.values[index];
+                      switch (type) {
+                        case DateSelectionType.yesterday:
+                          onDateChanged(type, null);
+                          break;
+                        case DateSelectionType.today:
+                          onDateChanged(type, null);
+                          break;
+                        case DateSelectionType.customDate:
+                          var newDate = await showPlatformDatePicker(
+                              context: context,
+                              initialDate: selectedDate.dateTime,
+                              firstDate: DateTime(1),
+                              lastDate: DateTime(9999)
+                          );
+                          onDateChanged(type, newDate ?? selectedDate.dateTime);
+                          break;
+                      }
+                    },
+                    isSelected: [
+                      selectedDate.isYesterday,
+                      selectedDate.isToday,
+                      !selectedDate.isYesterday && !selectedDate.isToday
+                    ],
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    selectedBorderColor: Colors.green[700],
+                    selectedColor: Colors.white,
+                    fillColor: Colors.green[200],
+                    color: Colors.green[400],
+                    constraints: BoxConstraints(
+                      minHeight: 40.0,
+                      minWidth: (constraints.maxWidth - 8 * 2) / 3,
+                    ),
+                    children: DateSelectionType.values.map((e) {
+                      return Text(e.getTitle());
+                    })
+                        .toList(),
+                  );
                 },
-                isSelected: [
-                  selectedDate.isYesterday,
-                  selectedDate.isToday,
-                  !selectedDate.isYesterday && !selectedDate.isToday
-                ],
-                borderRadius: const BorderRadius.all(Radius.circular(8)),
-                selectedBorderColor: Colors.green[700],
-                selectedColor: Colors.white,
-                fillColor: Colors.green[200],
-                color: Colors.green[400],
-                constraints: const BoxConstraints(
-                  minHeight: 40.0,
-                  minWidth: 80.0,
-                ),
-                children: DateSelectionType.values.map((e) {
-                  return Text(e.getTitle());
-                })
-                    .toList(),
               )
             ],
           );

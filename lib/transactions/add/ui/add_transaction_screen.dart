@@ -26,30 +26,7 @@ class AddTransactionScreen
       child: Column(
         children: [
           Text(Get.localisation.transactionTypeHint),
-          Obx(() {
-            return ToggleButtons(
-              onPressed: (index) async {
-                var type = TransactionType.visibleTypes[index];
-                controller.selectedType.value = type;
-              },
-              isSelected: TransactionType.visibleTypes
-                  .map((e) => e == controller.selectedType.value)
-                  .toList(),
-              borderRadius: const BorderRadius.all(Radius.circular(8)),
-              selectedBorderColor: Colors.green[700],
-              selectedColor: Colors.white,
-              fillColor: Colors.green[200],
-              color: Colors.green[400],
-              constraints: const BoxConstraints(
-                minHeight: 40.0,
-                minWidth: 80.0,
-              ),
-              children: TransactionType.visibleTypes.map((e) {
-                return Text(e.name);
-              })
-                  .toList(),
-            );
-          }),
+          _transactionTypeSelector(),
 
           const SizedBox(
             height: 8,
@@ -206,5 +183,36 @@ class AddTransactionScreen
         }),
       ),
     ];
+  }
+
+  Widget _transactionTypeSelector() {
+    return Obx(() {
+      return LayoutBuilder(
+        builder: (buildContext, constraints) {
+          return ToggleButtons(
+            onPressed: (index) async {
+              var type = TransactionType.visibleTypes[index];
+              controller.selectedType.value = type;
+            },
+            isSelected: TransactionType.visibleTypes
+                .map((e) => e == controller.selectedType.value)
+                .toList(),
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            selectedBorderColor: Colors.green[700],
+            selectedColor: Colors.white,
+            fillColor: Colors.green[200],
+            color: Colors.green[400],
+            constraints: BoxConstraints(
+              minHeight: 40.0,
+              minWidth: (constraints.maxWidth - 8*2) / TransactionType.visibleTypes.length,
+            ),
+            children: TransactionType.visibleTypes.map((e) {
+              return Text(e.name);
+            })
+                .toList(),
+          );
+        },
+      );
+    });
   }
 }

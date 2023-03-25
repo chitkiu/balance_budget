@@ -15,12 +15,12 @@ class TransactionsController extends GetxController {
 
   final TransactionsUIMapper _transactionsUIMapper = TransactionsUIMapper();
   RxList<TransactionUIModel> transactions = <TransactionUIModel>[].obs;
-  StreamSubscription? _spendListener;
+  StreamSubscription? _transactionListener;
 
   @override
   void onReady() {
-    _spendListener?.cancel();
-    _spendListener = _transactionsAggregator.transactions().listen((event) {
+    _transactionListener?.cancel();
+    _transactionListener = _transactionsAggregator.transactions().listen((event) {
       transactions.value = event.map(_transactionsUIMapper.mapFromRich)
           .whereType<TransactionUIModel>()
           .toList();
@@ -31,8 +31,8 @@ class TransactionsController extends GetxController {
 
   @override
   void onClose() {
-    _spendListener?.cancel();
-    _spendListener = null;
+    _transactionListener?.cancel();
+    _transactionListener = null;
     super.onClose();
   }
 
