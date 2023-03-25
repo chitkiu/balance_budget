@@ -64,5 +64,8 @@
 
   "cancel_bottom_sheet": "закрити",
   "edit_bottom_sheet": "редагувати",
-  "save_bottom_sheet": "зберегти"
+  "save_bottom_sheet": "зберегти",
+
+  "sign_out": "Вийти",
+  "sign_out_confirmation_subtitle": "Ви впевнені що хочете вийти?"
 }

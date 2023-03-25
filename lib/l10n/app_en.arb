@@ -64,5 +64,8 @@
 
   "cancel_bottom_sheet": "cancel",
   "edit_bottom_sheet": "edit",
-  "save_bottom_sheet": "save"
+  "save_bottom_sheet": "save",
+
+  "sign_out": "Sign out",
+  "sign_out_confirmation_subtitle": "Are you sure to sign out?"
 }
