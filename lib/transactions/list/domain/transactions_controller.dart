@@ -21,7 +21,9 @@ class TransactionsController extends GetxController {
   void onReady() {
     _spendListener?.cancel();
     _spendListener = _transactionsAggregator.transactions().listen((event) {
-      transactions.value = event.map(_transactionsUIMapper.mapFromRich).toList();
+      transactions.value = event.map(_transactionsUIMapper.mapFromRich)
+          .whereType<TransactionUIModel>()
+          .toList();
     });
 
     super.onReady();

@@ -90,15 +90,13 @@ class LocalAccountRepository {
     accounts.insert(index, newAccount!);*/
   }
 
-  void _createInitialTransaction(String? key, double sum) {
+  void _createInitialTransaction(String? accountId, double sum) {
     _transactionRepo.create(
         sum,
         TransactionType.setInitialBalance,
-        null,
-        key ?? '',
+        accountId ?? '',
         DateTime.now().removeSeconds(),
-        null,
-      skipZeroSum: false
+        skipZeroSum: false
     );
   }
 }

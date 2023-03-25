@@ -1,4 +1,3 @@
-import 'package:balance_budget/common/ui/custom_calendar/calendar_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
@@ -7,7 +6,9 @@ import 'package:get/get.dart';
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/custom_calendar/calendar.dart';
+import '../../../common/ui/custom_calendar/calendar_controller.dart';
 import '../domain/transactions_controller.dart';
+import 'items/transaction_item.dart';
 import 'models/transaction_ui_model.dart';
 
 class TransactionsScreen extends GetView<TransactionsController> {
@@ -124,59 +125,11 @@ class TransactionsScreen extends GetView<TransactionsController> {
     List<Widget> children = [];
     Divider divider = const Divider();
     for (int i = 0; i < transactions.length; i++) {
-      children.add(_transactionItem(transactions[i]));
+      children.add(TransactionItem(transactions[i], controller.onItemClick));
       if (i < transactions.length - 1) {
         children.add(divider);
       }
     }
     return children;
-  }
-
-  Widget _transactionItem(TransactionUIModel transaction) {
-    return GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onTap: () => controller.onItemClick(transaction),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Text(transaction.categoryName,
-                      style: const TextStyle(fontWeight: FontWeight.w500)),
-                  Text(transaction.sum,
-                      style: TextStyle(
-                          fontWeight: FontWeight.w500, color: transaction.sumColor)),
-                ],
-              ),
-              if (transaction is TransferTransactionUIModel)
-                _additionalInfo("${transaction.toAccountName} => ${transaction.fromAccountName}", CommonIcons.wallet),
-              if (transaction is !TransferTransactionUIModel)
-                _additionalInfo(transaction.accountName, CommonIcons.wallet),
-              if (transaction.comment != null)
-                _additionalInfo(transaction.comment!, CommonIcons.note),
-            ],
-          ),
-        )
-    );
-  }
-
-  Widget _additionalInfo(String text, IconData icon) {
-    return Row(
-      children: [
-        Icon(
-          icon,
-          size: 14,
-        ),
-        const SizedBox(width: 6),
-        Text(
-          text,
-          style: const TextStyle(fontSize: 14),
-        )
-      ],
-    );
   }
 }

@@ -6,30 +6,30 @@ part of 'transaction.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Transaction _$TransactionFromJson(Map<String, dynamic> json) => Transaction(
+CommonTransaction _$CommonTransactionFromJson(Map<String, dynamic> json) =>
+    CommonTransaction(
       sum: (json['sum'] as num).toDouble(),
       transactionType:
           $enumDecode(_$TransactionTypeEnumMap, json['transactionType']),
-      categoryId: json['categoryId'] as String?,
+      categoryId: json['categoryId'] as String,
       accountId: json['accountId'] as String,
-      time: const EpochDateTimeConverter().fromJson(json['time'] as int),
+      time: const EpochWithoutTimeDateTimeConverter()
+          .fromJson(json['time'] as int),
       creationTime:
           const EpochDateTimeConverter().fromJson(json['creationTime'] as int),
       comment: json['comment'] as String?,
-      additionalData: json['additionalData'] as String?,
     );
 
-Map<String, dynamic> _$TransactionToJson(Transaction instance) =>
+Map<String, dynamic> _$CommonTransactionToJson(CommonTransaction instance) =>
     <String, dynamic>{
       'sum': instance.sum,
       'transactionType': _$TransactionTypeEnumMap[instance.transactionType]!,
-      'categoryId': instance.categoryId,
       'accountId': instance.accountId,
-      'time': const EpochDateTimeConverter().toJson(instance.time),
+      'time': const EpochWithoutTimeDateTimeConverter().toJson(instance.time),
       'creationTime':
           const EpochDateTimeConverter().toJson(instance.creationTime),
       'comment': instance.comment,
-      'additionalData': instance.additionalData,
+      'categoryId': instance.categoryId,
     };
 
 const _$TransactionTypeEnumMap = {
@@ -38,3 +38,54 @@ const _$TransactionTypeEnumMap = {
   TransactionType.income: 'income',
   TransactionType.transfer: 'transfer',
 };
+
+SetBalanceTransaction _$SetBalanceTransactionFromJson(
+        Map<String, dynamic> json) =>
+    SetBalanceTransaction(
+      sum: (json['sum'] as num).toDouble(),
+      transactionType:
+          $enumDecode(_$TransactionTypeEnumMap, json['transactionType']),
+      accountId: json['accountId'] as String,
+      time: const EpochWithoutTimeDateTimeConverter()
+          .fromJson(json['time'] as int),
+      creationTime:
+          const EpochDateTimeConverter().fromJson(json['creationTime'] as int),
+    );
+
+Map<String, dynamic> _$SetBalanceTransactionToJson(
+        SetBalanceTransaction instance) =>
+    <String, dynamic>{
+      'sum': instance.sum,
+      'transactionType': _$TransactionTypeEnumMap[instance.transactionType]!,
+      'accountId': instance.accountId,
+      'time': const EpochWithoutTimeDateTimeConverter().toJson(instance.time),
+      'creationTime':
+          const EpochDateTimeConverter().toJson(instance.creationTime),
+    };
+
+TransferTransaction _$TransferTransactionFromJson(Map<String, dynamic> json) =>
+    TransferTransaction(
+      sum: (json['sum'] as num).toDouble(),
+      transactionType:
+          $enumDecode(_$TransactionTypeEnumMap, json['transactionType']),
+      accountId: json['accountId'] as String,
+      time: const EpochWithoutTimeDateTimeConverter()
+          .fromJson(json['time'] as int),
+      creationTime:
+          const EpochDateTimeConverter().fromJson(json['creationTime'] as int),
+      toAccountId: json['toAccountId'] as String,
+      comment: json['comment'] as String?,
+    );
+
+Map<String, dynamic> _$TransferTransactionToJson(
+        TransferTransaction instance) =>
+    <String, dynamic>{
+      'sum': instance.sum,
+      'transactionType': _$TransactionTypeEnumMap[instance.transactionType]!,
+      'accountId': instance.accountId,
+      'time': const EpochWithoutTimeDateTimeConverter().toJson(instance.time),
+      'creationTime':
+          const EpochDateTimeConverter().toJson(instance.creationTime),
+      'comment': instance.comment,
+      'toAccountId': instance.toAccountId,
+    };

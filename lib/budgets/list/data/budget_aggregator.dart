@@ -118,7 +118,8 @@ class BudgetAggregator {
       List<Account> accounts) {
 
     var filteredTransaction = transactions.where((element) {
-      return element.transactionType == TransactionType.spend &&
+      return element is CommonTransaction &&
+          element.transactionType == TransactionType.spend &&
           element.categoryId == categoryInfo.categoryId &&
           _periodValidation.isInCurrentPeriod(
               element.time, repeatType, startDate, endDate) &&

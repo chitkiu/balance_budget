@@ -58,13 +58,46 @@ class AccountsController extends GetxController {
   }
 
   double _calculateTransactions(List<Transaction> transactions, Account account) {
-    var filteredTransaction = transactions.where((element) => element.accountId == account.id);
+    var filteredTransaction = transactions.where((element) =>
+    element.accountId == account.id);
+
     var totalSum = 0.0;
-    for (var value in filteredTransaction) {
-      if (value.transactionType == TransactionType.spend) {
-        totalSum -= value.sum;
-      } else {
-        totalSum += value.sum;
+    for (var transaction in filteredTransaction) {
+      switch (transaction.transactionType) {
+        case TransactionType.setInitialBalance:
+          totalSum += transaction.sum;
+          break;
+        case TransactionType.spend:
+          totalSum -= transaction.sum;
+          break;
+        case TransactionType.income:
+          totalSum += transaction.sum;
+          break;
+        case TransactionType.transfer:
+          // Do nothing - will be added in next loop
+          break;
+      }
+    }
+
+    totalSum += _getTransferTotalSum(transactions, account);
+
+    return totalSum;
+  }
+
+  double _getTransferTotalSum(List<Transaction> transactions, Account account) {
+    var filteredTransferTransaction = transactions.where((element) =>
+    element is TransferTransaction &&
+        (element.accountId == account.id || element.toAccountId == account.id)
+    )
+        .map((e) => e as TransferTransaction);
+
+    var totalSum = 0.0;
+
+    for (var transaction in filteredTransferTransaction) {
+      if (transaction.accountId == account.id) {
+        totalSum -= transaction.sum;
+      } else if (transaction.toAccountId == account.id) {
+        totalSum += transaction.sum;
       }
     }
 

@@ -2,22 +2,27 @@ import '../../../../accounts/common/data/models/account.dart';
 import '../../../../categories/common/data/models/category.dart';
 import '../../../common/data/models/transaction.dart';
 
-class RichTransactionModel {
+abstract class RichTransactionModel {
   final Transaction transaction;
-  final Category category;
-  final Account account;
+  final Account fromAccount;
 
-  RichTransactionModel(this.transaction, this.category, this.account);
+  RichTransactionModel(this.transaction, this.fromAccount);
 }
 
-class RichTransferTransactionModel extends RichTransactionModel {
+class TransferRichTransactionModel extends RichTransactionModel {
 
   final Account toAccount;
 
-  RichTransferTransactionModel(
-      super.transaction,
-      super.category,
-      super.account,
-      this.toAccount
-  );
+  TransferRichTransactionModel(super.transaction, super.fromAccount, this.toAccount);
+}
+
+class SetBalanceRichTransactionModel extends RichTransactionModel {
+  SetBalanceRichTransactionModel(super.transaction, super.fromAccount);
+}
+
+class CategoryRichTransactionModel extends RichTransactionModel {
+
+  final Category category;
+
+  CategoryRichTransactionModel(super.transaction, super.fromAccount, this.category);
 }

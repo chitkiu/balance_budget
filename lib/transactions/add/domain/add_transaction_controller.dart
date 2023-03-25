@@ -68,8 +68,8 @@ class AddTransactionController extends GetxController {
     _accountSubscription = _accountRepo.accounts
         .map((event) => _spendAccountUIMapper.map(event))
         .listen((value) {
-          accountList.value = value;
-        });
+      accountList.value = value;
+    });
 
     selectedAccount.refresh();
 
@@ -106,20 +106,32 @@ class AddTransactionController extends GetxController {
       return;
     }
 
+    if (selectedType.value == TransactionType.transfer) {
+      var toAccountId = selectedToAccount.value;
+
+      if (toAccountId == null) {
+        return;
+      }
+
+      if (toAccountId == accountId) {
+        return;
+      }
+    }
+
     DateTime selected = selectedDate.value.dateTime;
 
     var addTransactionResult = _transactionsRepo.create(
-        double.parse(sum),
-        selectedType.value,
-        categoryId,
-        accountId,
-        DateTime(
-          selected.year,
-          selected.month,
-          selected.day,
-        ),
-        currentComment,
-        additionData: selectedToAccount.value,
+      double.parse(sum),
+      selectedType.value,
+      accountId,
+      DateTime(
+        selected.year,
+        selected.month,
+        selected.day,
+      ),
+      comment: currentComment,
+      toAccountId: selectedToAccount.value,
+      categoryId: categoryId,
     );
 
     if (addTransactionResult) {

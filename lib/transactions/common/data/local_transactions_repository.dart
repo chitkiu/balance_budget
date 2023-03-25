@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart' hide Transaction;
 
+import '../../../common/data/date_time_extension.dart';
 import '../../../common/data/models/transaction_type.dart';
 import 'models/transaction.dart';
 
@@ -32,27 +33,55 @@ class LocalTransactionsRepository {
   bool create(
       double sum,
       TransactionType transactionType,
-      String? categoryId,
       String accountId,
       DateTime time,
-      String? comment,
-      {bool skipZeroSum = true, String? additionData}
+      {bool skipZeroSum = true, String? toAccountId, String? categoryId, String? comment,}
   ) {
     if (skipZeroSum && sum <= 0) {
       return false;
     }
 
     var newTransaction = _ref.push();
-    newTransaction.set(Transaction(
-      sum: sum,
-      transactionType: transactionType,
-      categoryId: categoryId,
-      accountId: accountId,
-      time: time,
-      creationTime: DateTime.now(),
-      comment: comment,
-      additionalData: additionData,
-    ).toJson());
+    switch (transactionType) {
+      case TransactionType.setInitialBalance:
+        newTransaction.set(SetBalanceTransaction(
+          sum: sum,
+          transactionType: transactionType,
+          accountId: accountId,
+          time: time.withoutTime,
+          creationTime: DateTime.now(),
+        ).toJson());
+        break;
+      case TransactionType.spend:
+      case TransactionType.income:
+      if (categoryId == null) {
+        return false;
+      }
+        newTransaction.set(CommonTransaction(
+          sum: sum,
+          transactionType: transactionType,
+          categoryId: categoryId,
+          accountId: accountId,
+          time: time.withoutTime,
+          creationTime: DateTime.now(),
+          comment: comment,
+        ).toJson());
+        break;
+      case TransactionType.transfer:
+        if (toAccountId == null) {
+          return false;
+        }
+        newTransaction.set(TransferTransaction(
+          sum: sum,
+          transactionType: transactionType,
+          accountId: accountId,
+          time: time.withoutTime,
+          creationTime: DateTime.now(),
+          comment: comment,
+          toAccountId: toAccountId,
+        ).toJson());
+        break;
+    }
 
     return true;
   }
@@ -79,15 +108,29 @@ class LocalTransactionsRepository {
       var transaction = Transaction.fromJson(
           MapEntry(transactionId, jsonDecode(jsonEncode(dbTransaction.value))));
 
-      var newTransaction = transaction.copyWith(
-          sum: sum,
-          transactionType: transactionType,
-          categoryId: categoryId,
-          accountId: accountId,
-          time: time,
-          comment: comment);
+      Transaction? newTransaction;
 
-      if (newTransaction != transaction) {
+      if (transaction is TransferTransaction) {
+        newTransaction = transaction.copyWith(
+            sum: sum,
+            transactionType: transactionType,
+            categoryId: categoryId,
+            accountId: accountId,
+            time: time,
+            comment: comment
+        );
+      } else if (transaction is CommonTransaction) {
+        newTransaction = transaction.copyWith(
+            sum: sum,
+            transactionType: transactionType,
+            categoryId: categoryId,
+            accountId: accountId,
+            time: time,
+            comment: comment
+        );
+      }
+
+      if (newTransaction != null && newTransaction != transaction) {
         data.set(newTransaction.toJson());
       }
     }
