@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -17,6 +18,7 @@ class TransactionsAggregator {
 
   const TransactionsAggregator();
 
+  //TODO Add filters
   Stream<List<RichTransactionModel>> transactions() {
     return CombineLatestStream.combine3(
       _categoryRepository.categories,
@@ -65,18 +67,17 @@ class TransactionsAggregator {
               }
           }
         })
-            .where((element) => element != null)
-            .map((e) => e!)
+            .whereNotNull()
             .toList();
 
-        newTransactions.sort(_compare);
+        newTransactions.sort(compare);
 
         return newTransactions;
       },
     );
   }
 
-  int _compare(RichTransactionModel a, RichTransactionModel b) {
+  int compare(RichTransactionModel a, RichTransactionModel b) {
     var result = b.transaction.time.compareTo(a.transaction.time);
     if (result == 0) {
       return b.transaction.creationTime.compareTo(a.transaction.creationTime);

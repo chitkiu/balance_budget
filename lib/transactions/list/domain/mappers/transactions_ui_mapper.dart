@@ -1,3 +1,4 @@
+import 'package:balance_budget/transactions/list/ui/models/transaction_header_ui_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -12,6 +13,28 @@ import '../../ui/models/transaction_ui_model.dart';
 class TransactionsUIMapper {
 
   final NumberFormat _sumFormatter = NumberFormat("##0.00");
+  final DateFormat _headerDateFormat = DateFormat("dd MMMM");
+
+  TransactionUIModel? mapFromRich(RichTransactionModel richTransaction) {
+    switch (richTransaction.runtimeType) {
+      case TransferRichTransactionModel:
+        TransferRichTransactionModel transaction = richTransaction as TransferRichTransactionModel;
+        return _mapTransferModel(transaction.transaction, transaction.fromAccount, transaction.toAccount);
+
+      case CategoryRichTransactionModel:
+        CategoryRichTransactionModel transaction = richTransaction as CategoryRichTransactionModel;
+        return _mapCommonModel(transaction.transaction, transaction.category, transaction.fromAccount);
+    }
+
+    return null;
+  }
+
+  ///TODO Transaction will be use later
+  TransactionHeaderUIModel mapHeader(DateTime date, Iterable<TransactionUIModel> transactions) {
+    return TransactionHeaderUIModel(
+        _headerDateFormat.format(date)
+    );
+  }
 
   TransactionUIModel _mapCommonModel(Transaction transaction, Category category, Account account) {
     return CommonTransactionUIModel(
@@ -41,20 +64,6 @@ class TransactionsUIMapper {
       formattedDate: _dateFormat(transaction.time),
       dateTime: transaction.time,
     );
-  }
-
-  TransactionUIModel? mapFromRich(RichTransactionModel richTransaction) {
-    switch (richTransaction.runtimeType) {
-      case TransferRichTransactionModel:
-        TransferRichTransactionModel transaction = richTransaction as TransferRichTransactionModel;
-        return _mapTransferModel(transaction.transaction, transaction.fromAccount, transaction.toAccount);
-
-      case CategoryRichTransactionModel:
-        CategoryRichTransactionModel transaction = richTransaction as CategoryRichTransactionModel;
-        return _mapCommonModel(transaction.transaction, transaction.category, transaction.fromAccount);
-    }
-
-    return null;
   }
 
   String _dateFormat(DateTime dateTime) {

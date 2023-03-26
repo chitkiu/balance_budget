@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:balance_budget/common/data/date_time_extension.dart';
+import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 
 import '../../add/domain/add_transaction_binding.dart';
@@ -7,57 +9,53 @@ import '../../add/ui/add_transaction_screen.dart';
 import '../../info/domain/transaction_info_binding.dart';
 import '../../info/ui/transaction_info_screen.dart';
 import '../data/transactions_aggregator.dart';
+import '../ui/models/transaction_list_ui_model.dart';
 import '../ui/models/transaction_ui_model.dart';
 import 'mappers/transactions_ui_mapper.dart';
+import 'models/transactions_filter_date.dart';
 
 class TransactionsController extends GetxController {
   TransactionsAggregator get _transactionsAggregator => Get.find();
 
   final TransactionsUIMapper _transactionsUIMapper = TransactionsUIMapper();
-  RxList<TransactionUIModel> transactions = <TransactionUIModel>[].obs;
-  StreamSubscription? _transactionListener;
 
-  @override
-  void onReady() {
-    _transactionListener?.cancel();
-    _transactionListener = _transactionsAggregator.transactions().listen((event) {
-      transactions.value = event.map(_transactionsUIMapper.mapFromRich)
-          .whereType<TransactionUIModel>()
-          .toList();
+  Stream<List<TransactionListUIModel>> getItemsFromDayRange(TransactionsFilterDate dateTime) {
+    return _transactionsAggregator.transactions().map((items) {
+      var filteredTransaction = items.where((item) {
+        return item.transaction.time.isAfterOrAtSameMoment(dateTime.start) &&
+            item.transaction.time.isBeforeOrAtSameMoment(dateTime.end);
+      });
+
+      List<TransactionListUIModel> groupedTransactions = [];
+
+      groupBy(filteredTransaction, (item) => item.transaction.time)
+          .entries
+          .sortedBy((element) => element.key)
+          .reversed
+          .forEach((element) {
+        var transactions = element.value;
+        transactions.sort(_transactionsAggregator.compare);
+        var transactionsUIModels = transactions.map(_transactionsUIMapper.mapFromRich)
+            .whereNotNull();
+        groupedTransactions.add(
+            _transactionsUIMapper.mapHeader(element.key, transactionsUIModels));
+        groupedTransactions.addAll(transactionsUIModels);
+      });
+
+      return groupedTransactions;
     });
-
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    _transactionListener?.cancel();
-    _transactionListener = null;
-    super.onClose();
-  }
-
-  List<TransactionUIModel> getItemsFromDay(DateTime dateTime) {
-    return transactions.where((item) {
-      return item.dateTime.year == dateTime.year &&
-          item.dateTime.month == dateTime.month &&
-          item.dateTime.day == dateTime.day;
-    }).toList();
   }
 
   void addTransaction() {
-    Get.to(
-      () => AddTransactionScreen(),
-      binding: AddTransactionBinding()
-    );
+    Get.to(() => AddTransactionScreen(), binding: AddTransactionBinding());
   }
 
   void onItemClick(TransactionUIModel transaction) async {
     var binding = TransactionInfoBinding();
     binding.dependencies();
     await Get.bottomSheet(
-        TransactionInfoScreen(transaction.id),
+      TransactionInfoScreen(transaction.id),
     );
     binding.delete();
   }
-
 }

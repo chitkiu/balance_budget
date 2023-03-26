@@ -70,5 +70,7 @@
   "save_bottom_sheet": "зберегти",
 
   "sign_out": "Вийти",
-  "sign_out_confirmation_subtitle": "Ви впевнені що хочете вийти?"
+  "sign_out_confirmation_subtitle": "Ви впевнені що хочете вийти?",
+
+  "selected_dates": "Обрані дати: {DATE1} - {DATE2}"
 }
