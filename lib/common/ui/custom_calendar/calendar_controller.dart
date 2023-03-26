@@ -1,5 +1,6 @@
-import 'package:balance_budget/common/data/date_time_extension.dart';
 import 'package:flutter/widgets.dart';
+
+import '../../data/date_time_extension.dart';
 
 class CalendarController extends ChangeNotifier {
   DateTime _currentDate;
@@ -50,6 +51,12 @@ class CalendarController extends ChangeNotifier {
 
   DateTime getDateFromIndex(int index) {
     return DateTime(minDate.year, minDate.month, minDate.day + index);
+  }
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
   }
 
 }

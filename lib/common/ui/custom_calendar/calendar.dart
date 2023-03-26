@@ -1,8 +1,8 @@
-import 'package:balance_budget/common/data/date_time_extension.dart';
-import 'package:balance_budget/common/ui/custom_calendar/calendar_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
+import '../../data/date_time_extension.dart';
+import 'calendar_controller.dart';
 import 'calendar_header.dart';
 
 typedef ContentBuilder = Widget Function(DateTime date);
@@ -57,12 +57,6 @@ class DayViewState extends State<Calendar2> {
       oldWidget.controller.removeListener(_listener);
       widget.controller.addListener(_listener);
     }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    widget.controller.dispose();
   }
 
   @override
