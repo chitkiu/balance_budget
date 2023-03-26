@@ -18,7 +18,7 @@ class TransactionsScreen extends GetView<TransactionsController> {
     maxDate: DateTime(2050),
   );
 
-  TransactionsScreen({super.key}) : super();
+  TransactionsScreen({super.key});
 
   Widget _calendar() {
     return Calendar2(

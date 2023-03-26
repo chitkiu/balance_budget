@@ -20,7 +20,6 @@ class HomeBodyBuilder {
     HomeScreenTab.budget : BudgetsBinding(),
   };
 
-  //TODO Change Get.put to self-created binding
   Widget getBody(HomeScreenTab tab) {
     _itemBindings[tab]?.dependencies();
     for (var element in _itemBindings.entries) {
