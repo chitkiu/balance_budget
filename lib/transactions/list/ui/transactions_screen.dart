@@ -1,4 +1,5 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
@@ -15,6 +16,8 @@ import 'models/transaction_list_ui_model.dart';
 import 'models/transaction_ui_model.dart';
 
 const double _kDateInfoHeights = 24;
+const double _kDateInfoBottomPadding = 8;
+const double _kTotalDateInfoHeights = kToolbarHeight + _kDateInfoHeights + _kDateInfoBottomPadding;
 
 class TransactionsScreen extends GetView<TransactionsController> {
   final Rx<TransactionsFilterDate> _currentDate = TransactionsFilterDate(
@@ -27,95 +30,70 @@ class TransactionsScreen extends GetView<TransactionsController> {
   @override
   Widget build(BuildContext context) {
     return PlatformWidget(
-      cupertino: (context, platform) {
-        return CupertinoPageScaffold(
-          child: CustomScrollView(
-            slivers: [
-              CupertinoSliverNavigationBar(
-                largeTitle: GestureDetector(
-                  onTap: () => _showDatePickerDialog(context),
-                  child: Obx(() => Text(_shortFormatCurrentSelectedDate(_currentDate.value))),
-                ),
-                middle: Text(Get.localisation.transactionsTabName),
-                trailing: CupertinoButton(
-                  onPressed: () => controller.addTransaction(),
-                  child: Icon(CommonIcons.add),
-                ),
-              ),
-              _body(true),
-            ],
-          ),
-        );
-      },
-      material: (context, platform) {
-        return Scaffold(
-          body: CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                pinned: true,
-                expandedHeight: kToolbarHeight + _kDateInfoHeights,
-                title: Text(Get.localisation.transactionsTabName),
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: kToolbarHeight + _kDateInfoHeights,
-                    padding: const EdgeInsetsDirectional.fromSTEB(
-                        NavigationToolbar.kMiddleSpacing,
-                        kToolbarHeight + _kDateInfoHeights,
-                        0,
-                        0),
-                    child: GestureDetector(
-                      onTap: () => _showDatePickerDialog(context),
-                      child: Obx(() {
-                        var textStyle = Theme.of(context).textTheme.titleMedium;
-                        return Text(
-                          _formatCurrentSelectedDate(_currentDate.value),
-                          style: textStyle,
-                        );
-                      }),
-                    ),
-                  ),
-                ),
-              ),
-              _body(false)
-            ],
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () => controller.addTransaction(),
-            child: Icon(CommonIcons.add),
-          ),
-        );
-      },
+      cupertino: (context, platform) => _cupertinoPage(context),
+      material: (context, platform) => _materialPage(context),
     );
   }
 
-  Future<void> _showDatePickerDialog(BuildContext context) async {
-    var result = (await showCalendarDatePicker2Dialog(
-            context: context,
-            config: CalendarDatePicker2WithActionButtonsConfig(
-              calendarType: CalendarDatePicker2Type.range,
-              firstDayOfWeek: DateTime.monday,
+  CupertinoPageScaffold _cupertinoPage(BuildContext context) {
+    return CupertinoPageScaffold(
+      child: CustomScrollView(
+        slivers: [
+          CupertinoSliverNavigationBar(
+            largeTitle: GestureDetector(
+              onTap: () => _showDatePickerDialog(context),
+              child: Obx(() => Text(_shortFormatCurrentSelectedDate(_currentDate.value))),
             ),
-            dialogSize: const Size(325, 400),
-            value: [_currentDate.value.start, _currentDate.value.end]))
-        ?.whereType<DateTime>()
-        .toList();
+            middle: Text(Get.localisation.transactionsTabName),
+            trailing: CupertinoButton(
+              onPressed: () => controller.addTransaction(),
+              child: Icon(CommonIcons.add),
+            ),
+          ),
+          _body(true),
+        ],
+      ),
+    );
+  }
 
-    if (result != null) {
-      if (result.length == 1) {
-        _currentDate.value = TransactionsFilterDate(
-          start: result.first,
-          end: result.first,
-        );
-      } else if (result.length == 2) {
-        _currentDate.value = TransactionsFilterDate(
-          start: result.first,
-          end: result[1],
-        );
-      }
-    }
+  Scaffold _materialPage(BuildContext context) {
+    var textStyle = Theme.of(context).textTheme.titleMedium;
+    var topPadding = MediaQuery.of(context).padding.top;
 
-    debugPrint("result $result");
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            pinned: true,
+            ///Calculated with already added topPadding
+            expandedHeight: _kTotalDateInfoHeights,
+            title: Text(Get.localisation.transactionsTabName),
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                height: topPadding + _kTotalDateInfoHeights,
+                padding: EdgeInsetsDirectional.fromSTEB(
+                    NavigationToolbar.kMiddleSpacing,
+                    topPadding + kToolbarHeight,
+                    NavigationToolbar.kMiddleSpacing,
+                    _kDateInfoBottomPadding
+                ),
+                child: Obx(() {
+                  return Text(
+                    _formatCurrentSelectedDate(_currentDate.value),
+                    style: textStyle,
+                  );
+                }),
+              ),
+            ),
+          ),
+          _body(false)
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => controller.addTransaction(),
+        child: Icon(CommonIcons.add),
+      ),
+    );
   }
 
   Widget _body(bool addPaddingToBottom) {
@@ -137,13 +115,42 @@ class TransactionsScreen extends GetView<TransactionsController> {
               ),
             );
           }
+
           return _transactionsList(snapshot.data!, addPaddingToBottom);
         },
       );
     });
   }
 
-  Widget _transactionsList(List<TransactionListUIModel> transactions, bool addPaddingToBottom) {
+  Future<void> _showDatePickerDialog(BuildContext context) async {
+    var result = (await showCalendarDatePicker2Dialog(
+            context: context,
+            config: CalendarDatePicker2WithActionButtonsConfig(
+              calendarType: CalendarDatePicker2Type.range,
+              firstDayOfWeek: DateTime.monday,
+            ),
+            dialogSize: const Size(325, 400),
+            value: [_currentDate.value.start, _currentDate.value.end]))
+        ?.whereNotNull()
+        .toList();
+
+    if (result != null) {
+      if (result.length == 1) {
+        _currentDate.value = TransactionsFilterDate(
+          start: result.first,
+          end: result.first,
+        );
+      } else if (result.length == 2) {
+        _currentDate.value = TransactionsFilterDate(
+          start: result.first,
+          end: result[1],
+        );
+      }
+    }
+  }
+
+  Widget _transactionsList(
+      List<TransactionListUIModel> transactions, bool addPaddingToBottom) {
     int length = transactions.length * 2 - 1;
     if (addPaddingToBottom) {
       length += 1;
@@ -151,44 +158,40 @@ class TransactionsScreen extends GetView<TransactionsController> {
     //TODO Improve UI
     return SliverList(
         delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-            if (index == length - 1 && addPaddingToBottom) {
-              return const SizedBox(height: kMinInteractiveDimensionCupertino * 2);
-            }
-            final int itemIndex = index ~/ 2;
-            if (index.isEven) {
-              var item = transactions[itemIndex];
-              Widget widget;
-              if (item is TransactionHeaderUIModel) {
-                widget = Text(
-                  item.title,
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .titleSmall,
-                );
-              } else if (item is TransactionUIModel) {
-                widget = TransactionItem(item, controller.onItemClick);
-              } else {
-                widget = Container();
-              }
+      (BuildContext context, int index) {
+        if (index == length - 1 && addPaddingToBottom) {
+          return const SizedBox(height: kMinInteractiveDimensionCupertino * 2);
+        }
+        final int itemIndex = index ~/ 2;
+        if (index.isEven) {
+          var item = transactions[itemIndex];
+          Widget widget;
+          if (item is TransactionHeaderUIModel) {
+            widget = Text(
+              item.title,
+              style: Theme.of(context).textTheme.titleSmall,
+            );
+          } else if (item is TransactionUIModel) {
+            widget = TransactionItem(item, controller.onItemClick);
+          } else {
+            widget = Container();
+          }
 
-              return Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
-                child: widget,
-              );
-            }
-            return const Divider();
-          },
-          semanticIndexCallback: (Widget widget, int localIndex) {
-            if (localIndex.isEven) {
-              return localIndex ~/ 2;
-            }
-            return null;
-          },
-          childCount: length,
-        )
-    );
+          return Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+            child: widget,
+          );
+        }
+        return const Divider();
+      },
+      semanticIndexCallback: (Widget widget, int localIndex) {
+        if (localIndex.isEven) {
+          return localIndex ~/ 2;
+        }
+        return null;
+      },
+      childCount: length,
+    ));
   }
 
   final DateFormat _dateFormat = DateFormat("dd MMM");
@@ -197,6 +200,7 @@ class TransactionsScreen extends GetView<TransactionsController> {
     return Get.localisation
         .selected_dates(_dateFormat.format(date.start), _dateFormat.format(date.end));
   }
+
   String _shortFormatCurrentSelectedDate(TransactionsFilterDate date) {
     return "${_dateFormat.format(date.start)} - ${_dateFormat.format(date.end)}";
   }
