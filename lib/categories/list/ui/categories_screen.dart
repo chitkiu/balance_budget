@@ -17,6 +17,11 @@ class CategoriesScreen extends CommonScaffoldWithButtonScreen<CategoriesControll
   Widget body(BuildContext context) {
     return Obx(() {
       var categories = controller.categories;
+      if (categories.isEmpty) {
+        return Center(
+          child: Text(Get.localisation.noCategories),
+        );
+      }
       return ListView.separated(
         itemBuilder: (context, index) {
           var category = categories[index];

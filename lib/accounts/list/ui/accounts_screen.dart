@@ -18,6 +18,11 @@ class AccountsScreen extends CommonScaffoldWithButtonScreen<AccountsController> 
   Widget body(BuildContext context) {
     return Obx(() {
       var accounts = controller.accounts;
+      if (accounts.isEmpty) {
+        return Center(
+          child: Text(Get.localisation.noAccounts),
+        );
+      }
       return ListView.separated(
         itemBuilder: (context, index) {
           return _getAccountWidget(accounts[index]);

@@ -56,6 +56,8 @@
 
   "noTransactions": "You don't have transaction",
   "noBudgets": "You don't have budget",
+  "noAccounts": "You don't have accounts",
+  "noCategories": "You don't have categories",
 
   "totalBalance": "Total balance",
   "ownBalance": "Own balance",
