@@ -55,6 +55,7 @@
   "transferCategoryTitle": "Transfer",
 
   "noTransactions": "You don't have transaction",
+  "noBudgets": "You don't have budget",
 
   "totalBalance": "Total balance",
   "ownBalance": "Own balance",

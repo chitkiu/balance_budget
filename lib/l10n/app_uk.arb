@@ -55,6 +55,7 @@
   "transferCategoryTitle": "Переказ",
 
   "noTransactions": "У Вас немає транзакцій!",
+  "noBudgets": "У Вас немає запланованих бюджетів!",
 
   "totalBalance": "Загальний баланс",
   "ownBalance": "Власний баланс",

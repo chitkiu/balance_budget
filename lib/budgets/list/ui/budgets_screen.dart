@@ -18,6 +18,11 @@ class BudgetsScreen extends CommonScaffoldWithButtonScreen<BudgetsController> {
   Widget body(BuildContext context) {
     return Obx(() {
       var budgets = controller.budgets;
+      if (budgets.isEmpty) {
+        return Center(
+          child: Text(Get.localisation.noBudgets),
+        );
+      }
       return ListView.separated(
         itemBuilder: (context, index) {
           var budget = budgets[index];
