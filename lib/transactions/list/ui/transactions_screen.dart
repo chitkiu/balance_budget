@@ -40,13 +40,23 @@ class TransactionsScreen extends GetView<TransactionsController> {
       child: CustomScrollView(
         slivers: [
           CupertinoSliverNavigationBar(
-            largeTitle: GestureDetector(
-              onTap: () => _showDatePickerDialog(context),
-              child: Obx(() => Text(_shortFormatCurrentSelectedDate(_currentDate.value))),
+            largeTitle: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () => _showDatePickerDialog(context),
+                  child: Obx(() => Text(_shortFormatCurrentSelectedDate(_currentDate.value))),
+                ),
+                Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 16, 0),
+                  child: Icon(CupertinoIcons.color_filter, size: 32,),
+                )
+              ],
             ),
             middle: Text(Get.localisation.transactionsTabName),
-            trailing: CupertinoButton(
-              onPressed: () => controller.addTransaction(),
+            trailing: GestureDetector(
+              onTap: () => controller.addTransaction(),
               child: Icon(CommonIcons.add),
             ),
           ),
@@ -77,12 +87,21 @@ class TransactionsScreen extends GetView<TransactionsController> {
                     NavigationToolbar.kMiddleSpacing,
                     _kDateInfoBottomPadding
                 ),
-                child: Obx(() {
-                  return Text(
-                    _formatCurrentSelectedDate(_currentDate.value),
-                    style: textStyle,
-                  );
-                }),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Obx(() {
+                      return Text(
+                        _formatCurrentSelectedDate(_currentDate.value),
+                        style: textStyle,
+                      );
+                    }),
+                    GestureDetector(
+                      child: const Icon(Icons.filter_list, size: _kDateInfoHeights),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
