@@ -7,55 +7,41 @@ import '../../../common/ui/common_icons.dart';
 import 'base_transactions_widget.dart';
 
 class CupertinoTransactionsWidget extends BaseTransactionsWidget {
-  CupertinoTransactionsWidget({required super.controller, super.key});
+  CupertinoTransactionsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Text(Get.localisation.transactionsTabName),
-        trailing: GestureDetector(
-          onTap: controller.addTransaction,
-          child: Icon(CommonIcons.add),
+        navigationBar: CupertinoNavigationBar(
+          middle: Text(Get.localisation.transactionsTabName),
+          trailing: GestureDetector(
+            onTap: controller.addTransaction,
+            child: Icon(CommonIcons.add),
+          ),
         ),
-      ),
-      child: Obx(() {
-        return StreamBuilder(
-            stream: controller.getItemsFromDayRange(controller.currentDate.value),
-            builder: (context, snapshot) {
-              Widget? body;
-              if (!snapshot.hasData) {
-                body = const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              if (snapshot.data == null || snapshot.data?.isEmpty != false) {
-                body = Center(
-                  child: Text(Get.localisation.noTransactions),
-                );
-              }
-
-              if (body == null) {
-                var transactions = snapshot.data!;
-                body = ListView(
-                  shrinkWrap: true,
+        child: SafeArea(
+            child: Column(
+          children: [
+            _CupertinoFilterWidget(() => calendarButton(context)),
+            Expanded(
+                child: controller.obx(
+              (transactions) {
+                return ListView(
                   children: transactions
-                      .map((item) => mapTransactionToUI(context, item))
-                      .toList(),
+                          ?.map((item) => mapTransactionToUI(context, item))
+                          .toList() ??
+                      [],
                 );
-              }
-
-              return SafeArea(
-                  child: Column(
-                    children: [
-                      _CupertinoFilterWidget(() => calendarButton(context)),
-                      Expanded(child: body)
-                    ],
-                  )
-              );
-            });
-      }),
-    );
+              },
+              onLoading: const Center(
+                child: CircularProgressIndicator(),
+              ),
+              onEmpty: Center(
+                child: Text(Get.localisation.noTransactions),
+              ),
+            ))
+          ],
+        )));
   }
 }
 

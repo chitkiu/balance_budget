@@ -1,13 +1,13 @@
-import 'dart:async';
-
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
+import 'package:rxdart/streams.dart';
 
 import '../../../common/data/date_time_extension.dart';
 import '../../add/domain/add_transaction_binding.dart';
 import '../../add/ui/add_transaction_screen.dart';
 import '../../info/domain/transaction_info_binding.dart';
 import '../../info/ui/transaction_info_screen.dart';
+import '../data/models/rich_transaction_model.dart';
 import '../data/transactions_aggregator.dart';
 import '../ui/models/transaction_list_ui_model.dart';
 import '../ui/models/transaction_ui_model.dart';
@@ -15,39 +15,37 @@ import 'mappers/transactions_ui_mapper.dart';
 import 'models/transactions_filter_date.dart';
 import 'selected_transactions_date_storage.dart';
 
-class TransactionsController extends GetxController {
+class TransactionsController extends GetxController
+    with StateMixin<List<TransactionListUIModel>> {
   TransactionsAggregator get _transactionsAggregator => Get.find();
+
   SelectedTransactionsDateStorage get _dateStorage => Get.find();
 
-  Rx<TransactionsFilterDate> get currentDate => _dateStorage.currentDate;
+  late final Rx<TransactionsFilterDate> currentDate;
 
   final TransactionsUIMapper _transactionsUIMapper = TransactionsUIMapper();
 
-  Stream<List<TransactionListUIModel>> getItemsFromDayRange(TransactionsFilterDate dateTime) {
-    return _transactionsAggregator.transactions().map((items) {
-      var filteredTransaction = items.where((item) {
-        return item.transaction.time.isAfterOrAtSameMoment(dateTime.start) &&
-            item.transaction.time.isBeforeOrAtSameMoment(dateTime.end);
-      });
+  RxList<TransactionListUIModel> transactions = <TransactionListUIModel>[].obs;
 
-      List<TransactionListUIModel> groupedTransactions = [];
+  TransactionsController() {
+    currentDate = _dateStorage.currentDateStream.value.obs;
 
-      groupBy(filteredTransaction, (item) => item.transaction.time)
-          .entries
-          .sortedBy((element) => element.key)
-          .reversed
-          .forEach((element) {
-        var transactions = element.value;
-        transactions.sort(_transactionsAggregator.compare);
-        var transactionsUIModels = transactions.map(_transactionsUIMapper.mapFromRich)
-            .whereNotNull();
-        groupedTransactions.add(
-            _transactionsUIMapper.mapHeader(element.key, transactionsUIModels));
-        groupedTransactions.addAll(transactionsUIModels);
-      });
+    currentDate.bindStream(_dateStorage.currentDateStream);
 
-      return groupedTransactions;
-    });
+    transactions.bindStream(CombineLatestStream.combine2(
+      _transactionsAggregator.transactions(),
+      _dateStorage.currentDateStream,
+      _mapTransactionsToUI,
+    ).handleError((Object e, StackTrace str) {
+      change(null, status: RxStatus.error(str.toString()));
+    }).map((event) {
+      if (event.isEmpty) {
+        change(null, status: RxStatus.empty());
+      } else {
+        change(event, status: RxStatus.success());
+      }
+      return event;
+    }));
   }
 
   void addTransaction() {
@@ -61,5 +59,35 @@ class TransactionsController extends GetxController {
       TransactionInfoScreen(transaction.id),
     );
     binding.delete();
+  }
+
+  void setNewDate(TransactionsFilterDate date) {
+    _dateStorage.setNewDate(date);
+  }
+
+  List<TransactionListUIModel> _mapTransactionsToUI(
+      List<RichTransactionModel> transactions, TransactionsFilterDate date) {
+    var filteredTransaction = transactions.where((item) {
+      return item.transaction.time.isAfterOrAtSameMoment(date.start) &&
+          item.transaction.time.isBeforeOrAtSameMoment(date.end);
+    });
+
+    List<TransactionListUIModel> groupedTransactions = [];
+
+    groupBy(filteredTransaction, (item) => item.transaction.time)
+        .entries
+        .sortedBy((element) => element.key)
+        .reversed
+        .forEach((element) {
+      var transactions = element.value;
+      transactions.sort(_transactionsAggregator.compare);
+      var transactionsUIModels =
+          transactions.map(_transactionsUIMapper.mapFromRich).whereNotNull();
+      groupedTransactions
+          .add(_transactionsUIMapper.mapHeader(element.key, transactionsUIModels));
+      groupedTransactions.addAll(transactionsUIModels);
+    });
+
+    return groupedTransactions;
   }
 }

@@ -12,12 +12,10 @@ import 'models/transaction_header_ui_model.dart';
 import 'models/transaction_list_ui_model.dart';
 import 'models/transaction_ui_model.dart';
 
-abstract class BaseTransactionsWidget extends StatelessWidget {
+abstract class BaseTransactionsWidget extends GetView<TransactionsController> {
   final DateFormat _appBarDateFormatter = DateFormat("dd, MMM");
 
-  final TransactionsController controller;
-
-  BaseTransactionsWidget({required this.controller, super.key});
+  BaseTransactionsWidget({super.key});
 
   @protected
   Widget mapTransactionToUI(BuildContext context, TransactionListUIModel item) {
@@ -43,6 +41,7 @@ abstract class BaseTransactionsWidget extends StatelessWidget {
 
   @protected
   Future<void> changeDate(BuildContext context) async {
+
     var result = (await showCalendarDatePicker2Dialog(
         context: context,
         config: CalendarDatePicker2WithActionButtonsConfig(
@@ -56,15 +55,15 @@ abstract class BaseTransactionsWidget extends StatelessWidget {
 
     if (result != null) {
       if (result.length == 1) {
-        controller.currentDate.value = TransactionsFilterDate(
+        controller.setNewDate(TransactionsFilterDate(
           start: result.first,
           end: result.first,
-        );
+        ));
       } else if (result.length == 2) {
-        controller.currentDate.value = TransactionsFilterDate(
+        controller.setNewDate(TransactionsFilterDate(
           start: result.first,
           end: result[1],
-        );
+        ));
       }
     }
   }

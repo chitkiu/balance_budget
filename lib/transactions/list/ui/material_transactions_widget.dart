@@ -5,9 +5,10 @@ import 'package:get/get.dart';
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_icons.dart';
 import 'base_transactions_widget.dart';
+import 'models/transaction_list_ui_model.dart';
 
 class MaterialTransactionsWidget extends BaseTransactionsWidget {
-  MaterialTransactionsWidget({required super.controller, super.key});
+  MaterialTransactionsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,15 @@ class MaterialTransactionsWidget extends BaseTransactionsWidget {
           calendarButton(context),
         ],
       ),
-      body: getList(),
+      body: controller.obx(
+        (transactions) => _transactionsList(context, transactions),
+        onLoading: const Center(
+          child: CircularProgressIndicator(),
+        ),
+        onEmpty: Center(
+          child: Text(Get.localisation.noTransactions),
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: controller.addTransaction,
         child: Icon(CommonIcons.add),
@@ -27,8 +36,7 @@ class MaterialTransactionsWidget extends BaseTransactionsWidget {
     );
   }
 
-  @protected
-  Widget searchBar() {
+  Widget _searchBar() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       color: Colors.green,
@@ -57,57 +65,39 @@ class MaterialTransactionsWidget extends BaseTransactionsWidget {
     );
   }
 
-  @protected
-  Widget getList() {
-    return Obx(() {
-      return StreamBuilder(
-          stream: controller.getItemsFromDayRange(controller.currentDate.value),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            if (snapshot.data == null || snapshot.data?.isEmpty != false) {
-              return Center(
-                child: Text(Get.localisation.noTransactions),
-              );
-            }
-
-            var transactions = snapshot.data!;
-            return Column(
-              children: <Widget>[
-                Expanded(
-                  child: NestedScrollView(
-                    headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-                      return <Widget>[
-                        SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                            return searchBar();
-                          }, childCount: 1),
-                        ),
-                        SliverPersistentHeader(
-                          pinned: true,
-                          floating: true,
-                          delegate: _FilterHeader(),
-                        ),
-                      ];
-                    },
-                    body: SafeArea(
-                      bottom: false,
-                      child: ListView(
-                        children: transactions
-                            .map((item) => mapTransactionToUI(context, item))
-                            .toList(),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            );
-          });
-    });
+  Widget _transactionsList(
+      BuildContext context, List<TransactionListUIModel>? transactions) {
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: NestedScrollView(
+            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+              return <Widget>[
+                SliverList(
+                  delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                    return _searchBar();
+                  }, childCount: 1),
+                ),
+                SliverPersistentHeader(
+                  pinned: true,
+                  floating: true,
+                  delegate: _FilterHeader(),
+                ),
+              ];
+            },
+            body: SafeArea(
+              bottom: false,
+              child: ListView(
+                children: transactions
+                        ?.map((item) => mapTransactionToUI(context, item))
+                        .toList() ??
+                    [],
+              ),
+            ),
+          ),
+        )
+      ],
+    );
   }
 }
 
