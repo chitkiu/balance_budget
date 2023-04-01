@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:balance_budget/common/data/date_time_extension.dart';
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 
+import '../../../common/data/date_time_extension.dart';
 import '../../add/domain/add_transaction_binding.dart';
 import '../../add/ui/add_transaction_screen.dart';
 import '../../info/domain/transaction_info_binding.dart';
@@ -13,14 +13,13 @@ import '../ui/models/transaction_list_ui_model.dart';
 import '../ui/models/transaction_ui_model.dart';
 import 'mappers/transactions_ui_mapper.dart';
 import 'models/transactions_filter_date.dart';
+import 'selected_transactions_date_storage.dart';
 
 class TransactionsController extends GetxController {
   TransactionsAggregator get _transactionsAggregator => Get.find();
+  SelectedTransactionsDateStorage get _dateStorage => Get.find();
 
-  final Rx<TransactionsFilterDate> currentDate = TransactionsFilterDate(
-      start: DateTime(DateTime.now().year, DateTime.now().month, 1),
-      end: DateTime(DateTime.now().year, DateTime.now().month + 1, 0))
-      .obs;
+  Rx<TransactionsFilterDate> get currentDate => _dateStorage.currentDate;
 
   final TransactionsUIMapper _transactionsUIMapper = TransactionsUIMapper();
 
