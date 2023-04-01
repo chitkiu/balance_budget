@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.5
   get: ^4.6.5
   flutter_platform_widgets: ^3.2.0
   flutter_localizations:
@@ -18,13 +18,13 @@ dependencies:
   intl: any
   async: ^2.10.0
   rxdart: ^0.27.7
-  firebase_core: ^2.8.0
-  firebase_auth: ^4.3.0
-  firebase_ui_auth: ^1.1.17
-  firebase_database: ^10.0.16
+  firebase_core: ^2.9.0
+  firebase_auth: ^4.4.0
+  firebase_ui_auth: ^1.2.0
+  firebase_database: ^10.1.0
   json_serializable: ^6.6.1
   json_annotation: ^4.8.0
-  firebase_ui_oauth_google: ^1.0.24
+  firebase_ui_oauth_google: ^1.1.0
   flutter_launcher_icons: ^0.12.0
   calendar_date_picker2: ^0.4.9
   collection: ^1.17.0
@@ -33,7 +33,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^2.0.0
+  flutter_lints: ^2.0.1
   build_runner: ^2.3.3
 
 flutter:
