@@ -30,7 +30,7 @@ class HomeBodyBuilder {
 
     switch (tab) {
       case HomeScreenTab.transactions:
-        return TransactionsScreen();
+        return const TransactionsScreen();
       case HomeScreenTab.budget:
         return BudgetsScreen();
       case HomeScreenTab.settings:

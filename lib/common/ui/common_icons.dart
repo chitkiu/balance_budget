@@ -33,4 +33,8 @@ class CommonIcons {
   static IconData get arrowUp => Icons.keyboard_arrow_up_sharp;
 
   static IconData get arrowDown => Icons.keyboard_arrow_down_sharp;
+
+  static IconData get filter => Icons.filter_list;
+
+  static IconData get calendar => _isCupertino ? CupertinoIcons.calendar_today : Icons.calendar_today;
 }

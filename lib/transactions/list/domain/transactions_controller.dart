@@ -17,6 +17,11 @@ import 'models/transactions_filter_date.dart';
 class TransactionsController extends GetxController {
   TransactionsAggregator get _transactionsAggregator => Get.find();
 
+  final Rx<TransactionsFilterDate> currentDate = TransactionsFilterDate(
+      start: DateTime(DateTime.now().year, DateTime.now().month, 1),
+      end: DateTime(DateTime.now().year, DateTime.now().month + 1, 0))
+      .obs;
+
   final TransactionsUIMapper _transactionsUIMapper = TransactionsUIMapper();
 
   Stream<List<TransactionListUIModel>> getItemsFromDayRange(TransactionsFilterDate dateTime) {

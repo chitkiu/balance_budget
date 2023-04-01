@@ -72,5 +72,7 @@
   "sign_out": "Вийти",
   "sign_out_confirmation_subtitle": "Ви впевнені що хочете вийти?",
 
-  "selected_dates": "Обрані дати: {DATE1} - {DATE2}"
+  "selected_dates": "Обрані дати: {DATE1} - {DATE2}",
+
+  "filter": "Фільтри"
 }

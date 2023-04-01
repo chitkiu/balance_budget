@@ -72,5 +72,7 @@
   "sign_out": "Sign out",
   "sign_out_confirmation_subtitle": "Are you sure to sign out?",
 
-  "selected_dates": "Selected date: {DATE1} - {DATE2}"
+  "selected_dates": "Selected date: {DATE1} - {DATE2}",
+
+  "filter": "Filter"
 }
