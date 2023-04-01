@@ -16,61 +16,72 @@ class BudgetsScreen extends CommonScaffoldWithButtonScreen<BudgetsController> {
 
   @override
   Widget body(BuildContext context) {
-    return Obx(() {
-      var budgets = controller.budgets;
-      if (budgets.isEmpty) {
-        return Center(
-          child: Text(Get.localisation.noBudgets),
-        );
-      }
-      return ListView.separated(
-        itemBuilder: (context, index) {
-          var budget = budgets[index];
-          if (budget is TotalBudgetUIModel) {
-            return Column(
-              children: [
-                const Text("Total",
-                    style: TextStyle(fontWeight: FontWeight.w500)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(budget.name),
-                    Text("${budget.spendSum}/${budget.totalSum}"),
-                  ],
-                )
-              ],
+    return StreamBuilder(
+      stream: controller.getBudgets(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(),
             );
-          } else if (budget is CategoryBudgetUIModel) {
-            return Column(
-              children: [
-                const Text("Single category",
-                    style: TextStyle(fontWeight: FontWeight.w500)),
-                Text(budget.name),
-                _categoryInfo(budget.categoryInfoUIModel),
-              ],
-            );
-          } else if (budget is TotalBudgetWithCategoryUIModel) {
-            return Column(
-              children: <Widget>[
-                const Text("Multi category",
-                    style: TextStyle(fontWeight: FontWeight.w500)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(budget.name),
-                    Text("${budget.spendSum}/${budget.totalSum}"),
-                  ],
-                )
-              ] + budget.categoriesInfoUIModel.map(_categoryInfo).toList(),
-            );
-          } else {
-            return const Placeholder();
           }
-        },
-        itemCount: budgets.length,
-        separatorBuilder: (context, index) => const Divider(),
-      );
-    });
+        }
+        var budgets = snapshot.data;
+        if (budgets == null || budgets.isEmpty) {
+          return Center(
+            child: Text(Get.localisation.noBudgets),
+          );
+        }
+
+        return ListView.separated(
+          itemBuilder: (context, index) {
+            var budget = budgets[index];
+            if (budget is TotalBudgetUIModel) {
+              return Column(
+                children: [
+                  const Text("Total",
+                      style: TextStyle(fontWeight: FontWeight.w500)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(budget.name),
+                      Text("${budget.spendSum}/${budget.totalSum}"),
+                    ],
+                  )
+                ],
+              );
+            } else if (budget is CategoryBudgetUIModel) {
+              return Column(
+                children: [
+                  const Text("Single category",
+                      style: TextStyle(fontWeight: FontWeight.w500)),
+                  Text(budget.name),
+                  _categoryInfo(budget.categoryInfoUIModel),
+                ],
+              );
+            } else if (budget is TotalBudgetWithCategoryUIModel) {
+              return Column(
+                children: <Widget>[
+                  const Text("Multi category",
+                      style: TextStyle(fontWeight: FontWeight.w500)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(budget.name),
+                      Text("${budget.spendSum}/${budget.totalSum}"),
+                    ],
+                  )
+                ] + budget.categoriesInfoUIModel.map(_categoryInfo).toList(),
+              );
+            } else {
+              return const Placeholder();
+            }
+          },
+          itemCount: budgets.length,
+          separatorBuilder: (context, index) => const Divider(),
+        );
+      },
+    );
   }
 
   @override

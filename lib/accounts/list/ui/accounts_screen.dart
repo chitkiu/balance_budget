@@ -16,21 +16,32 @@ class AccountsScreen extends CommonScaffoldWithButtonScreen<AccountsController> 
 
   @override
   Widget body(BuildContext context) {
-    return Obx(() {
-      var accounts = controller.accounts;
-      if (accounts.isEmpty) {
-        return Center(
-          child: Text(Get.localisation.noAccounts),
+    return StreamBuilder(
+      stream: controller.getAccounts(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        }
+        var accounts = snapshot.data;
+        if (accounts == null || accounts.isEmpty) {
+          return Center(
+            child: Text(Get.localisation.noAccounts),
+          );
+        }
+
+        return ListView.separated(
+          itemBuilder: (context, index) {
+            return _getAccountWidget(accounts[index]);
+          },
+          itemCount: accounts.length,
+          separatorBuilder: (context, index) => const Divider(),
         );
-      }
-      return ListView.separated(
-        itemBuilder: (context, index) {
-          return _getAccountWidget(accounts[index]);
-        },
-        itemCount: accounts.length,
-        separatorBuilder: (context, index) => const Divider(),
-      );
-    });
+      },
+    );
   }
 
   @override

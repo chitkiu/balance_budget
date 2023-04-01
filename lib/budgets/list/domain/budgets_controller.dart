@@ -16,35 +16,19 @@ class BudgetsController extends GetxController {
 
   final BudgetUIMapper _mapper = const BudgetUIMapper();
 
-  RxList<BudgetUIModel> budgets = <BudgetUIModel>[].obs;
-  StreamSubscription? _listener;
-
-  @override
-  void onReady() {
-    _listener?.cancel();
-    _listener = _budgetAggregator.budgets().listen((value) {
-      budgets.value =
-          value.map((e) => _mapper.map(e)).whereType<BudgetUIModel>().toList();
+  Stream<List<BudgetUIModel>> getBudgets() {
+    return _budgetAggregator.budgets().map((value) {
+      return value.map((e) => _mapper.map(e))
+          .whereType<BudgetUIModel>()
+          .toList();
     });
-
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    _listener?.cancel();
-    _listener = null;
-    super.onClose();
   }
 
   void onAddClick() {
     _budgetRepo.createTotalBudget(
-      BudgetRepeatType.oneTime,
-      BudgetRepeatType.oneTime.name,
-      1000,
+      BudgetRepeatType.oneTime, BudgetRepeatType.oneTime.name, 1000,
       startDate: const BudgetDate(year: 2023, month: 2, day: 8),
-      endDate: const BudgetDate(year: 2023, month: 2, day: 9),
-    );
+      endDate: const BudgetDate(year: 2023, month: 2, day: 9),);
     // Get.to(
     //       () => AddAccountScreen(),
     //   binding: AddAccountBinding(),

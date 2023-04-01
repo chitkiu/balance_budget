@@ -14,27 +14,13 @@ class CategoriesController extends GetxController {
 
   final CategoryUIMapper _mapper = CategoryUIMapper();
 
-  RxList<CategoryUIModel> categories = <CategoryUIModel>[].obs;
-  StreamSubscription? _listener;
-
-  @override
-  void onReady() {
-    _listener?.cancel();
-    _listener = _categoryRepo.categories.listen((event) {
-      categories.value = event
+  Stream<List<CategoryUIModel>> getCategories() {
+    return _categoryRepo.categories.map((event) {
+      return event
           .where((category) => TransactionType.canAddCategory.contains(category.transactionType))
           .map(_mapper.map)
           .toList();
     });
-
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    _listener?.cancel();
-    _listener = null;
-    super.onClose();
   }
 
   void onAddClick() {
