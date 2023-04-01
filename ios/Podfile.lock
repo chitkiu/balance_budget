@@ -7,47 +7,47 @@ PODS:
     - AppAuth/Core
   - desktop_webview_auth (0.0.1):
     - Flutter
-  - Firebase/Auth (10.6.0):
+  - Firebase/Auth (10.7.0):
     - Firebase/CoreOnly
-    - FirebaseAuth (~> 10.6.0)
-  - Firebase/CoreOnly (10.6.0):
-    - FirebaseCore (= 10.6.0)
-  - Firebase/Database (10.6.0):
+    - FirebaseAuth (~> 10.7.0)
+  - Firebase/CoreOnly (10.7.0):
+    - FirebaseCore (= 10.7.0)
+  - Firebase/Database (10.7.0):
     - Firebase/CoreOnly
-    - FirebaseDatabase (~> 10.6.0)
-  - Firebase/DynamicLinks (10.6.0):
+    - FirebaseDatabase (~> 10.7.0)
+  - Firebase/DynamicLinks (10.7.0):
     - Firebase/CoreOnly
-    - FirebaseDynamicLinks (~> 10.6.0)
-  - firebase_auth (4.3.0):
-    - Firebase/Auth (= 10.6.0)
+    - FirebaseDynamicLinks (~> 10.7.0)
+  - firebase_auth (4.4.0):
+    - Firebase/Auth (= 10.7.0)
     - firebase_core
     - Flutter
-  - firebase_core (2.8.0):
-    - Firebase/CoreOnly (= 10.6.0)
+  - firebase_core (2.9.0):
+    - Firebase/CoreOnly (= 10.7.0)
     - Flutter
-  - firebase_database (10.0.16):
-    - Firebase/Database (= 10.6.0)
+  - firebase_database (10.1.0):
+    - Firebase/Database (= 10.7.0)
     - firebase_core
     - Flutter
-  - firebase_dynamic_links (5.0.17):
-    - Firebase/DynamicLinks (= 10.6.0)
+  - firebase_dynamic_links (5.1.0):
+    - Firebase/DynamicLinks (= 10.7.0)
     - firebase_core
     - Flutter
-  - FirebaseAuth (10.6.0):
+  - FirebaseAuth (10.7.0):
     - FirebaseCore (~> 10.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
     - GoogleUtilities/Environment (~> 7.8)
     - GTMSessionFetcher/Core (< 4.0, >= 2.1)
-  - FirebaseCore (10.6.0):
+  - FirebaseCore (10.7.0):
     - FirebaseCoreInternal (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/Logger (~> 7.8)
-  - FirebaseCoreInternal (10.6.0):
+  - FirebaseCoreInternal (10.7.0):
     - "GoogleUtilities/NSData+zlib (~> 7.8)"
-  - FirebaseDatabase (10.6.0):
+  - FirebaseDatabase (10.7.0):
     - FirebaseCore (~> 10.0)
     - leveldb-library (~> 1.22)
-  - FirebaseDynamicLinks (10.6.0):
+  - FirebaseDynamicLinks (10.7.0):
     - FirebaseCore (~> 10.0)
   - Flutter (1.0.0)
   - google_sign_in_ios (0.0.1):
@@ -123,16 +123,16 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AppAuth: 8fca6b5563a5baef2c04bee27538025e4ceb2add
   desktop_webview_auth: d645139460ef203d50bd0cdb33356785dd939cce
-  Firebase: f13680471b021937f2230ea8503c7809d8c29806
-  firebase_auth: aa94601a07cad33a3f95c8c1ce8ba86d00ca3d9a
-  firebase_core: 58542d7399889ebdbb034baa72d081e54c5c814d
-  firebase_database: bebecb0e8ddfb1d46a22e51219d48f6ee2e9563b
-  firebase_dynamic_links: 250c752d2c982ac98e7e01f33fdb99fe0dc84230
-  FirebaseAuth: 743e5cd568af59d6d99a91ea9300843672515cf7
-  FirebaseCore: fa80ad16a62d52f67274b5b88304c3a318bbf9a4
-  FirebaseCoreInternal: c7cd505e2136811096b225ac388d6254a2622362
-  FirebaseDatabase: c3ab8f695e48d4c4431f8406b58ebe543be185d9
-  FirebaseDynamicLinks: 99c501143953e925681a37aade96bb2db34b30ca
+  Firebase: 0219acf760880eeec8ce479895bd7767466d9f81
+  firebase_auth: 5984ebaf5463319e304ab1c0966b06994bd1c69a
+  firebase_core: d85432877e814811e040e7659f9c82faeab66e04
+  firebase_database: 7dfac1ef83539a3716784b11f4d72d077c3464c2
+  firebase_dynamic_links: eb6716a5419a7b1ad5ef4860c84290c48a30be91
+  FirebaseAuth: dd64c01631df724b09f33e584625775c52f7d71f
+  FirebaseCore: e317665b9d744727a97e623edbbed009320afdd7
+  FirebaseCoreInternal: 8845798510aae74703467480f71ac613788d0696
+  FirebaseDatabase: 06195bac336b5e4c893ec04a111631a4cdb00178
+  FirebaseDynamicLinks: 16a8fae3697fba66fed7a1d646fe59f30d42aa31
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   google_sign_in_ios: 1256ff9d941db546373826966720b0c24804bcdd
   GoogleSignIn: 5651ce3a61e56ca864160e79b484cd9ed3f49b7a
@@ -142,6 +142,6 @@ SPEC CHECKSUMS:
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
 
-PODFILE CHECKSUM: cc1f88378b4bfcf93a6ce00d2c587857c6008d3b
+PODFILE CHECKSUM: bd295fc198b245bb51189c8140d55e735c8dd822
 
 COCOAPODS: 1.11.3
