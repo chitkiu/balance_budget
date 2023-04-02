@@ -6,18 +6,33 @@ import '../../../common/data/models/transaction_type.dart';
 import 'models/transaction.dart';
 
 class LocalTransactionsRepository {
-  CollectionReference<Transaction> get _ref =>
-      FirebaseFirestore.instance.collection("users/${FirebaseAuth.instance.currentUser!.uid}/transactions").withConverter<Transaction>(
-            fromFirestore: (snapshot, _) =>
-                Transaction.fromJson(MapEntry(snapshot.id, snapshot.data()!)),
-            toFirestore: (category, _) => category.toJson(),
-          );
+  CollectionReference<Transaction> get _ref => FirebaseFirestore.instance
+      .collection("users/${FirebaseAuth.instance.currentUser!.uid}/transactions")
+      .withConverter<Transaction>(
+        fromFirestore: (snapshot, _) =>
+            Transaction.fromJson(MapEntry(snapshot.id, snapshot.data()!)),
+        toFirestore: (category, _) => category.toJson(),
+      );
 
   Stream<List<Transaction>> get transactions =>
       _ref.snapshots().map((event) => event.docs.map((e) => e.data()).toList());
 
   Stream<Transaction?> getTransactionById(String id) {
     return _ref.doc(id).snapshots().map((event) => event.data());
+  }
+
+  Stream<List<Transaction>> getTransactionByTimeRange(
+    DateTime start,
+    DateTime end,
+  ) {
+    return _ref
+        .where(
+          'time',
+          isGreaterThanOrEqualTo: start.withoutTime.millisecondsSinceEpoch,
+          isLessThanOrEqualTo: end.withoutTime.millisecondsSinceEpoch,
+        )
+        .snapshots()
+        .map((event) => event.docs.map((e) => e.data()).toList());
   }
 
   bool create(

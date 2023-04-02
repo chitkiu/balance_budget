@@ -1,8 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
-import 'package:rxdart/streams.dart';
+import 'package:rxdart/transformers.dart';
 
-import '../../../common/data/date_time_extension.dart';
 import '../../add/domain/add_transaction_binding.dart';
 import '../../add/ui/add_transaction_screen.dart';
 import '../../info/domain/transaction_info_binding.dart';
@@ -27,16 +26,19 @@ class TransactionsController extends GetxController
 
   RxList<TransactionListUIModel> transactions = <TransactionListUIModel>[].obs;
 
-  TransactionsController() {
+  @override
+  void onInit() {
+    super.onInit();
+
     currentDate = _dateStorage.currentDateStream.value.obs;
 
     currentDate.bindStream(_dateStorage.currentDateStream);
 
-    transactions.bindStream(CombineLatestStream.combine2(
-      _transactionsAggregator.transactions(),
-      _dateStorage.currentDateStream,
-      _mapTransactionsToUI,
-    ).handleError((Object e, StackTrace str) {
+    transactions.bindStream(_dateStorage.currentDateStream.switchMap((dateRange) {
+      return _transactionsAggregator
+          .transactionsByDate(dateRange.start, dateRange.end)
+          .map(_mapTransactionsToUI);
+    }).handleError((Object e, StackTrace str) {
       change(null, status: RxStatus.error(str.toString()));
     }).map((event) {
       if (event.isEmpty) {
@@ -66,12 +68,7 @@ class TransactionsController extends GetxController
   }
 
   List<TransactionListUIModel> _mapTransactionsToUI(
-      List<RichTransactionModel> transactions, TransactionsFilterDate date) {
-    var filteredTransaction = transactions.where((item) {
-      return item.transaction.time.isAfterOrAtSameMoment(date.start) &&
-          item.transaction.time.isBeforeOrAtSameMoment(date.end);
-    });
-
+      List<RichTransactionModel> filteredTransaction) {
     List<TransactionListUIModel> groupedTransactions = [];
 
     groupBy(filteredTransaction, (item) => item.transaction.time)
