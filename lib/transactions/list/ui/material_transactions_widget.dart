@@ -67,34 +67,25 @@ class MaterialTransactionsWidget extends BaseTransactionsWidget {
 
   Widget _transactionsList(
       BuildContext context, ComplexTransactionsUIModel? model) {
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: NestedScrollView(
-            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-              return <Widget>[
-                SliverList(
-                  delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-                    return _searchBar();
-                  }, childCount: 1),
-                ),
-                SliverPersistentHeader(
-                  pinned: true,
-                  floating: true,
-                  delegate: _FilterHeader(model?.transactionCount ?? 0),
-                ),
-              ];
-            },
-            body: SafeArea(
-              bottom: false,
-              child: ListView(
-                children: model?.transactions
-                        .map((item) => mapTransactionToUI(context, item))
-                        .toList() ??
+    return CustomScrollView(
+      slivers: [
+        SliverList(
+          delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+            return _searchBar();
+          }, childCount: 1),
+        ),
+        SliverPersistentHeader(
+          pinned: true,
+          floating: true,
+          delegate: _FilterHeader(model?.transactionCount ?? 0),
+        ),
+        SliverList(
+            delegate: SliverChildListDelegate.fixed(
+                model?.transactions
+                    .map((item) => mapTransactionToUI(context, item))
+                    .toList() ??
                     [],
-              ),
-            ),
-          ),
+            )
         )
       ],
     );
