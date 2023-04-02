@@ -145,6 +145,8 @@ class _FilterHeader extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
-    return false;
+    return oldDelegate is _FilterHeader
+        ? oldDelegate.transactionCount != transactionCount
+        : true;
   }
 }
