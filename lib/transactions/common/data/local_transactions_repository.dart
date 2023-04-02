@@ -17,8 +17,18 @@ class LocalTransactionsRepository {
   Stream<List<Transaction>> get transactions =>
       _ref.snapshots().map((event) => event.docs.map((e) => e.data()).toList());
 
-  Stream<Transaction?> getTransactionById(String id) {
-    return _ref.doc(id).snapshots().map((event) => event.data());
+  Stream<Transaction?> getTransactionById(
+      String id,
+      ) {
+    return _ref.doc(id)
+        .snapshots()
+        .map((event) {
+      if (event.exists) {
+        return event.data();
+      } else {
+        return null;
+      }
+    });
   }
 
   Stream<List<Transaction>> getTransactionByTimeRange(

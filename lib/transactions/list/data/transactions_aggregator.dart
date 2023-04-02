@@ -42,6 +42,17 @@ class TransactionsAggregator {
     );
   }
 
+  Stream<RichTransactionModel?> transactionById(
+      String id,
+  ) {
+    return CombineLatestStream.combine3(
+      _categoryRepository.categories,
+      _transactionsRepository.getTransactionById(id),
+      _walletRepository.wallets,
+      _mapTransaction,
+    );
+  }
+
   int compare(RichTransactionModel a, RichTransactionModel b) {
     var result = b.transaction.time.compareTo(a.transaction.time);
     if (result == 0) {
@@ -50,47 +61,53 @@ class TransactionsAggregator {
     return result;
   }
 
+  RichTransactionModel? _mapTransaction(
+      List<Category> categories, Transaction? transaction, List<Wallet> wallets) {
+    if (transaction == null) {
+      return null;
+    }
+    var wallet =
+    wallets.firstWhereOrNull((element) => element.id == transaction.walletId);
+    if (wallet == null) {
+      return null;
+    }
+    switch (transaction.transactionType) {
+      case TransactionType.setInitialBalance:
+        return null;
+      case TransactionType.transfer:
+        if (transaction is TransferTransaction) {
+          var toWallet = wallets
+              .firstWhereOrNull((element) => element.id == transaction.toWalletId);
+          if (toWallet == null) {
+            return null;
+          }
+          return TransferRichTransactionModel(
+            transaction,
+            wallet,
+            toWallet,
+          );
+        } else {
+          return null;
+        }
+      case TransactionType.expense:
+      case TransactionType.income:
+        if (transaction is CommonTransaction) {
+          var category = categories
+              .firstWhereOrNull((element) => element.id == transaction.categoryId);
+          if (category == null) {
+            return null;
+          }
+          return CategoryRichTransactionModel(transaction, wallet, category);
+        } else {
+          return null;
+        }
+    }
+  }
+
   List<RichTransactionModel> _mapTransactions(
       List<Category> categories, List<Transaction> transactions, List<Wallet> wallets) {
     List<RichTransactionModel> newTransactions = transactions
-        .map((transaction) {
-          var wallet =
-              wallets.firstWhereOrNull((element) => element.id == transaction.walletId);
-          if (wallet == null) {
-            return null;
-          }
-          switch (transaction.transactionType) {
-            case TransactionType.setInitialBalance:
-              return null;
-            case TransactionType.transfer:
-              if (transaction is TransferTransaction) {
-                var toWallet = wallets
-                    .firstWhereOrNull((element) => element.id == transaction.toWalletId);
-                if (toWallet == null) {
-                  return null;
-                }
-                return TransferRichTransactionModel(
-                  transaction,
-                  wallet,
-                  toWallet,
-                );
-              } else {
-                return null;
-              }
-            case TransactionType.expense:
-            case TransactionType.income:
-              if (transaction is CommonTransaction) {
-                var category = categories
-                    .firstWhereOrNull((element) => element.id == transaction.categoryId);
-                if (category == null) {
-                  return null;
-                }
-                return CategoryRichTransactionModel(transaction, wallet, category);
-              } else {
-                return null;
-              }
-          }
-        })
+        .map((transaction) => _mapTransaction(categories, transaction, wallets) )
         .whereNotNull()
         .toList();
 

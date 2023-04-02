@@ -12,10 +12,7 @@ class TransactionInfoController extends GetxController {
   final TransactionsUIMapper _transactionsUIMapper = TransactionsUIMapper();
 
   Stream<TransactionUIModel?> transactionById(String id) {
-    return _transactionsAggregator.transactions()
-        .map((events) =>
-        events.firstWhereOrNull((element) => element.transaction.id == id))
-        .map((event) {
+    return _transactionsAggregator.transactionById(id).map((event) {
       if (event == null) {
         return null;
       } else {
@@ -28,7 +25,8 @@ class TransactionInfoController extends GetxController {
     await _transactionsRepo.remove(id);
   }
 
-  Future<void> editTransaction(String id, {
+  Future<void> editTransaction(
+    String id, {
     required String newSum,
     required String newComment,
   }) async {
