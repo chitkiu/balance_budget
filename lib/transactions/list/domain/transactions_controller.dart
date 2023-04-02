@@ -3,10 +3,10 @@ import 'package:get/get.dart';
 import 'package:rxdart/transformers.dart';
 
 import '../../../common/getx_extensions.dart';
-import '../../add/domain/add_transaction_binding.dart';
-import '../../add/ui/add_transaction_screen.dart';
 import '../../info/domain/transaction_info_binding.dart';
 import '../../info/ui/transaction_info_screen.dart';
+import '../../update/domain/update_transaction_binding.dart';
+import '../../update/ui/update_transaction_screen.dart';
 import '../data/models/rich_transaction_model.dart';
 import '../data/transactions_aggregator.dart';
 import '../ui/models/complex_transactions_ui_model.dart';
@@ -53,9 +53,9 @@ class TransactionsController extends GetxController
   }
 
   void addTransaction() {
-    AddTransactionScreen(
+    UpdateTransactionScreen(
       title: Get.localisation.addTransactionTitle,
-      bindingCreator: () => AddTransactionBinding(),
+      bindingCreator: () => UpdateTransactionBinding(),
     ).open();
   }
 

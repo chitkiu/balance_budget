@@ -1,4 +1,3 @@
-import 'package:balance_budget/transactions/add/ui/date_time_selector_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
@@ -7,18 +6,23 @@ import '../../../common/data/models/transaction_type.dart';
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/base_bottom_sheet_screen.dart';
 import '../../../common/ui/common_icons.dart';
-import '../domain/add_transaction_binding.dart';
-import '../domain/add_transaction_controller.dart';
+import '../../list/data/models/rich_transaction_model.dart';
+import '../../update/ui/date_time_selector_widget.dart';
+import '../domain/update_transaction_binding.dart';
+import '../domain/update_transaction_controller.dart';
 import 'models/transaction_wallet_ui_model.dart';
 
-//TODO Add possibility to edit transaction
-class AddTransactionScreen
-    extends BaseBottomSheetScreen<AddTransactionBinding, AddTransactionController> {
-
-  AddTransactionScreen({required super.title, required super.bindingCreator, super.key});
+class UpdateTransactionScreen
+    extends BaseBottomSheetScreen<UpdateTransactionBinding, UpdateTransactionController> {
 
   final TextEditingController _sumController = TextEditingController();
   final TextEditingController _commentController = TextEditingController();
+
+  UpdateTransactionScreen({RichTransactionModel? model, required super.title, required super.bindingCreator, super.key}) {
+    if (model != null) {
+      _setupInfoByModel(model);
+    }
+  }
 
   @override
   Widget body(BuildContext context) {
@@ -220,5 +224,11 @@ class AddTransactionScreen
       case TransactionType.setInitialBalance:
         return Colors.grey;
     }
+  }
+
+  void _setupInfoByModel(RichTransactionModel model) {
+    //TODO Add format
+    _sumController.text = model.transaction.sum.toString() ?? '';
+    _commentController.text = model.transaction.comment ?? '';
   }
 }

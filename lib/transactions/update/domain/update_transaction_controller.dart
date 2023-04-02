@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart' as rxd;
 
@@ -11,6 +9,7 @@ import '../../../wallets/common/data/local_wallet_repository.dart';
 import '../../../wallets/list/domain/wallets_binding.dart';
 import '../../../wallets/list/ui/wallets_screen.dart';
 import '../../common/data/local_transactions_repository.dart';
+import '../../list/data/models/rich_transaction_model.dart';
 import '../ui/models/date_selection_type.dart';
 import '../ui/models/select_date_ui_model.dart';
 import '../ui/models/transaction_category_ui_model.dart';
@@ -18,7 +17,11 @@ import '../ui/models/transaction_wallet_ui_model.dart';
 import 'mappers/transaction_category_ui_mapper.dart';
 import 'mappers/transaction_wallet_ui_mapper.dart';
 
-class AddTransactionController extends GetxController {
+class UpdateTransactionController extends GetxController {
+  final RichTransactionModel? model;
+
+  UpdateTransactionController({ this.model });
+
   final TransactionCategoryUIMapper _expenseCategoryUIMapper =
       TransactionCategoryUIMapper();
   final TransactionWalletUIMapper _expenseWalletUIMapper = TransactionWalletUIMapper();
@@ -41,23 +44,20 @@ class AddTransactionController extends GetxController {
 
   Rx<SelectDayUIModel> selectedDate = SelectDayUIModel.now().obs;
 
-  var selectedType = TransactionType.expense.obs;
-
-  StreamSubscription? _subscription;
+  final selectedType = TransactionType.expense.obs;
 
   @override
   void onReady() {
-    _subscription?.cancel();
 
     //TODO Move to separate class
-    _subscription = rxd.CombineLatestStream.combine3(
-      _categoryRepo.categories,
-      selectedCategory.stream,
-      selectedType.stream,
-      _expenseCategoryUIMapper.map,
-    ).listen((value) {
-      categoryList.value = value;
-    });
+    categoryList.bindStream(
+        rxd.CombineLatestStream.combine3(
+          _categoryRepo.categories,
+          selectedCategory.stream,
+          selectedType.stream,
+          _expenseCategoryUIMapper.map,
+        )
+    );
 
     //Add refresh for set initial data
     selectedCategory.refresh();
@@ -68,14 +68,11 @@ class AddTransactionController extends GetxController {
 
     selectedWallet.refresh();
 
-    super.onReady();
-  }
+    if (model != null) {
+      _setupInitialData(model!);
+    }
 
-  @override
-  void onClose() {
-    _subscription?.cancel();
-    _subscription = null;
-    super.onClose();
+    super.onReady();
   }
 
   void onSaveTransaction(String sum, String comment) {
@@ -113,7 +110,7 @@ class AddTransactionController extends GetxController {
 
     DateTime selected = selectedDate.value.dateTime;
 
-    var addTransactionResult = _transactionsRepo.create(
+    var addTransactionResult = _transactionsRepo.createOrUpdate(
       double.parse(sum),
       selectedType.value,
       walletId,
@@ -122,6 +119,7 @@ class AddTransactionController extends GetxController {
         selected.month,
         selected.day,
       ),
+      id: model?.transaction.id,
       comment: currentComment,
       toWalletId: selectedToWallet.value,
       categoryId: categoryId,
@@ -200,5 +198,17 @@ class AddTransactionController extends GetxController {
     return first.year == second.year &&
         first.month == second.month &&
         first.day == second.day;
+  }
+
+  void _setupInitialData(RichTransactionModel model) {
+    if (model is CategoryRichTransactionModel) {
+      selectedCategory.value = model.category.id;
+    }
+    selectedType.value = model.transaction.transactionType;
+    _selectCustomDay(model.transaction.time);
+    selectedWallet.value = model.fromWallet.id;
+    if (model is TransferRichTransactionModel) {
+      selectedToWallet.value = model.toWallet.id;
+    }
   }
 }

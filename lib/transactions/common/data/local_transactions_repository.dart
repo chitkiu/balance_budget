@@ -45,7 +45,7 @@ class LocalTransactionsRepository {
         .map((event) => event.docs.map((e) => e.data()).toList());
   }
 
-  bool create(
+  bool createOrUpdate(
     double sum,
     TransactionType transactionType,
     String walletId,
@@ -54,27 +54,28 @@ class LocalTransactionsRepository {
     String? toWalletId,
     String? categoryId,
     String? comment,
+        String? id,
   }) {
     if (skipZeroSum && sum <= 0) {
       return false;
     }
-
+    Transaction transaction;
     switch (transactionType) {
       case TransactionType.setInitialBalance:
-        _ref.add(SetBalanceTransaction(
+        transaction = SetBalanceTransaction(
           sum: sum,
           transactionType: transactionType,
           walletId: walletId,
           time: time.withoutTime,
           creationTime: DateTime.now(),
-        ));
+        );
         break;
       case TransactionType.expense:
       case TransactionType.income:
         if (categoryId == null) {
           return false;
         }
-        _ref.add(CommonTransaction(
+        transaction = CommonTransaction(
           sum: sum,
           transactionType: transactionType,
           categoryId: categoryId,
@@ -82,13 +83,13 @@ class LocalTransactionsRepository {
           time: time.withoutTime,
           creationTime: DateTime.now(),
           comment: comment,
-        ));
+        );
         break;
       case TransactionType.transfer:
         if (toWalletId == null) {
           return false;
         }
-        _ref.add(TransferTransaction(
+        transaction = TransferTransaction(
           sum: sum,
           transactionType: transactionType,
           walletId: walletId,
@@ -96,8 +97,14 @@ class LocalTransactionsRepository {
           creationTime: DateTime.now(),
           comment: comment,
           toWalletId: toWalletId,
-        ));
+        );
         break;
+    }
+
+    if (id != null) {
+      _ref.doc(id).set(transaction);
+    } else {
+      _ref.add(transaction);
     }
 
     return true;

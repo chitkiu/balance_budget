@@ -1,12 +1,13 @@
 import 'package:get/get.dart';
 
 import '../../../common/getx_extensions.dart';
-import '../../add/domain/add_transaction_binding.dart';
-import '../../add/ui/add_transaction_screen.dart';
 import '../../common/data/local_transactions_repository.dart';
+import '../../list/data/models/rich_transaction_model.dart';
 import '../../list/data/transactions_aggregator.dart';
 import '../../list/domain/mappers/transactions_ui_mapper.dart';
 import '../../list/ui/models/transaction_ui_model.dart';
+import '../../update/domain/update_transaction_binding.dart';
+import '../../update/ui/update_transaction_screen.dart';
 
 class TransactionInfoController extends GetxController {
   final String id;
@@ -18,11 +19,14 @@ class TransactionInfoController extends GetxController {
 
   final TransactionsUIMapper _transactionsUIMapper = TransactionsUIMapper();
 
-  Rxn<TransactionUIModel> transaction = Rxn();
+  final Rxn<RichTransactionModel> _dataTransactionModel = Rxn();
+  final Rxn<TransactionUIModel> transaction = Rxn();
 
   @override
   void onInit() {
+    _dataTransactionModel.bindStream(_transactionsAggregator.transactionById(id));
     transaction.bindStream(_transactionById(id));
+
     super.onInit();
   }
 
@@ -41,9 +45,10 @@ class TransactionInfoController extends GetxController {
   }
 
   void goToEdit() {
-    AddTransactionScreen(
+    UpdateTransactionScreen(
       title: Get.localisation.transactionInfoEditTitle,
-      bindingCreator: () => AddTransactionBinding(),
+      bindingCreator: () => UpdateTransactionBinding(model: _dataTransactionModel.value),
+      model: _dataTransactionModel.value,
     ).open();
   }
 }

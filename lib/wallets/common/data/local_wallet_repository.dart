@@ -80,7 +80,7 @@ class LocalWalletRepository {
   }
 
   void _createInitialTransaction(String? walletId, double sum) {
-    _transactionRepo.create(sum, TransactionType.setInitialBalance, walletId ?? '',
+    _transactionRepo.createOrUpdate(sum, TransactionType.setInitialBalance, walletId ?? '',
         DateTime.now(),
         skipZeroSum: false);
   }
