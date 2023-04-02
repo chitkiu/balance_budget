@@ -87,7 +87,7 @@ TotalBudget _$TotalBudgetFromJson(Map<String, dynamic> json) => TotalBudget(
       _$JsonConverterFromJson<Map<String, dynamic>, BudgetDate>(
           json['endDate'], const BudgetDateConverter().fromJson),
       (json['totalSum'] as num).toDouble(),
-      (json['accounts'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+      (json['wallets'] as List<dynamic>?)?.map((e) => e as String).toList() ??
           [],
     );
 
@@ -100,5 +100,5 @@ Map<String, dynamic> _$TotalBudgetToJson(TotalBudget instance) =>
           instance.endDate, const BudgetDateConverter().toJson),
       'type': instance._type,
       'totalSum': instance.totalSum,
-      'accounts': instance.accounts,
+      'wallets': instance.wallets,
     };

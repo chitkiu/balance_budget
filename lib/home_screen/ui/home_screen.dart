@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
-import '../../accounts/common/data/local_account_repository.dart';
 import '../../budgets/common/data/local_budget_repository.dart';
 import '../../categories/common/data/local_category_repository.dart';
 import '../../transactions/common/data/local_transactions_repository.dart';
 import '../../transactions/list/domain/selected_transactions_date_storage.dart';
+import '../../wallets/common/data/local_wallet_repository.dart';
 import 'home_body_builder.dart';
 import 'mappers/home_screen_tab_mapper.dart';
 import 'models/home_screen_tab.dart';
@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     Get.lazyPut(() => LocalCategoryRepository());
-    Get.lazyPut(() => LocalAccountRepository());
+    Get.lazyPut(() => LocalWalletRepository());
     Get.lazyPut(() => LocalTransactionsRepository());
     Get.lazyPut(() => LocalBudgetRepository());
     Get.lazyPut(() => SelectedTransactionsDateStorage());

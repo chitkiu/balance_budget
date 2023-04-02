@@ -7,7 +7,7 @@ class AddCategoryController extends GetxController {
 
   LocalCategoryRepository get _categoryRepo => Get.find();
 
-  var selectedType = TransactionType.spend.obs;
+  var selectedType = TransactionType.expense.obs;
 
   //TODO
   void onSaveCategory(String title) {

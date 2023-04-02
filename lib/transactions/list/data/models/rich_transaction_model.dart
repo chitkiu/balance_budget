@@ -1,24 +1,24 @@
-import '../../../../accounts/common/data/models/account.dart';
 import '../../../../categories/common/data/models/category.dart';
+import '../../../../wallets/common/data/models/wallet.dart';
 import '../../../common/data/models/transaction.dart';
 
 abstract class RichTransactionModel {
   final Transaction transaction;
-  final Account fromAccount;
+  final Wallet fromWallet;
 
-  RichTransactionModel(this.transaction, this.fromAccount);
+  RichTransactionModel(this.transaction, this.fromWallet);
 }
 
 class TransferRichTransactionModel extends RichTransactionModel {
 
-  final Account toAccount;
+  final Wallet toWallet;
 
-  TransferRichTransactionModel(super.transaction, super.fromAccount, this.toAccount);
+  TransferRichTransactionModel(super.transaction, super.fromWallet, this.toWallet);
 }
 
 class CategoryRichTransactionModel extends RichTransactionModel {
 
   final Category category;
 
-  CategoryRichTransactionModel(super.transaction, super.fromAccount, this.category);
+  CategoryRichTransactionModel(super.transaction, super.fromWallet, this.category);
 }

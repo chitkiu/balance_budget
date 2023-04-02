@@ -59,7 +59,7 @@ class LocalTransactionsRepository {
           creationTime: DateTime.now(),
         ));
         break;
-      case TransactionType.spend:
+      case TransactionType.expense:
       case TransactionType.income:
         if (categoryId == null) {
           return false;

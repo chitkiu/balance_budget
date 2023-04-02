@@ -3,10 +3,10 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../accounts/common/data/models/account.dart';
 import '../../../../categories/common/data/models/category.dart';
 import '../../../../common/data/models/transaction_type.dart';
 import '../../../../common/ui/common_ui_settings.dart';
+import '../../../../wallets/common/data/models/wallet.dart';
 import '../../../common/data/models/transaction.dart';
 import '../../data/models/rich_transaction_model.dart';
 import '../../ui/models/transaction_ui_model.dart';
@@ -20,11 +20,11 @@ class TransactionsUIMapper {
     switch (richTransaction.runtimeType) {
       case TransferRichTransactionModel:
         TransferRichTransactionModel transaction = richTransaction as TransferRichTransactionModel;
-        return _mapTransferModel(transaction.transaction, transaction.fromAccount, transaction.toAccount);
+        return _mapTransferModel(transaction.transaction, transaction.fromWallet, transaction.toWallet);
 
       case CategoryRichTransactionModel:
         CategoryRichTransactionModel transaction = richTransaction as CategoryRichTransactionModel;
-        return _mapCommonModel(transaction.transaction, transaction.category, transaction.fromAccount);
+        return _mapCommonModel(transaction.transaction, transaction.category, transaction.fromWallet);
     }
 
     return null;
@@ -35,15 +35,15 @@ class TransactionsUIMapper {
       Iterable<RichTransactionModel> transactions,
       Iterable<TransactionUIModel> transactionsUIModel
       ) {
-    final spendSum = transactions
-        .where((element) => element.transaction.transactionType == TransactionType.spend)
+    final expenseSum = transactions
+        .where((element) => element.transaction.transactionType == TransactionType.expense)
         .map((e) => e.transaction.sum)
         .sum;
     final incomeSum = transactions
         .where((element) => element.transaction.transactionType == TransactionType.income)
         .map((e) => e.transaction.sum)
         .sum;
-    final totalSum = incomeSum - spendSum;
+    final totalSum = incomeSum - expenseSum;
     String totalSumText = _sumFormatter.format(totalSum.abs());
     Color sumColor = Colors.grey;
     if (totalSum < 0) {
@@ -61,14 +61,14 @@ class TransactionsUIMapper {
     );
   }
 
-  TransactionUIModel _mapCommonModel(Transaction transaction, Category category, Account account) {
+  TransactionUIModel _mapCommonModel(Transaction transaction, Category category, Wallet wallet) {
     return CommonTransactionUIModel(
       id: transaction.id,
       sum: _sumFormat(transaction.sum),
       sumDouble: transaction.sum,
-      sumColor: (transaction.transactionType == TransactionType.spend) ? Colors.redAccent : Colors.green,
+      sumColor: (transaction.transactionType == TransactionType.expense) ? Colors.redAccent : Colors.green,
       categoryName: category.title,
-      accountName: account.name,
+      walletName: wallet.name,
       formattedDate: _dateFormat(transaction.time),
       dateTime: transaction.time,
       comment: transaction.comment,
@@ -77,15 +77,15 @@ class TransactionsUIMapper {
 
   TransactionUIModel _mapTransferModel(
       Transaction transaction,
-      Account fromAccount,
-      Account toAccount,
+      Wallet fromWallet,
+      Wallet toWallet,
   ) {
     return TransferTransactionUIModel(
       id: transaction.id,
       sum: _sumFormat(transaction.sum),
       sumDouble: transaction.sum,
-      fromAccountName: fromAccount.name,
-      toAccountName: toAccount.name,
+      fromWalletName: fromWallet.name,
+      toWalletName: toWallet.name,
       formattedDate: _dateFormat(transaction.time),
       dateTime: transaction.time,
     );

@@ -2,17 +2,17 @@ import 'package:get/get.dart';
 
 import '../../../common/domain/models/deletable_bindings.dart';
 import '../../../common/getx_extensions.dart';
-import 'accounts_controller.dart';
+import 'wallets_controller.dart';
 
-class AccountsBinding extends DeletableBindings {
+class WalletsBinding extends DeletableBindings {
   @override
   void dependencies() {
-    Get.put(AccountsController());
+    Get.put(WalletsController());
   }
 
   @override
   void delete() {
-    Get.deleteIfExist<AccountsController>();
+    Get.deleteIfExist<WalletsController>();
   }
 
 }

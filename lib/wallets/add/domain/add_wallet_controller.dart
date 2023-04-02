@@ -1,29 +1,29 @@
 import 'package:get/get.dart';
 
-import '../../common/data/local_account_repository.dart';
-import '../ui/models/account_type.dart';
+import '../../common/data/local_wallet_repository.dart';
+import '../ui/models/wallet_type.dart';
 
-class AddAccountController extends GetxController {
-  LocalAccountRepository get _accountRepo => Get.find();
+class AddWalletController extends GetxController {
+  LocalWalletRepository get _walletRepo => Get.find();
 
-  Rx<AccountType> accountType = AccountType.debit.obs;
+  Rx<WalletType> walletType = WalletType.debit.obs;
 
   //TODO Add error, split to methods
-  Future<void> onSaveAccount(
+  Future<void> onSaveWallet(
       {required String title,
       String? totalBalance,
       String? ownBalance,
       String? creditBalance}) async {
-    switch (accountType.value) {
-      case AccountType.debit:
+    switch (walletType.value) {
+      case WalletType.debit:
         if (totalBalance != null) {
           if (double.tryParse(totalBalance) == null) {
             return;
           }
-          await _accountRepo.createDebit(title, double.parse(totalBalance));
+          await _walletRepo.createDebit(title, double.parse(totalBalance));
         }
         break;
-      case AccountType.credit:
+      case WalletType.credit:
         if (ownBalance != null && creditBalance != null) {
           if (double.tryParse(ownBalance) == null) {
             return;
@@ -31,7 +31,7 @@ class AddAccountController extends GetxController {
           if (double.tryParse(creditBalance) == null) {
             return;
           }
-          await _accountRepo.createCredit(
+          await _walletRepo.createCredit(
               title,
               double.parse(ownBalance),
               double.parse(creditBalance),

@@ -4,12 +4,12 @@ import 'package:get/get.dart';
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
-import '../domain/accounts_controller.dart';
-import 'models/account_ui_model.dart';
+import '../domain/wallets_controller.dart';
+import 'models/wallet_ui_model.dart';
 
-class AccountsScreen extends CommonScaffoldWithButtonScreen<AccountsController> {
-  AccountsScreen({Key? key}) : super(
-      Get.localisation.accountsTitle,
+class WalletsScreen extends CommonScaffoldWithButtonScreen<WalletsController> {
+  WalletsScreen({Key? key}) : super(
+      Get.localisation.walletsTitle,
       icon: CommonIcons.add,
       key: key
   );
@@ -17,7 +17,7 @@ class AccountsScreen extends CommonScaffoldWithButtonScreen<AccountsController> 
   @override
   Widget body(BuildContext context) {
     return StreamBuilder(
-      stream: controller.getAccounts(),
+      stream: controller.getWallets(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           if (!snapshot.hasData) {
@@ -26,18 +26,18 @@ class AccountsScreen extends CommonScaffoldWithButtonScreen<AccountsController> 
             );
           }
         }
-        var accounts = snapshot.data;
-        if (accounts == null || accounts.isEmpty) {
+        var wallets = snapshot.data;
+        if (wallets == null || wallets.isEmpty) {
           return Center(
-            child: Text(Get.localisation.noAccounts),
+            child: Text(Get.localisation.noWallets),
           );
         }
 
         return ListView.separated(
           itemBuilder: (context, index) {
-            return _getAccountWidget(accounts[index]);
+            return _getWalletWidget(wallets[index]);
           },
-          itemCount: accounts.length,
+          itemCount: wallets.length,
           separatorBuilder: (context, index) => const Divider(),
         );
       },
@@ -49,28 +49,28 @@ class AccountsScreen extends CommonScaffoldWithButtonScreen<AccountsController> 
     controller.onAddClick();
   }
 
-  Widget _getAccountWidget(AccountUIModel account) {
-    if (account is CreditAccountUIModel) {
-      return _creditAccountWidget(account);
+  Widget _getWalletWidget(WalletUIModel wallet) {
+    if (wallet is CreditWalletUIModel) {
+      return _creditWalletWidget(wallet);
     } else {
-      return _defaultAccountWidget(account);
+      return _defaultWalletWidget(wallet);
     }
   }
 
-  Widget _defaultAccountWidget(AccountUIModel account) {
+  Widget _defaultWalletWidget(WalletUIModel wallet) {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(account.name,
+            Text(wallet.name,
                 style: const TextStyle(fontWeight: FontWeight.w500)),
             const SizedBox(height: 4,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(Get.localisation.totalBalance),
-                Text(account.balance),
+                Text(wallet.balance),
               ],
             )
           ],
@@ -78,34 +78,34 @@ class AccountsScreen extends CommonScaffoldWithButtonScreen<AccountsController> 
     );
   }
 
-  Widget _creditAccountWidget(CreditAccountUIModel account) {
+  Widget _creditWalletWidget(CreditWalletUIModel wallet) {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(account.name,
+            Text(wallet.name,
                 style: const TextStyle(fontWeight: FontWeight.w500)),
             const SizedBox(height: 4,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(Get.localisation.totalBalance),
-                Text(account.balance),
+                Text(wallet.balance),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(Get.localisation.ownBalance),
-                Text(account.ownSum),
+                Text(wallet.ownSum),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(Get.localisation.creditLimit),
-                Text(account.creditSum),
+                Text(wallet.creditSum),
               ],
             )
           ],

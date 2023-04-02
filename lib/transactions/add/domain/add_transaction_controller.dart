@@ -3,48 +3,47 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart' as rxd;
 
-import '../../../accounts/common/data/local_account_repository.dart';
-import '../../../accounts/list/domain/accounts_binding.dart';
-import '../../../accounts/list/ui/accounts_screen.dart';
 import '../../../categories/common/data/local_category_repository.dart';
 import '../../../categories/list/domain/categories_binding.dart';
 import '../../../categories/list/ui/categories_screen.dart';
 import '../../../common/data/models/transaction_type.dart';
+import '../../../wallets/common/data/local_wallet_repository.dart';
+import '../../../wallets/list/domain/wallets_binding.dart';
+import '../../../wallets/list/ui/wallets_screen.dart';
 import '../../common/data/local_transactions_repository.dart';
 import '../ui/models/date_selection_type.dart';
 import '../ui/models/select_date_ui_model.dart';
-import '../ui/models/transaction_account_ui_model.dart';
 import '../ui/models/transaction_category_ui_model.dart';
-import 'mappers/transaction_account_ui_mapper.dart';
+import '../ui/models/transaction_wallet_ui_model.dart';
 import 'mappers/transaction_category_ui_mapper.dart';
+import 'mappers/transaction_wallet_ui_mapper.dart';
 
 class AddTransactionController extends GetxController {
-  final TransactionCategoryUIMapper _spendCategoryUIMapper =
+  final TransactionCategoryUIMapper _expenseCategoryUIMapper =
       TransactionCategoryUIMapper();
-  final TransactionAccountUIMapper _spendAccountUIMapper = TransactionAccountUIMapper();
+  final TransactionWalletUIMapper _expenseWalletUIMapper = TransactionWalletUIMapper();
 
   LocalTransactionsRepository get _transactionsRepo => Get.find();
 
   LocalCategoryRepository get _categoryRepo => Get.find();
 
-  LocalAccountRepository get _accountRepo => Get.find();
+  LocalWalletRepository get _walletRepo => Get.find();
 
   RxList<TransactionCategoryUIModel> categoryList = <TransactionCategoryUIModel>[].obs;
 
-  RxList<TransactionAccountUIModel> accountList = <TransactionAccountUIModel>[].obs;
+  RxList<TransactionWalletUIModel> walletList = <TransactionWalletUIModel>[].obs;
 
   Rxn<String> selectedCategory = Rxn();
 
-  Rxn<String> selectedAccount = Rxn();
+  Rxn<String> selectedWallet = Rxn();
 
-  Rxn<String> selectedToAccount = Rxn();
+  Rxn<String> selectedToWallet = Rxn();
 
   Rx<SelectDayUIModel> selectedDate = SelectDayUIModel.now().obs;
 
-  var selectedType = TransactionType.spend.obs;
+  var selectedType = TransactionType.expense.obs;
 
   StreamSubscription? _subscription;
-  StreamSubscription? _accountSubscription;
 
   @override
   void onReady() {
@@ -55,7 +54,7 @@ class AddTransactionController extends GetxController {
       _categoryRepo.categories,
       selectedCategory.stream,
       selectedType.stream,
-      _spendCategoryUIMapper.map,
+      _expenseCategoryUIMapper.map,
     ).listen((value) {
       categoryList.value = value;
     });
@@ -64,14 +63,10 @@ class AddTransactionController extends GetxController {
     selectedCategory.refresh();
     selectedType.refresh();
 
-    _accountSubscription?.cancel();
-    _accountSubscription = _accountRepo.accounts
-        .map((event) => _spendAccountUIMapper.map(event))
-        .listen((value) {
-      accountList.value = value;
-    });
+    walletList.bindStream(_walletRepo.wallets
+        .map((event) => _expenseWalletUIMapper.map(event)));
 
-    selectedAccount.refresh();
+    selectedWallet.refresh();
 
     super.onReady();
   }
@@ -80,8 +75,6 @@ class AddTransactionController extends GetxController {
   void onClose() {
     _subscription?.cancel();
     _subscription = null;
-    _accountSubscription?.cancel();
-    _accountSubscription = null;
     super.onClose();
   }
 
@@ -101,19 +94,19 @@ class AddTransactionController extends GetxController {
       return;
     }
 
-    var accountId = selectedAccount.value;
-    if (accountId == null) {
+    var walletId = selectedWallet.value;
+    if (walletId == null) {
       return;
     }
 
     if (selectedType.value == TransactionType.transfer) {
-      var toAccountId = selectedToAccount.value;
+      var toWalletId = selectedToWallet.value;
 
-      if (toAccountId == null) {
+      if (toWalletId == null) {
         return;
       }
 
-      if (toAccountId == accountId) {
+      if (toWalletId == walletId) {
         return;
       }
     }
@@ -123,14 +116,14 @@ class AddTransactionController extends GetxController {
     var addTransactionResult = _transactionsRepo.create(
       double.parse(sum),
       selectedType.value,
-      accountId,
+      walletId,
       DateTime(
         selected.year,
         selected.month,
         selected.day,
       ),
       comment: currentComment,
-      toWalletId: selectedToAccount.value,
+      toWalletId: selectedToWallet.value,
       categoryId: categoryId,
     );
 
@@ -143,12 +136,12 @@ class AddTransactionController extends GetxController {
     selectedCategory.value = category.categoryId;
   }
 
-  void selectAccount(TransactionAccountUIModel account) {
-    selectedAccount.value = account.accountId;
+  void selectWallet(TransactionWalletUIModel wallet) {
+    selectedWallet.value = wallet.walletId;
   }
 
-  void selectToAccount(TransactionAccountUIModel account) {
-    selectedToAccount.value = account.accountId;
+  void selectToWallet(TransactionWalletUIModel wallet) {
+    selectedToWallet.value = wallet.walletId;
   }
 
   void selectDateByType(
@@ -175,10 +168,10 @@ class AddTransactionController extends GetxController {
     );
   }
 
-  void onManageAccountsClick() {
+  void onManageWalletsClick() {
     Get.to(
-      () => AccountsScreen(),
-      binding: AccountsBinding(),
+      () => WalletsScreen(),
+      binding: WalletsBinding(),
     );
   }
 

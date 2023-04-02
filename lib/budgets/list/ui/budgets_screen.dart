@@ -45,7 +45,7 @@ class BudgetsScreen extends CommonScaffoldWithButtonScreen<BudgetsController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(budget.name),
-                      Text("${budget.spendSum}/${budget.totalSum}"),
+                      Text("${budget.expenseSum}/${budget.totalSum}"),
                     ],
                   )
                 ],
@@ -68,7 +68,7 @@ class BudgetsScreen extends CommonScaffoldWithButtonScreen<BudgetsController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(budget.name),
-                      Text("${budget.spendSum}/${budget.totalSum}"),
+                      Text("${budget.expenseSum}/${budget.totalSum}"),
                     ],
                   )
                 ] + budget.categoriesInfoUIModel.map(_categoryInfo).toList(),
@@ -94,7 +94,7 @@ class BudgetsScreen extends CommonScaffoldWithButtonScreen<BudgetsController> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(model.categoryName),
-        Text("${model.spendSum}/${model.totalSum}"),
+        Text("${model.expenseSum}/${model.totalSum}"),
       ],
     );
   }

@@ -105,7 +105,7 @@ class TotalBudget extends Budget {
   final double totalSum;
 
   @JsonKey(defaultValue: [])
-  final List<String> accounts;
+  final List<String> wallets;
 
   TotalBudget(
       super.name,
@@ -113,7 +113,7 @@ class TotalBudget extends Budget {
       super.startDate,
       super.endDate,
       this.totalSum,
-      this.accounts
+      this.wallets
   );
 
   factory TotalBudget.fromJson(MapEntry<String, dynamic> entry) =>

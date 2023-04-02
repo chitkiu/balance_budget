@@ -8,7 +8,7 @@ import '../../../common/ui/common_icons.dart';
 enum HomeScreenTab {
   transactions,
   budget,
-  accounts,
+  wallets,
   settings;
 }
 
@@ -22,7 +22,7 @@ extension HomeScreenMapper on HomeScreenTab {
         return CommonIcons.dollarCircle;
       case HomeScreenTab.settings:
         return CommonIcons.settings;
-      case HomeScreenTab.accounts:
+      case HomeScreenTab.wallets:
         return CommonIcons.wallet;
     }
   }
@@ -35,8 +35,8 @@ extension HomeScreenMapper on HomeScreenTab {
         return Get.localisation.budgetTabName;
       case HomeScreenTab.settings:
         return Get.localisation.settingsTabName;
-      case HomeScreenTab.accounts:
-        return Get.localisation.accountsTabName;
+      case HomeScreenTab.wallets:
+        return Get.localisation.walletsTabName;
     }
   }
 }

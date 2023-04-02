@@ -7,31 +7,31 @@ import 'package:rxdart/rxdart.dart';
 import '../../../common/pair.dart';
 import '../../../transactions/common/data/local_transactions_repository.dart';
 import '../../../transactions/common/data/models/transaction.dart';
-import '../../add/domain/add_account_binding.dart';
-import '../../add/ui/add_account_screen.dart';
-import '../../common/data/local_account_repository.dart';
-import '../../common/data/models/account.dart';
-import '../ui/models/account_ui_model.dart';
-import 'mappers/account_ui_mapper.dart';
+import '../../add/domain/add_wallet_binding.dart';
+import '../../add/ui/add_wallet_screen.dart';
+import '../../common/data/local_wallet_repository.dart';
+import '../../common/data/models/wallet.dart';
+import '../ui/models/wallet_ui_model.dart';
+import 'mappers/wallet_ui_mapper.dart';
 
-class AccountsController extends GetxController {
-  LocalAccountRepository get _accountRepo => Get.find();
+class WalletsController extends GetxController {
+  LocalWalletRepository get _walletRepo => Get.find();
   LocalTransactionsRepository get _transactionRepo => Get.find();
 
-  final AccountUIMapper _mapper = AccountUIMapper();
+  final WalletUIMapper _mapper = WalletUIMapper();
 
-  Stream<List<AccountUIModel>> getAccounts() {
+  Stream<List<WalletUIModel>> getWallets() {
     return CombineLatestStream.combine2(
         _transactionRepo.transactions,
-        _accountRepo.accounts,
+        _walletRepo.wallets,
             (a, b) {
           return Pair(a, b);
         }
     )
     .map((value) {
       var transactionsData = value.first;
-      var accountsData = value.second;
-      return accountsData.map((e) {
+      var walletsData = value.second;
+      return walletsData.map((e) {
         return _mapper.map(e, _calculateTransactions(transactionsData, e));
       }).toList();
     });
@@ -39,14 +39,14 @@ class AccountsController extends GetxController {
 
   void onAddClick() {
     Get.to(
-          () => AddAccountScreen(),
-      binding: AddAccountBinding(),
+          () => AddWalletScreen(),
+      binding: AddWalletBinding(),
     );
   }
 
-  double _calculateTransactions(List<Transaction> transactions, Account account) {
+  double _calculateTransactions(List<Transaction> transactions, Wallet wallet) {
     var filteredTransaction = transactions.where((element) =>
-    element.walletId == account.id);
+    element.walletId == wallet.id);
 
     var totalSum = 0.0;
     for (var transaction in filteredTransaction) {
@@ -54,7 +54,7 @@ class AccountsController extends GetxController {
         case TransactionType.setInitialBalance:
           totalSum += transaction.sum;
           break;
-        case TransactionType.spend:
+        case TransactionType.expense:
           totalSum -= transaction.sum;
           break;
         case TransactionType.income:
@@ -66,24 +66,24 @@ class AccountsController extends GetxController {
       }
     }
 
-    totalSum += _getTransferTotalSum(transactions, account);
+    totalSum += _getTransferTotalSum(transactions, wallet);
 
     return totalSum;
   }
 
-  double _getTransferTotalSum(List<Transaction> transactions, Account account) {
+  double _getTransferTotalSum(List<Transaction> transactions, Wallet wallet) {
     var filteredTransferTransaction = transactions.where((element) =>
     element is TransferTransaction &&
-        (element.walletId == account.id || element.toWalletId == account.id)
+        (element.walletId == wallet.id || element.toWalletId == wallet.id)
     )
         .map((e) => e as TransferTransaction);
 
     var totalSum = 0.0;
 
     for (var transaction in filteredTransferTransaction) {
-      if (transaction.walletId == account.id) {
+      if (transaction.walletId == wallet.id) {
         totalSum -= transaction.sum;
-      } else if (transaction.toWalletId == account.id) {
+      } else if (transaction.toWalletId == wallet.id) {
         totalSum += transaction.sum;
       }
     }

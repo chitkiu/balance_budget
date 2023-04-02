@@ -1,6 +1,6 @@
-import '../../../../accounts/common/data/models/account.dart';
 import '../../../../categories/common/data/models/category.dart';
 import '../../../../transactions/common/data/models/transaction.dart';
+import '../../../../wallets/common/data/models/wallet.dart';
 import '../../../common/data/models/budget.dart';
 
 abstract class RichBudget {
@@ -11,12 +11,12 @@ abstract class RichBudget {
 
 class RichCategoryBudgetInfo {
   final double totalSum;
-  final double totalSpendSum;
+  final double totalExpenseSum;
   final Category category;
-  final List<Account> account;
+  final List<Wallet> wallets;
   final Iterable<Transaction> categoryTransactions;
 
-  RichCategoryBudgetInfo(this.totalSum, this.totalSpendSum, this.category, this.account, this.categoryTransactions);
+  RichCategoryBudgetInfo(this.totalSum, this.totalExpenseSum, this.category, this.wallets, this.categoryTransactions);
 }
 
 class RichCategoryBudget extends RichBudget {
@@ -33,9 +33,9 @@ class RichTotalBudgetWithCategory extends RichBudget {
 
 class RichTotalBudget extends RichBudget {
   final Iterable<Transaction> transactions;
-  final List<Account> account;
+  final List<Wallet> wallets;
 
-  RichTotalBudget(super.budget, this.transactions, this.account);
+  RichTotalBudget(super.budget, this.transactions, this.wallets);
 }
 
 

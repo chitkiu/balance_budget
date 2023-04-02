@@ -53,9 +53,9 @@ class TransactionItem extends StatelessWidget {
   Widget _subtitle(TransactionUIModel model) {
     String subtitleText;
     if (model is TransferTransactionUIModel) {
-      subtitleText = "${model.fromAccountName} => ${model.toAccountName}";
+      subtitleText = "${model.fromWalletName} => ${model.toWalletName}";
     } else {
-      subtitleText = model.accountName;
+      subtitleText = model.walletName;
     }
 
     return _additionalInfo(subtitleText, CommonIcons.wallet);

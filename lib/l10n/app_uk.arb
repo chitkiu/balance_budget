@@ -5,27 +5,27 @@
 
   "transactionsTabName": "Транзакції",
   "budgetTabName": "Бюджети",
-  "accountsTabName": "Аккаунти",
+  "walletsTabName": "Гаманці",
   "settingsTabName": "Налаштування",
 
   "addTransactionTitle": "Додати транзакцію",
   "addTransactionSumHint": "Сума",
   "addTransactionCategoryHint": "Категорія:",
-  "addTransactionAccountHint": "Аккаунт:",
+  "addTransactionWalletHint": "Гаманець:",
   "addTransactionCommentHint": "Коментар",
 
   "transactionInfoTitle": "Інформація про транзакцію",
   "transactionInfoEditTitle": "Редагування транзакції",
   "transactionInfoSumPrefix": "Сума:",
   "transactionInfoCategoryPrefix": "Категорія:",
-  "transactionInfoAccountPrefix": "Аккаунт:",
+  "transactionInfoWalletPrefix": "Гаманець:",
   "transactionInfoTimePrefix": "Час:",
   "transactionInfoCommentPrefix": "Коментар:",
 
-  "manageAccountsButtonText": "Управління аккаунтами",
+  "manageWalletsButtonText": "Управління гаманцями",
   "manageCategoriesButtonText": "Управління категоріями",
 
-  "accountsTitle": "Аккаунти",
+  "walletsTitle": "Гаманці",
 
   "categoriesTitle": "Категорії",
   "addCategoryTitle": "Додати категорію",
@@ -33,11 +33,11 @@
   "transactionTypeHint": "Тип",
   "nameHint": "Назва",
 
-  "addAccountTitle": "Додати аккаунт",
-  "addAccountTypeSelector": "Виберіть тип аккаунту",
-  "addAccountTotalBalanceHint": "Загальний баланс",
-  "addAccountOwnBalanceHint": "Власний баланс",
-  "addAccountCreditLimit": "Кредитний ліміт",
+  "addWalletTitle": "Додати гаманець",
+  "addWalletTypeSelector": "Виберіть тип гаманця",
+  "addWalletTotalBalanceHint": "Загальний баланс",
+  "addWalletOwnBalanceHint": "Власний баланс",
+  "addWalletCreditLimit": "Кредитний ліміт",
 
   "today": "Сьогодні",
   "yesterday": "Вчора",
@@ -56,7 +56,7 @@
 
   "noTransactions": "У Вас немає транзакцій!",
   "noBudgets": "У Вас немає запланованих бюджетів!",
-  "noAccounts": "У Вас немає аккаунтів!",
+  "noWallets": "У Вас немає гаманців!",
   "noCategories": "У Вас немає категорій!",
 
   "totalBalance": "Загальний баланс",

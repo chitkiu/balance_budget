@@ -8,7 +8,7 @@ import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
 import '../domain/add_transaction_controller.dart';
-import 'models/transaction_account_ui_model.dart';
+import 'models/transaction_wallet_ui_model.dart';
 
 class AddTransactionScreen
     extends CommonScaffoldWithButtonScreen<AddTransactionController> {
@@ -96,12 +96,12 @@ class AddTransactionScreen
             }
           }),
 
-          ..._selectAccount(controller.selectedAccount, (p0) => controller.selectAccount(p0)),
+          ..._selectWallet(controller.selectedWallet, (p0) => controller.selectWallet(p0)),
 
           Obx(() {
             if (controller.selectedType.value == TransactionType.transfer) {
               return Column(
-                children: _selectAccount(controller.selectedToAccount, (p0) => controller.selectToAccount(p0)),
+                children: _selectWallet(controller.selectedToWallet, (p0) => controller.selectToWallet(p0)),
               );
             } else {
               return Container();
@@ -141,9 +141,9 @@ class AddTransactionScreen
     controller.onSaveTransaction(_sumController.text, _commentController.text);
   }
 
-  List<Widget> _selectAccount(
-      Rxn<String> selectedAccount,
-      void Function(TransactionAccountUIModel) onAccountSelected,
+  List<Widget> _selectWallet(
+      Rxn<String> selectedWallet,
+      void Function(TransactionWalletUIModel) onWalletSelected,
   ) {
     return [
       const SizedBox(
@@ -153,10 +153,10 @@ class AddTransactionScreen
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(Get.localisation.addTransactionAccountHint),
+          Text(Get.localisation.addTransactionWalletHint),
           PlatformTextButton(
-            onPressed: controller.onManageAccountsClick,
-            child: Text(Get.localisation.manageAccountsButtonText),
+            onPressed: controller.onManageWalletsClick,
+            child: Text(Get.localisation.manageWalletsButtonText),
           )
         ],
       ),
@@ -165,15 +165,15 @@ class AddTransactionScreen
         child: Obx(() {
           return ListView(
             scrollDirection: Axis.horizontal,
-            children: controller.accountList.map((element) {
+            children: controller.walletList.map((element) {
               return PlatformTextButton(
                 onPressed: () {
-                  onAccountSelected(element);
+                  onWalletSelected(element);
                 },
                 child: Row(
                   children: [
                     Text(element.title),
-                    if (selectedAccount.value == element.accountId)
+                    if (selectedWallet.value == element.walletId)
                       Icon(CommonIcons.ok)
                   ],
                 ),
@@ -220,7 +220,7 @@ class AddTransactionScreen
 
   Color _getBackgroundColorBySelectedType(TransactionType type) {
     switch (type) {
-      case TransactionType.spend:
+      case TransactionType.expense:
         return Colors.redAccent;
       case TransactionType.income:
         return Colors.green;

@@ -1,28 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'account.dart';
+part of 'wallet.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-DebitAccount _$DebitAccountFromJson(Map<String, dynamic> json) => DebitAccount(
+DebitWallet _$DebitWalletFromJson(Map<String, dynamic> json) => DebitWallet(
       name: json['name'] as String,
     );
 
-Map<String, dynamic> _$DebitAccountToJson(DebitAccount instance) =>
+Map<String, dynamic> _$DebitWalletToJson(DebitWallet instance) =>
     <String, dynamic>{
       'name': instance.name,
       'type': instance._type,
     };
 
-CreditAccount _$CreditAccountFromJson(Map<String, dynamic> json) =>
-    CreditAccount(
+CreditWallet _$CreditWalletFromJson(Map<String, dynamic> json) => CreditWallet(
       name: json['name'] as String,
       creditBalance: (json['creditBalance'] as num).toDouble(),
     );
 
-Map<String, dynamic> _$CreditAccountToJson(CreditAccount instance) =>
+Map<String, dynamic> _$CreditWalletToJson(CreditWallet instance) =>
     <String, dynamic>{
       'name': instance.name,
       'type': instance._type,

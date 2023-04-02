@@ -5,27 +5,27 @@
 
   "transactionsTabName": "Transactions",
   "budgetTabName": "Budgets",
-  "accountsTabName": "Accounts",
+  "walletsTabName": "Wallets",
   "settingsTabName": "Settings",
 
   "addTransactionTitle": "Add transaction",
   "addTransactionSumHint": "Sum",
   "addTransactionCategoryHint": "Category:",
-  "addTransactionAccountHint": "Account:",
+  "addTransactionWalletHint": "Wallet:",
   "addTransactionCommentHint": "Comment",
 
   "transactionInfoTitle": "Transaction info",
   "transactionInfoEditTitle": "Edit transaction",
   "transactionInfoSumPrefix": "Sum:",
   "transactionInfoCategoryPrefix": "Category:",
-  "transactionInfoAccountPrefix": "Account:",
+  "transactionInfoWalletPrefix": "Wallet:",
   "transactionInfoTimePrefix": "Time:",
   "transactionInfoCommentPrefix": "Comment:",
 
-  "manageAccountsButtonText": "Manage accounts",
+  "manageWalletsButtonText": "Manage wallets",
   "manageCategoriesButtonText": "Manage categories",
 
-  "accountsTitle": "Accounts",
+  "walletsTitle": "Wallets",
 
   "categoriesTitle": "Categories",
   "addCategoryTitle": "Add category",
@@ -33,11 +33,11 @@
   "transactionTypeHint": "Type",
   "nameHint": "Name",
 
-  "addAccountTitle": "Add account",
-  "addAccountTypeSelector": "Select account type",
-  "addAccountTotalBalanceHint": "Total balance",
-  "addAccountOwnBalanceHint": "Own balance",
-  "addAccountCreditLimit": "Credit limit",
+  "addWalletTitle": "Add wallet",
+  "addWalletTypeSelector": "Select wallet type",
+  "addWalletTotalBalanceHint": "Total balance",
+  "addWalletOwnBalanceHint": "Own balance",
+  "addWalletCreditLimit": "Credit limit",
 
   "today": "Today",
   "yesterday": "Yesterday",
@@ -56,7 +56,7 @@
 
   "noTransactions": "You don't have transaction",
   "noBudgets": "You don't have budget",
-  "noAccounts": "You don't have accounts",
+  "noWallets": "You don't have wallets",
   "noCategories": "You don't have categories",
 
   "totalBalance": "Total balance",

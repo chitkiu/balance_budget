@@ -7,17 +7,17 @@ abstract class BudgetUIModel {
 
 class TotalBudgetUIModel extends BudgetUIModel {
   final double totalSum;
-  final double spendSum;
+  final double expenseSum;
 
-  TotalBudgetUIModel(super.name, super.id, this.totalSum, this.spendSum);
+  TotalBudgetUIModel(super.name, super.id, this.totalSum, this.expenseSum);
 }
 
 class CategoryInfoUIModel {
   final double totalSum;
-  final double spendSum;
+  final double expenseSum;
   final String categoryName;
 
-  CategoryInfoUIModel(this.totalSum, this.spendSum, this.categoryName);
+  CategoryInfoUIModel(this.totalSum, this.expenseSum, this.categoryName);
 }
 
 class CategoryBudgetUIModel extends BudgetUIModel {
@@ -28,9 +28,9 @@ class CategoryBudgetUIModel extends BudgetUIModel {
 
 class TotalBudgetWithCategoryUIModel extends BudgetUIModel {
   final double totalSum;
-  final double spendSum;
+  final double expenseSum;
   final List<CategoryInfoUIModel> categoriesInfoUIModel;
 
   TotalBudgetWithCategoryUIModel(
-      super.name, super.id, this.totalSum, this.spendSum, this.categoriesInfoUIModel);
+      super.name, super.id, this.totalSum, this.expenseSum, this.categoriesInfoUIModel);
 }

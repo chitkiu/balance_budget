@@ -1,13 +1,13 @@
 import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../../accounts/common/data/local_account_repository.dart';
-import '../../../accounts/common/data/models/account.dart';
 import '../../../categories/common/data/local_category_repository.dart';
 import '../../../categories/common/data/models/category.dart';
 import '../../../common/data/models/transaction_type.dart';
 import '../../../transactions/common/data/local_transactions_repository.dart';
 import '../../../transactions/common/data/models/transaction.dart';
+import '../../../wallets/common/data/local_wallet_repository.dart';
+import '../../../wallets/common/data/models/wallet.dart';
 import '../../common/data/local_budget_repository.dart';
 import '../../common/data/models/budget.dart';
 import '../../common/data/models/budget_date.dart';
@@ -19,7 +19,7 @@ import 'models/rich_budget.dart';
 class BudgetAggregator {
   LocalTransactionsRepository get _transactionRepo => Get.find();
 
-  LocalAccountRepository get _accountRepo => Get.find();
+  LocalWalletRepository get _walletRepo => Get.find();
 
   LocalCategoryRepository get _categoryRepo => Get.find();
 
@@ -32,19 +32,19 @@ class BudgetAggregator {
   Stream<List<RichBudget>> budgets() {
     return CombineLatestStream.combine4(
         _transactionRepo.transactions,
-        _accountRepo.accounts,
+        _walletRepo.wallets,
         _categoryRepo.categories,
-        _budgetRepo.budgets, (transactions, accounts, categories, budgets) {
+        _budgetRepo.budgets, (transactions, wallets, categories, budgets) {
       return budgets
           .map((budget) {
             if (budget is TotalBudget) {
-              return _mapToTotal(budget, transactions, accounts);
+              return _mapToTotal(budget, transactions, wallets);
             } else if (budget is CategoryBudget) {
               return _mapSingleCategoryRichBudget(
-                  budget, categories, transactions, accounts);
+                  budget, categories, transactions, wallets);
             } else if (budget is TotalBudgetWithCategories) {
               return _mapTotalRichBudgetWithCategory(
-                  budget, categories, transactions, accounts);
+                  budget, categories, transactions, wallets);
             } else {
               return null;
             }
@@ -55,29 +55,29 @@ class BudgetAggregator {
   }
 
   RichBudget _mapToTotal(
-      TotalBudget budget, List<Transaction> transactions, List<Account> accounts) {
+      TotalBudget budget, List<Transaction> transactions, List<Wallet> wallets) {
     var filteredTransaction = transactions.where((element) {
-      return element.transactionType == TransactionType.spend &&
+      return element.transactionType == TransactionType.expense &&
           _periodValidation.isInCurrentPeriod(
               element.time, budget.repeatType, budget.startDate, budget.endDate) &&
-          _isCorrectAccount(budget.accounts, element.walletId);
+          _isCorrectWallet(budget.wallets, element.walletId);
     });
 
-    var filteredAccounts = accounts;
-    if (budget.accounts.isNotEmpty) {
-      filteredAccounts =
-          accounts.where((element) => budget.accounts.contains(element.id)).toList();
+    var filteredWallets = wallets;
+    if (budget.wallets.isNotEmpty) {
+      filteredWallets =
+          wallets.where((element) => budget.wallets.contains(element.id)).toList();
     }
 
     return RichTotalBudget(
       budget,
       filteredTransaction,
-      filteredAccounts,
+      filteredWallets,
     );
   }
 
   RichBudget _mapSingleCategoryRichBudget(CategoryBudget budget,
-      List<Category> categories, List<Transaction> transactions, List<Account> accounts) {
+      List<Category> categories, List<Transaction> transactions, List<Wallet> wallets) {
     return RichCategoryBudget(
         budget,
         _mapCategoryInfo(
@@ -87,12 +87,12 @@ class BudgetAggregator {
           budget.endDate,
           categories,
           transactions,
-          accounts,
+          wallets,
         ));
   }
 
   RichBudget _mapTotalRichBudgetWithCategory(TotalBudgetWithCategories budget,
-      List<Category> categories, List<Transaction> transactions, List<Account> accounts) {
+      List<Category> categories, List<Transaction> transactions, List<Wallet> wallets) {
     return RichTotalBudgetWithCategory(
         budget,
         budget.categoriesInfo.map((categoryInfo) {
@@ -103,7 +103,7 @@ class BudgetAggregator {
             budget.endDate,
             categories,
             transactions,
-            accounts,
+            wallets,
           );
         }).toList());
   }
@@ -115,39 +115,39 @@ class BudgetAggregator {
       BudgetDate? endDate,
       List<Category> categories,
       List<Transaction> transactions,
-      List<Account> accounts) {
+      List<Wallet> wallets) {
 
     var filteredTransaction = transactions.where((element) {
       return element is CommonTransaction &&
-          element.transactionType == TransactionType.spend &&
+          element.transactionType == TransactionType.expense &&
           element.categoryId == categoryInfo.categoryId &&
           _periodValidation.isInCurrentPeriod(
               element.time, repeatType, startDate, endDate) &&
-          _isCorrectAccount(categoryInfo.accounts, element.walletId);
+          _isCorrectWallet(categoryInfo.wallets, element.walletId);
     });
 
-    var filteredAccounts = accounts;
-    if (categoryInfo.accounts.isNotEmpty) {
-      filteredAccounts = accounts
-          .where((element) => categoryInfo.accounts.contains(element.id))
+    var filteredWallets = wallets;
+    if (categoryInfo.wallets.isNotEmpty) {
+      filteredWallets = wallets
+          .where((element) => categoryInfo.wallets.contains(element.id))
           .toList();
     }
 
-    var totalSpendSum = 0.0;
+    var totalExpendSum = 0.0;
     for (var value in filteredTransaction) {
-      totalSpendSum += value.sum;
+      totalExpendSum += value.sum;
     }
 
     return RichCategoryBudgetInfo(
       categoryInfo.maxSum,
-      totalSpendSum,
+      totalExpendSum,
       categories.firstWhere((element) => element.id == categoryInfo.categoryId),
-      filteredAccounts,
+      filteredWallets,
       filteredTransaction,
     );
   }
 
-  bool _isCorrectAccount(List<String> accounts, String id) {
-    return accounts.isEmpty || accounts.contains(id);
+  bool _isCorrectWallet(List<String> wallets, String id) {
+    return wallets.isEmpty || wallets.contains(id);
   }
 }

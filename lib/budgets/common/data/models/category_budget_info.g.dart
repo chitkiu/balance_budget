@@ -10,7 +10,7 @@ CategoryBudgetInfo _$CategoryBudgetInfoFromJson(Map<String, dynamic> json) =>
     CategoryBudgetInfo(
       categoryId: json['categoryId'] as String,
       maxSum: (json['maxSum'] as num).toDouble(),
-      accounts: (json['accounts'] as List<dynamic>?)
+      wallets: (json['wallets'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           [],
@@ -20,5 +20,5 @@ Map<String, dynamic> _$CategoryBudgetInfoToJson(CategoryBudgetInfo instance) =>
     <String, dynamic>{
       'categoryId': instance.categoryId,
       'maxSum': instance.maxSum,
-      'accounts': instance.accounts,
+      'wallets': instance.wallets,
     };

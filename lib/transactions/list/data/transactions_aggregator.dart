@@ -2,11 +2,11 @@ import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../../accounts/common/data/local_account_repository.dart';
-import '../../../accounts/common/data/models/account.dart';
 import '../../../categories/common/data/local_category_repository.dart';
 import '../../../categories/common/data/models/category.dart';
 import '../../../common/data/models/transaction_type.dart';
+import '../../../wallets/common/data/local_wallet_repository.dart';
+import '../../../wallets/common/data/models/wallet.dart';
 import '../../common/data/local_transactions_repository.dart';
 import '../../common/data/models/transaction.dart';
 import 'models/rich_transaction_model.dart';
@@ -16,7 +16,7 @@ class TransactionsAggregator {
 
   LocalTransactionsRepository get _transactionsRepository => Get.find();
 
-  LocalAccountRepository get _accountRepository => Get.find();
+  LocalWalletRepository get _walletRepository => Get.find();
 
   const TransactionsAggregator();
 
@@ -25,7 +25,7 @@ class TransactionsAggregator {
     return CombineLatestStream.combine3(
       _categoryRepository.categories,
       _transactionsRepository.transactions,
-      _accountRepository.accounts,
+      _walletRepository.wallets,
       _mapTransactions,
     );
   }
@@ -37,7 +37,7 @@ class TransactionsAggregator {
     return CombineLatestStream.combine3(
       _categoryRepository.categories,
       _transactionsRepository.getTransactionByTimeRange(start, end),
-      _accountRepository.accounts,
+      _walletRepository.wallets,
       _mapTransactions,
     );
   }
@@ -51,12 +51,12 @@ class TransactionsAggregator {
   }
 
   List<RichTransactionModel> _mapTransactions(
-      List<Category> categories, List<Transaction> transactions, List<Account> accounts) {
+      List<Category> categories, List<Transaction> transactions, List<Wallet> wallets) {
     List<RichTransactionModel> newTransactions = transactions
         .map((transaction) {
-          var account =
-              accounts.firstWhereOrNull((element) => element.id == transaction.walletId);
-          if (account == null) {
+          var wallet =
+              wallets.firstWhereOrNull((element) => element.id == transaction.walletId);
+          if (wallet == null) {
             return null;
           }
           switch (transaction.transactionType) {
@@ -64,20 +64,20 @@ class TransactionsAggregator {
               return null;
             case TransactionType.transfer:
               if (transaction is TransferTransaction) {
-                var toAccount = accounts
+                var toWallet = wallets
                     .firstWhereOrNull((element) => element.id == transaction.toWalletId);
-                if (toAccount == null) {
+                if (toWallet == null) {
                   return null;
                 }
                 return TransferRichTransactionModel(
                   transaction,
-                  account,
-                  toAccount,
+                  wallet,
+                  toWallet,
                 );
               } else {
                 return null;
               }
-            case TransactionType.spend:
+            case TransactionType.expense:
             case TransactionType.income:
               if (transaction is CommonTransaction) {
                 var category = categories
@@ -85,7 +85,7 @@ class TransactionsAggregator {
                 if (category == null) {
                   return null;
                 }
-                return CategoryRichTransactionModel(transaction, account, category);
+                return CategoryRichTransactionModel(transaction, wallet, category);
               } else {
                 return null;
               }

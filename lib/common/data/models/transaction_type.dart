@@ -1,17 +1,17 @@
 enum TransactionType {
   setInitialBalance,
-  spend,
+  expense,
   income,
   transfer;
 
   static List<TransactionType> showInTransactionList = [
-    TransactionType.spend,
+    TransactionType.expense,
     TransactionType.income,
     TransactionType.transfer,
   ];
 
   static List<TransactionType> canAddCategory = [
-    TransactionType.spend,
+    TransactionType.expense,
     TransactionType.income,
   ];
 

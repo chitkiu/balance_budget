@@ -4,49 +4,49 @@ import 'package:get/get.dart';
 
 import '../../../common/data/models/transaction_type.dart';
 import '../../../transactions/common/data/local_transactions_repository.dart';
-import 'models/account.dart';
+import 'models/wallet.dart';
 
-class LocalAccountRepository {
-  CollectionReference<Account> get _ref =>
-      FirebaseFirestore.instance.collection("users/${FirebaseAuth.instance.currentUser!.uid}/wallets").withConverter<Account>(
+class LocalWalletRepository {
+  CollectionReference<Wallet> get _ref =>
+      FirebaseFirestore.instance.collection("users/${FirebaseAuth.instance.currentUser!.uid}/wallets").withConverter<Wallet>(
             fromFirestore: (snapshot, _) =>
-                Account.fromJson(MapEntry(snapshot.id, snapshot.data()!)),
-            toFirestore: (account, _) => account.toJson(),
+                Wallet.fromJson(MapEntry(snapshot.id, snapshot.data()!)),
+            toFirestore: (wallet, _) => wallet.toJson(),
           );
 
   LocalTransactionsRepository get _transactionRepo => Get.find();
 
-  Stream<List<Account>> get accounts =>
+  Stream<List<Wallet>> get wallets =>
       _ref.snapshots().map((event) => event.docs.map((e) => e.data()).toList());
 
   //TODO Added creating default accounts (cash for example)
-  LocalAccountRepository() {
+  LocalWalletRepository() {
     // createDebit("Mono white", 1000);
     // createCredit("Mono black", 0, 1000);
   }
 
   Future<void> createDebit(String name, double totalBalance) async {
-    var newAccount = await _ref.add(DebitAccount(
+    var newWallet = await _ref.add(DebitWallet(
       name: name,
     ));
 
-    _createInitialTransaction(newAccount.id, totalBalance);
+    _createInitialTransaction(newWallet.id, totalBalance);
   }
 
   Future<void> createCredit(String name, double ownBalance, double creditBalance) async {
-    var newAccount = await _ref.add(CreditAccount(
+    var newWallet = await _ref.add(CreditWallet(
       name: name,
       creditBalance: creditBalance,
     ));
 
-    _createInitialTransaction(newAccount.id, ownBalance);
+    _createInitialTransaction(newWallet.id, ownBalance);
   }
 
-  Account? getAccountById(String id) {
+  Wallet? getWalletById(String id) {
     // return accounts.firstWhereOrNull((element) => element.id == id);
   }
 
-  void remove(String account) {
+  void remove(String walletId) {
     // accounts.removeWhere((element) => element.id == category);
   }
 
@@ -79,8 +79,8 @@ class LocalAccountRepository {
     accounts.insert(index, newAccount!);*/
   }
 
-  void _createInitialTransaction(String? accountId, double sum) {
-    _transactionRepo.create(sum, TransactionType.setInitialBalance, accountId ?? '',
+  void _createInitialTransaction(String? walletId, double sum) {
+    _transactionRepo.create(sum, TransactionType.setInitialBalance, walletId ?? '',
         DateTime.now(),
         skipZeroSum: false);
   }

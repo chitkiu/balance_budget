@@ -34,7 +34,7 @@ Map<String, dynamic> _$CommonTransactionToJson(CommonTransaction instance) =>
 
 const _$TransactionTypeEnumMap = {
   TransactionType.setInitialBalance: 'setInitialBalance',
-  TransactionType.spend: 'spend',
+  TransactionType.expense: 'expense',
   TransactionType.income: 'income',
   TransactionType.transfer: 'transfer',
 };

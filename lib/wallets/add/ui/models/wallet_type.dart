@@ -1,4 +1,4 @@
-enum AccountType {
+enum WalletType {
   debit,
   credit;
 }

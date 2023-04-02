@@ -7,12 +7,12 @@ import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
 import '../../../common/ui/common_ui_settings.dart';
 import '../../../common/ui/platform_dropdown_button.dart';
-import '../domain/add_account_controller.dart';
-import 'models/account_type.dart';
+import '../domain/add_wallet_controller.dart';
+import 'models/wallet_type.dart';
 
-class AddAccountScreen extends CommonScaffoldWithButtonScreen<AddAccountController> {
-  AddAccountScreen({super.key}) : super(
-    Get.localisation.addAccountTitle,
+class AddWalletScreen extends CommonScaffoldWithButtonScreen<AddWalletController> {
+  AddWalletScreen({super.key}) : super(
+    Get.localisation.addWalletTitle,
     icon: CommonIcons.check,
   );
 
@@ -41,28 +41,28 @@ class AddAccountScreen extends CommonScaffoldWithButtonScreen<AddAccountControll
           },
         ),
         const SizedBox(height: 8,),
-        Text(Get.localisation.addAccountTypeSelector),
+        Text(Get.localisation.addWalletTypeSelector),
         Obx(() {
           return PlatformDropdownButton(
-            items: AccountType.values.map((e) {
-              return DropdownMenuItem<AccountType>(
+            items: WalletType.values.map((e) {
+              return DropdownMenuItem<WalletType>(
                 value: e,
                 child: Text(e.name),
               );
             }).toList(),
-            value: controller.accountType.value,
+            value: controller.walletType.value,
             onChanged: (value) {
               if (value != null) {
-                controller.accountType.value = value;
+                controller.walletType.value = value;
               }
             },
             cupertino: cupertinoDropdownButtonData,
           );
         }),
         Obx(() {
-          AccountType accountType = controller.accountType.value;
-          switch (accountType) {
-            case AccountType.debit:
+          WalletType walletType = controller.walletType.value;
+          switch (walletType) {
+            case WalletType.debit:
               _totalBalanceController.clear();
               return PlatformTextField(
                 keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
@@ -70,17 +70,17 @@ class AddAccountScreen extends CommonScaffoldWithButtonScreen<AddAccountControll
                 material: (context, platform) {
                   return MaterialTextFieldData(
                       decoration: InputDecoration(
-                          labelText: Get.localisation.addAccountTotalBalanceHint
+                          labelText: Get.localisation.addWalletTotalBalanceHint
                       )
                   );
                 },
                 cupertino: (context, platform) {
                   return CupertinoTextFieldData(
-                      placeholder: Get.localisation.addAccountTotalBalanceHint
+                      placeholder: Get.localisation.addWalletTotalBalanceHint
                   );
                 },
               );
-            case AccountType.credit:
+            case WalletType.credit:
               _ownBalanceController.clear();
               _creditBalanceController.clear();
               return Column(
@@ -91,13 +91,13 @@ class AddAccountScreen extends CommonScaffoldWithButtonScreen<AddAccountControll
                     material: (context, platform) {
                       return MaterialTextFieldData(
                           decoration: InputDecoration(
-                              labelText: Get.localisation.addAccountOwnBalanceHint
+                              labelText: Get.localisation.addWalletOwnBalanceHint
                           )
                       );
                     },
                     cupertino: (context, platform) {
                       return CupertinoTextFieldData(
-                          placeholder: Get.localisation.addAccountOwnBalanceHint
+                          placeholder: Get.localisation.addWalletOwnBalanceHint
                       );
                     },
                   ),
@@ -107,13 +107,13 @@ class AddAccountScreen extends CommonScaffoldWithButtonScreen<AddAccountControll
                     material: (context, platform) {
                       return MaterialTextFieldData(
                           decoration: InputDecoration(
-                              labelText: Get.localisation.addAccountCreditLimit
+                              labelText: Get.localisation.addWalletCreditLimit
                           )
                       );
                     },
                     cupertino: (context, platform) {
                       return CupertinoTextFieldData(
-                          placeholder: Get.localisation.addAccountCreditLimit
+                          placeholder: Get.localisation.addWalletCreditLimit
                       );
                     },
                   ),
@@ -127,7 +127,7 @@ class AddAccountScreen extends CommonScaffoldWithButtonScreen<AddAccountControll
 
   @override
   void onButtonPress() async {
-    await controller.onSaveAccount(
+    await controller.onSaveWallet(
       title: _nameController.text,
       totalBalance: _totalBalanceController.text,
       ownBalance: _ownBalanceController.text,

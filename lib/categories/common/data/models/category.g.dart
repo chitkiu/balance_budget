@@ -19,7 +19,7 @@ Map<String, dynamic> _$CategoryToJson(Category instance) => <String, dynamic>{
 
 const _$TransactionTypeEnumMap = {
   TransactionType.setInitialBalance: 'setInitialBalance',
-  TransactionType.spend: 'spend',
+  TransactionType.expense: 'expense',
   TransactionType.income: 'income',
   TransactionType.transfer: 'transfer',
 };

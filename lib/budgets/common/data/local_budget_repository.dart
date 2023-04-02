@@ -24,10 +24,10 @@ class LocalBudgetRepository {
     double totalSum, {
     BudgetDate? startDate,
     BudgetDate? endDate,
-    List<String>? accounts,
+    List<String>? wallets,
   }) {
     _saveBudget(TotalBudget(name, repeatType,
-        startDate ?? BudgetDate.fromNow(), endDate, totalSum, accounts ?? []));
+        startDate ?? BudgetDate.fromNow(), endDate, totalSum, wallets ?? []));
   }
 
   void createCategoryBudget(
@@ -37,14 +37,14 @@ class LocalBudgetRepository {
     String categoryId, {
     BudgetDate? startDate,
     BudgetDate? endDate,
-    List<String>? accounts,
+    List<String>? wallets,
   }) {
     _saveBudget(CategoryBudget(
       name,
       repeatType,
       startDate ?? BudgetDate.fromNow(),
       endDate,
-      createCategoryInfo(categoryId, maxSum, accounts: accounts),
+      createCategoryInfo(categoryId, maxSum, wallets: wallets),
     ));
   }
 
@@ -65,9 +65,9 @@ class LocalBudgetRepository {
   }
 
   CategoryBudgetInfo createCategoryInfo(String categoryId, double maxSum,
-      {List<String>? accounts}) {
+      {List<String>? wallets}) {
     return CategoryBudgetInfo(
-        categoryId: categoryId, maxSum: maxSum, accounts: accounts ?? []);
+        categoryId: categoryId, maxSum: maxSum, wallets: wallets ?? []);
   }
 
   void _saveBudget(Budget budget) {
