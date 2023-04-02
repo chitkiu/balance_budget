@@ -9,12 +9,13 @@ abstract class GetWidgetWithBinding<Binding extends Bindings, Controller> extend
 
   const GetWidgetWithBinding({super.key, required this.bindingCreator});
 
-  Widget view();
+  Widget view(BuildContext context);
 
   @nonVirtual
+  @override
   Widget build(BuildContext context) {
     _createBinding();
-    return view();
+    return view(context);
   }
 
   void _createBinding() {

@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:rxdart/transformers.dart';
 
+import '../../../common/getx_extensions.dart';
 import '../../add/domain/add_transaction_binding.dart';
 import '../../add/ui/add_transaction_screen.dart';
 import '../../info/domain/transaction_info_binding.dart';
@@ -52,14 +53,15 @@ class TransactionsController extends GetxController
   }
 
   void addTransaction() {
-    Get.to(() => AddTransactionScreen(), binding: AddTransactionBinding());
+    AddTransactionScreen(
+      title: Get.localisation.addTransactionTitle,
+      bindingCreator: () => AddTransactionBinding(),
+    ).open();
   }
 
-  void onItemClick(TransactionUIModel transaction) async {
-    await Get.bottomSheet(
-      TransactionInfoScreen(
-          transaction.id, bindingCreator: () => TransactionInfoBinding()),
-    );
+  void onItemClick(TransactionUIModel transaction) {
+    TransactionInfoScreen(bindingCreator: () => TransactionInfoBinding(transaction.id))
+        .open();
   }
 
   void setNewDate(TransactionsFilterDate date) {

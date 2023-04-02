@@ -1,6 +1,7 @@
-import 'package:balance_budget/common/getx_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../../common/getx_extensions.dart';
 
 abstract class TransactionUIModel {
   final String id;

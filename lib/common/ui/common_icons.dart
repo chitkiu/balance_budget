@@ -36,5 +36,5 @@ class CommonIcons {
 
   static IconData get filter => Icons.filter_list;
 
-  static IconData get calendar => _isCupertino ? CupertinoIcons.calendar_today : Icons.calendar_today;
+  static IconData get calendar => _isCupertino ? CupertinoIcons.calendar_today : Icons.calendar_month;
 }
