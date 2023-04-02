@@ -32,7 +32,7 @@ class TransactionItem extends StatelessWidget {
               ],
             ),
             if (transaction is TransferTransactionUIModel)
-              _additionalInfo("${(transaction as TransferTransactionUIModel).toAccountName} => ${(transaction as TransferTransactionUIModel).fromAccountName}", CommonIcons.wallet),
+              _additionalInfo("${(transaction as TransferTransactionUIModel).fromAccountName} => ${(transaction as TransferTransactionUIModel).toAccountName}", CommonIcons.wallet),
             if (transaction is !TransferTransactionUIModel)
               _additionalInfo(transaction.accountName, CommonIcons.wallet),
             if (transaction.comment != null)
