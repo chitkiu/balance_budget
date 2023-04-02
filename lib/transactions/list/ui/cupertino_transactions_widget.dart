@@ -55,36 +55,41 @@ class _CupertinoFilterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.red,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 4),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: calendarButton(),
-            ),
-            GestureDetector(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      Get.localisation.filter,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        CommonIcons.filter,
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 4, bottom: 3),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: calendarButton(),
+              ),
+              GestureDetector(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        Get.localisation.filter,
                       ),
-                    ),
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          CommonIcons.filter,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
+        const Divider(
+          height: 1,
+          color: Colors.black,
+        )
+      ],
     );
   }
 }

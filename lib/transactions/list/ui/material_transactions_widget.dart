@@ -95,51 +95,54 @@ class _FilterHeader extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 3),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    '$transactionCount transactions',
+    return Container(
+      color: Theme.of(context).colorScheme.background,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 4, bottom: 3),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      '$transactionCount transactions',
+                    ),
                   ),
                 ),
-              ),
-              GestureDetector(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        Get.localisation.filter,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                          CommonIcons.filter,
+                GestureDetector(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          Get.localisation.filter,
                         ),
-                      ),
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(
+                            CommonIcons.filter,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        const Divider(height: 1),
-      ],
+          const Divider(height: 1),
+        ],
+      ),
     );
   }
 
   @override
-  double get maxExtent => 52.0;
+  double get maxExtent => 48.0;
 
   @override
-  double get minExtent => 52.0;
+  double get minExtent => 48.0;
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
