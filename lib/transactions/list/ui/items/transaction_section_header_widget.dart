@@ -1,4 +1,6 @@
+import 'package:balance_budget/common/getx_extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../models/transaction_header_ui_model.dart';
 import '../models/transaction_ui_model.dart';
@@ -28,8 +30,7 @@ class TransactionSectionHeaderWidget extends StatelessWidget {
                 children: <Widget>[
                   RichText(
                       text: TextSpan(
-                        //TODO Add translate
-                        text: "Total: ",
+                        text: Get.localisation.total,
                         style: Theme.of(context).textTheme.titleSmall,
                         children: [
                           TextSpan(
