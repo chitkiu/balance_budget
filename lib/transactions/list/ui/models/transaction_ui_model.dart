@@ -2,9 +2,7 @@ import 'package:balance_budget/common/getx_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'transaction_list_ui_model.dart';
-
-abstract class TransactionUIModel extends TransactionListUIModel {
+abstract class TransactionUIModel {
   final String id;
   final String sum;
   final double sumDouble;

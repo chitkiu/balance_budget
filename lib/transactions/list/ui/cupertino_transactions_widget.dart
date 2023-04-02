@@ -22,13 +22,15 @@ class CupertinoTransactionsWidget extends BaseTransactionsWidget {
         child: SafeArea(
             child: Column(
           children: [
-            _CupertinoFilterWidget(() => calendarButton(context)),
+            Obx(() => _CupertinoFilterWidget(
+                controller.transactions.value.transactionCount,
+                () => calendarButton(context))),
             Expanded(
                 child: controller.obx(
-              (transactions) {
+              (model) {
                 return ListView(
-                  children: transactions
-                          ?.map((item) => mapTransactionToUI(context, item))
+                  children: model?.transactions
+                          .map((item) => mapTransactionToUI(context, item))
                           .toList() ??
                       [],
                 );
@@ -47,8 +49,9 @@ class CupertinoTransactionsWidget extends BaseTransactionsWidget {
 
 class _CupertinoFilterWidget extends StatelessWidget {
   final Function() calendarButton;
+  final int transactionCount;
 
-  const _CupertinoFilterWidget(this.calendarButton);
+  const _CupertinoFilterWidget(this.transactionCount, this.calendarButton);
 
   @override
   Widget build(BuildContext context) {

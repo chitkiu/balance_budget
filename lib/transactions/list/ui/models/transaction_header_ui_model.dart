@@ -1,7 +1,13 @@
-import 'transaction_list_ui_model.dart';
+import 'dart:ui';
 
-class TransactionHeaderUIModel extends TransactionListUIModel {
+import 'transaction_ui_model.dart';
+
+class TransactionHeaderUIModel {
   final String title;
+  final String sum;
+  final Color sumColor;
+  final Iterable<TransactionUIModel> transactions;
 
-  const TransactionHeaderUIModel(this.title);
+  const TransactionHeaderUIModel(
+      this.title, this.sum, this.sumColor, this.transactions);
 }

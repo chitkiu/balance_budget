@@ -1,5 +1,4 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 import '../../../../common/ui/common_icons.dart';
 import '../models/transaction_ui_model.dart';
@@ -13,33 +12,52 @@ class TransactionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onTap: () => onItemClick(transaction),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (kDebugMode)
-              Text("ID: ${transaction.id}"),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Text(transaction.categoryName,
-                    style: const TextStyle(fontWeight: FontWeight.w500)),
-                Text(transaction.sum,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500, color: transaction.sumColor)),
-              ],
+      onTap: () => onItemClick(transaction),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Center(
+            child: CircleAvatar(
+              child: Icon(Icons.no_transfer),
+              backgroundColor: Colors.grey.withOpacity(0.3),
             ),
-            if (transaction is TransferTransactionUIModel)
-              _additionalInfo("${(transaction as TransferTransactionUIModel).fromAccountName} => ${(transaction as TransferTransactionUIModel).toAccountName}", CommonIcons.wallet),
-            if (transaction is !TransferTransactionUIModel)
-              _additionalInfo(transaction.accountName, CommonIcons.wallet),
-            if (transaction.comment != null)
-              _additionalInfo(transaction.comment!, CommonIcons.note),
-          ],
-        )
+          ),
+          SizedBox(
+            width: 12,
+          ),
+          Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(transaction.categoryName,
+                      style: const TextStyle(fontWeight: FontWeight.w500)),
+                  _subtitle(transaction),
+                  if (transaction.comment != null)
+                    _additionalInfo(transaction.comment!, CommonIcons.note)
+                ],
+              )
+          ),
+          SizedBox(
+            width: 12,
+          ),
+          Text(transaction.sum,
+              style: TextStyle(
+                  fontWeight: FontWeight.w500, color: transaction.sumColor))
+        ],
+      ),
     );
+  }
+
+  Widget _subtitle(TransactionUIModel model) {
+    String subtitleText;
+    if (model is TransferTransactionUIModel) {
+      subtitleText = "${model.fromAccountName} => ${model.toAccountName}";
+    } else {
+      subtitleText = model.accountName;
+    }
+
+    return _additionalInfo(subtitleText, CommonIcons.wallet);
   }
 
   Widget _additionalInfo(String text, IconData icon) {

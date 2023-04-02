@@ -8,14 +8,15 @@ import '../../info/domain/transaction_info_binding.dart';
 import '../../info/ui/transaction_info_screen.dart';
 import '../data/models/rich_transaction_model.dart';
 import '../data/transactions_aggregator.dart';
-import '../ui/models/transaction_list_ui_model.dart';
+import '../ui/models/complex_transactions_ui_model.dart';
+import '../ui/models/transaction_header_ui_model.dart';
 import '../ui/models/transaction_ui_model.dart';
 import 'mappers/transactions_ui_mapper.dart';
 import 'models/transactions_filter_date.dart';
 import 'selected_transactions_date_storage.dart';
 
 class TransactionsController extends GetxController
-    with StateMixin<List<TransactionListUIModel>> {
+    with StateMixin<ComplexTransactionsUIModel> {
   TransactionsAggregator get _transactionsAggregator => Get.find();
 
   SelectedTransactionsDateStorage get _dateStorage => Get.find();
@@ -24,7 +25,7 @@ class TransactionsController extends GetxController
 
   final TransactionsUIMapper _transactionsUIMapper = TransactionsUIMapper();
 
-  RxList<TransactionListUIModel> transactions = <TransactionListUIModel>[].obs;
+  Rx<ComplexTransactionsUIModel> transactions = ComplexTransactionsUIModel(0, []).obs;
 
   @override
   void onInit() {
@@ -41,7 +42,7 @@ class TransactionsController extends GetxController
     }).handleError((Object e, StackTrace str) {
       change(null, status: RxStatus.error(str.toString()));
     }).map((event) {
-      if (event.isEmpty) {
+      if (event.transactions.isEmpty) {
         change(null, status: RxStatus.empty());
       } else {
         change(event, status: RxStatus.success());
@@ -67,9 +68,11 @@ class TransactionsController extends GetxController
     _dateStorage.setNewDate(date);
   }
 
-  List<TransactionListUIModel> _mapTransactionsToUI(
+  ComplexTransactionsUIModel _mapTransactionsToUI(
       List<RichTransactionModel> filteredTransaction) {
-    List<TransactionListUIModel> groupedTransactions = [];
+    List<TransactionHeaderUIModel> groupedTransactions = [];
+
+    var totalTransactionCount = 0;
 
     groupBy(filteredTransaction, (item) => item.transaction.time)
         .entries
@@ -80,11 +83,14 @@ class TransactionsController extends GetxController
       transactions.sort(_transactionsAggregator.compare);
       var transactionsUIModels =
           transactions.map(_transactionsUIMapper.mapFromRich).whereNotNull();
-      groupedTransactions
-          .add(_transactionsUIMapper.mapHeader(element.key, transactionsUIModels));
-      groupedTransactions.addAll(transactionsUIModels);
+      totalTransactionCount += transactionsUIModels.length;
+      groupedTransactions.add(_transactionsUIMapper.mapHeader(
+          element.key, transactions, transactionsUIModels));
     });
 
-    return groupedTransactions;
+    return ComplexTransactionsUIModel(
+        totalTransactionCount,
+        groupedTransactions
+    );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:balance_budget/transactions/list/ui/models/transaction_header_ui_model.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -29,10 +30,34 @@ class TransactionsUIMapper {
     return null;
   }
 
-  ///TODO Transaction will be use later
-  TransactionHeaderUIModel mapHeader(DateTime date, Iterable<TransactionUIModel> transactions) {
+  TransactionHeaderUIModel mapHeader(
+      DateTime date,
+      Iterable<RichTransactionModel> transactions,
+      Iterable<TransactionUIModel> transactionsUIModel
+      ) {
+    final spendSum = transactions
+        .where((element) => element.transaction.transactionType == TransactionType.spend)
+        .map((e) => e.transaction.sum)
+        .sum;
+    final incomeSum = transactions
+        .where((element) => element.transaction.transactionType == TransactionType.income)
+        .map((e) => e.transaction.sum)
+        .sum;
+    final totalSum = incomeSum - spendSum;
+    String totalSumText = _sumFormatter.format(totalSum.abs());
+    Color sumColor = Colors.grey;
+    if (totalSum < 0) {
+      totalSumText = "-$totalSumText";
+      sumColor = Colors.redAccent;
+    } else if (totalSum > 0) {
+      totalSumText = "+$totalSumText";
+      sumColor = Colors.green;
+    }
     return TransactionHeaderUIModel(
-        _headerDateFormat.format(date)
+      _headerDateFormat.format(date),
+      totalSumText,
+      sumColor,
+      transactionsUIModel,
     );
   }
 

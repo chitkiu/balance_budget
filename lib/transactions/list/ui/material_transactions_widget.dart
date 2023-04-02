@@ -1,3 +1,4 @@
+import 'package:balance_budget/transactions/list/ui/models/complex_transactions_ui_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
@@ -5,7 +6,6 @@ import 'package:get/get.dart';
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_icons.dart';
 import 'base_transactions_widget.dart';
-import 'models/transaction_list_ui_model.dart';
 
 class MaterialTransactionsWidget extends BaseTransactionsWidget {
   MaterialTransactionsWidget({super.key});
@@ -21,7 +21,7 @@ class MaterialTransactionsWidget extends BaseTransactionsWidget {
         ],
       ),
       body: controller.obx(
-        (transactions) => _transactionsList(context, transactions),
+        (model) => _transactionsList(context, model),
         onLoading: const Center(
           child: CircularProgressIndicator(),
         ),
@@ -66,7 +66,7 @@ class MaterialTransactionsWidget extends BaseTransactionsWidget {
   }
 
   Widget _transactionsList(
-      BuildContext context, List<TransactionListUIModel>? transactions) {
+      BuildContext context, ComplexTransactionsUIModel? model) {
     return Column(
       children: <Widget>[
         Expanded(
@@ -81,15 +81,15 @@ class MaterialTransactionsWidget extends BaseTransactionsWidget {
                 SliverPersistentHeader(
                   pinned: true,
                   floating: true,
-                  delegate: _FilterHeader(),
+                  delegate: _FilterHeader(model?.transactionCount ?? 0),
                 ),
               ];
             },
             body: SafeArea(
               bottom: false,
               child: ListView(
-                children: transactions
-                        ?.map((item) => mapTransactionToUI(context, item))
+                children: model?.transactions
+                        .map((item) => mapTransactionToUI(context, item))
                         .toList() ??
                     [],
               ),
@@ -102,6 +102,10 @@ class MaterialTransactionsWidget extends BaseTransactionsWidget {
 }
 
 class _FilterHeader extends SliverPersistentHeaderDelegate {
+  final int transactionCount;
+
+  _FilterHeader(this.transactionCount);
+
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
@@ -110,12 +114,11 @@ class _FilterHeader extends SliverPersistentHeaderDelegate {
         padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 4),
         child: Row(
           children: <Widget>[
-            const Expanded(
+            Expanded(
               child: Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  //TODO replace by translation
-                  '100 transactions',
+                  '$transactionCount transactions',
                 ),
               ),
             ),

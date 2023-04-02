@@ -7,10 +7,8 @@ import 'package:intl/intl.dart';
 
 import '../../../common/ui/common_icons.dart';
 import '../domain/models/transactions_filter_date.dart';
-import 'items/transaction_item.dart';
+import 'items/transaction_section_header_widget.dart';
 import 'models/transaction_header_ui_model.dart';
-import 'models/transaction_list_ui_model.dart';
-import 'models/transaction_ui_model.dart';
 
 abstract class BaseTransactionsWidget extends GetView<TransactionsController> {
   final DateFormat _appBarDateFormatter = DateFormat("dd, MMM");
@@ -18,38 +16,26 @@ abstract class BaseTransactionsWidget extends GetView<TransactionsController> {
   BaseTransactionsWidget({super.key});
 
   @protected
-  Widget mapTransactionToUI(BuildContext context, TransactionListUIModel item) {
-    Widget widget;
-    if (item is TransactionHeaderUIModel) {
-      widget = Text(
-        item.title,
-        style:
-        Theme.of(context).textTheme.titleSmall,
-      );
-    } else if (item is TransactionUIModel) {
-      widget = TransactionItem(item, controller.onItemClick);
-    } else {
-      widget = Container();
-    }
-
-    return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(
-          8, 0, 8, 0),
-      child: widget,
+  Widget mapTransactionToUI(BuildContext context, TransactionHeaderUIModel item) {
+    return TransactionSectionHeaderWidget(
+      model: item,
+      onItemClick: controller.onItemClick,
     );
   }
 
   @protected
   Future<void> changeDate(BuildContext context) async {
-
     var result = (await showCalendarDatePicker2Dialog(
-        context: context,
-        config: CalendarDatePicker2WithActionButtonsConfig(
-          calendarType: CalendarDatePicker2Type.range,
-          firstDayOfWeek: DateTime.monday,
-        ),
-        dialogSize: const Size(325, 400),
-        value: [controller.currentDate.value.start, controller.currentDate.value.end]))
+            context: context,
+            config: CalendarDatePicker2WithActionButtonsConfig(
+              calendarType: CalendarDatePicker2Type.range,
+              firstDayOfWeek: DateTime.monday,
+            ),
+            dialogSize: const Size(325, 400),
+            value: [
+          controller.currentDate.value.start,
+          controller.currentDate.value.end
+        ]))
         ?.whereNotNull()
         .toList();
 
@@ -106,5 +92,4 @@ abstract class BaseTransactionsWidget extends GetView<TransactionsController> {
       ),
     );
   }
-
 }
