@@ -28,16 +28,6 @@ extension DTExtension on DateTime {
     return subtract(const Duration(days: 1));
   }
 
-  DateTime removeSeconds() {
-    return DateTime(
-        year,
-        month,
-        day,
-        hour,
-        minute
-    );
-  }
-
   DateTime get withoutTime => DateTime(year, month, day);
 
   /// Gets difference of days between [date] and calling object.

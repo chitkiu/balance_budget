@@ -130,7 +130,7 @@ class AddTransactionController extends GetxController {
         selected.day,
       ),
       comment: currentComment,
-      toAccountId: selectedToAccount.value,
+      toWalletId: selectedToAccount.value,
       categoryId: categoryId,
     );
 

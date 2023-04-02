@@ -1,7 +1,5 @@
-import 'dart:convert';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 
 import 'models/budget.dart';
 import 'models/budget_date.dart';
@@ -10,16 +8,15 @@ import 'models/category_budget_info.dart';
 
 class LocalBudgetRepository {
 
-  DatabaseReference get _ref => FirebaseDatabase.instance.ref("users/${FirebaseAuth.instance.currentUser?.uid ?? '0'}/budgets");
+  CollectionReference<Budget> get _ref =>
+      FirebaseFirestore.instance.collection("users/${FirebaseAuth.instance.currentUser!.uid}/budgets").withConverter<Budget>(
+        fromFirestore: (snapshot, _) =>
+            Budget.fromJson(MapEntry(snapshot.id, snapshot.data()!)),
+        toFirestore: (category, _) => category.toJson(),
+      );
 
-  Stream<List<Budget>> get budgets => _ref.onValue.map((event) {
-    if (event.snapshot.exists) {
-      Map<String, dynamic> dataValue = jsonDecode(jsonEncode(event.snapshot.value));
-      return dataValue.entries.map((e) => Budget.fromJson(e)).toList();
-    } else {
-      return <Budget>[];
-    }
-  });
+  Stream<List<Budget>> get budgets =>
+      _ref.snapshots().map((event) => event.docs.map((e) => e.data()).toList());
 
   void createTotalBudget(
     BudgetRepeatType repeatType,
@@ -74,9 +71,6 @@ class LocalBudgetRepository {
   }
 
   void _saveBudget(Budget budget) {
-    var newBudget = _ref.push();
-    newBudget.set(
-        budget.toJson()
-    );
+    _ref.add(budget);
   }
 }

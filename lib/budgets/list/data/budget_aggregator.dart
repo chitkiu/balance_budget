@@ -60,7 +60,7 @@ class BudgetAggregator {
       return element.transactionType == TransactionType.spend &&
           _periodValidation.isInCurrentPeriod(
               element.time, budget.repeatType, budget.startDate, budget.endDate) &&
-          _isCorrectAccount(budget.accounts, element.accountId);
+          _isCorrectAccount(budget.accounts, element.walletId);
     });
 
     var filteredAccounts = accounts;
@@ -123,7 +123,7 @@ class BudgetAggregator {
           element.categoryId == categoryInfo.categoryId &&
           _periodValidation.isInCurrentPeriod(
               element.time, repeatType, startDate, endDate) &&
-          _isCorrectAccount(categoryInfo.accounts, element.accountId);
+          _isCorrectAccount(categoryInfo.accounts, element.walletId);
     });
 
     var filteredAccounts = accounts;

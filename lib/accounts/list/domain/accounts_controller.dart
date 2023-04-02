@@ -46,7 +46,7 @@ class AccountsController extends GetxController {
 
   double _calculateTransactions(List<Transaction> transactions, Account account) {
     var filteredTransaction = transactions.where((element) =>
-    element.accountId == account.id);
+    element.walletId == account.id);
 
     var totalSum = 0.0;
     for (var transaction in filteredTransaction) {
@@ -74,16 +74,16 @@ class AccountsController extends GetxController {
   double _getTransferTotalSum(List<Transaction> transactions, Account account) {
     var filteredTransferTransaction = transactions.where((element) =>
     element is TransferTransaction &&
-        (element.accountId == account.id || element.toAccountId == account.id)
+        (element.walletId == account.id || element.toWalletId == account.id)
     )
         .map((e) => e as TransferTransaction);
 
     var totalSum = 0.0;
 
     for (var transaction in filteredTransferTransaction) {
-      if (transaction.accountId == account.id) {
+      if (transaction.walletId == account.id) {
         totalSum -= transaction.sum;
-      } else if (transaction.toAccountId == account.id) {
+      } else if (transaction.toWalletId == account.id) {
         totalSum += transaction.sum;
       }
     }

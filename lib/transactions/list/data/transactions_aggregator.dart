@@ -27,46 +27,43 @@ class TransactionsAggregator {
       (categories, transactions, accounts) {
         List<RichTransactionModel> newTransactions = transactions
             .map((transaction) {
-          var account =
-          accounts.firstWhereOrNull((element) => element.id == transaction.accountId);
-          if (account == null) {
-            return null;
-          }
-          switch (transaction.transactionType) {
-            case TransactionType.setInitialBalance:
-              return null;
-            case TransactionType.transfer:
-              if (transaction is TransferTransaction) {
-                var toAccount = accounts.firstWhereOrNull(
-                        (element) => element.id == transaction.toAccountId
-                );
-                if (toAccount == null) {
-                  return null;
-                }
-                return TransferRichTransactionModel(
-                  transaction,
-                  account,
-                  toAccount,
-                );
-              } else {
+              var account = accounts
+                  .firstWhereOrNull((element) => element.id == transaction.walletId);
+              if (account == null) {
                 return null;
               }
-            case TransactionType.spend:
-            case TransactionType.income:
-              if (transaction is CommonTransaction) {
-                var category = categories.firstWhereOrNull((element) =>
-                element.id == transaction.categoryId);
-                if (category == null) {
+              switch (transaction.transactionType) {
+                case TransactionType.setInitialBalance:
                   return null;
-                }
-                return CategoryRichTransactionModel(
-                    transaction, account, category
-                );
-              } else {
-                return null;
+                case TransactionType.transfer:
+                  if (transaction is TransferTransaction) {
+                    var toAccount = accounts.firstWhereOrNull(
+                        (element) => element.id == transaction.toWalletId);
+                    if (toAccount == null) {
+                      return null;
+                    }
+                    return TransferRichTransactionModel(
+                      transaction,
+                      account,
+                      toAccount,
+                    );
+                  } else {
+                    return null;
+                  }
+                case TransactionType.spend:
+                case TransactionType.income:
+                  if (transaction is CommonTransaction) {
+                    var category = categories.firstWhereOrNull(
+                        (element) => element.id == transaction.categoryId);
+                    if (category == null) {
+                      return null;
+                    }
+                    return CategoryRichTransactionModel(transaction, account, category);
+                  } else {
+                    return null;
+                  }
               }
-          }
-        })
+            })
             .whereNotNull()
             .toList();
 

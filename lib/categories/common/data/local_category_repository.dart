@@ -1,7 +1,5 @@
-import 'dart:convert';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
@@ -21,17 +19,19 @@ class LocalCategoryRepository {
     ),
   ];
 
-  DatabaseReference get _ref => FirebaseDatabase.instance.ref("users/${FirebaseAuth.instance.currentUser?.uid ?? '0'}/categories");
+  CollectionReference<Category> get _ref =>
+      FirebaseFirestore.instance.collection("users/${FirebaseAuth.instance.currentUser!.uid}/categories").withConverter<Category>(
+        fromFirestore: (snapshot, _) =>
+            Category.fromJson(MapEntry(snapshot.id, snapshot.data()!)),
+        toFirestore: (category, _) => category.toJson(),
+      );
 
-  Stream<List<Category>> get categories => _ref.onValue.map((event) {
-    if (event.snapshot.exists) {
-      Map<String, dynamic> dataValue = jsonDecode(jsonEncode(event.snapshot.value));
-      return dataValue.entries.map((e) => Category.fromJson(e)).toList()
-        ..addAll(_localCategories);
-    } else {
-      return _localCategories;
-    }
-  });
+  Stream<List<Category>> get categories =>
+      _ref.snapshots().map((event) {
+        var result = event.docs.map((e) => e.data()).toList();
+        result.addAll(_localCategories);
+        return result;
+      });
 
   LocalCategoryRepository() {
     //TODO Add init default categories
@@ -41,33 +41,25 @@ class LocalCategoryRepository {
   }
 
   void create(String title, TransactionType transactionType, IconData? icon) async {
-    var newCategory = _ref.push();
-    newCategory.set(
+    _ref.add(
         Category(
           title: title,
           transactionType: transactionType,
           // icon: icon,
-        ).toJson()
+        )
     );
   }
 
-  Future<Category?> getCategoryById(String id) async {
-    var item = await _ref.child(id).get();
-    if (item.exists) {
-      Map<String, dynamic> dataValue = jsonDecode(jsonEncode(item.value));
-      return Category.fromJson(dataValue.entries.first);
-    }
-    return null;
+  Stream<Category?> getCategoryById(String id) {
+    return _ref.doc(id).snapshots().map((event) => event.data());
   }
 
   Future<List<Category>> getCategoriesByType(TransactionType type) async {
-    var result = await _ref.orderByChild('transactionType').equalTo(type.name).get();
-    if (result.exists) {
-      Map<String, dynamic> dataValue = jsonDecode(jsonEncode(result.value));
-      return dataValue.entries.map((e) => Category.fromJson(e)).toList();
-    } else {
-      return [];
-    }
+    var result = await _ref.orderBy('transactionType')
+        .where('transactionType', isEqualTo: type.name)
+        .get();
+
+    return result.docs.map((e) => e.data()).toList();
   }
 
   void remove(String category) {

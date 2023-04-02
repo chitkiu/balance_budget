@@ -1,85 +1,77 @@
-import 'dart:convert';
-
+import 'package:cloud_firestore/cloud_firestore.dart' hide Transaction;
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart' hide Transaction;
 
 import '../../../common/data/date_time_extension.dart';
 import '../../../common/data/models/transaction_type.dart';
 import 'models/transaction.dart';
 
 class LocalTransactionsRepository {
-  DatabaseReference get _ref => FirebaseDatabase.instance
-      .ref("users/${FirebaseAuth.instance.currentUser?.uid ?? '0'}/transactions");
+  CollectionReference<Transaction> get _ref =>
+      FirebaseFirestore.instance.collection("users/${FirebaseAuth.instance.currentUser!.uid}/transactions").withConverter<Transaction>(
+            fromFirestore: (snapshot, _) =>
+                Transaction.fromJson(MapEntry(snapshot.id, snapshot.data()!)),
+            toFirestore: (category, _) => category.toJson(),
+          );
 
-  Stream<List<Transaction>> get transactions => _ref.onValue.map((event) {
-        if (event.snapshot.exists) {
-          Map<String, dynamic> dataValue = jsonDecode(jsonEncode(event.snapshot.value));
-          return dataValue.entries.map((e) => Transaction.fromJson(e)).toList();
-        } else {
-          return <Transaction>[];
-        }
-      });
+  Stream<List<Transaction>> get transactions =>
+      _ref.snapshots().map((event) => event.docs.map((e) => e.data()).toList());
 
   Stream<Transaction?> getTransactionById(String id) {
-    return _ref.child(id).onValue.map((event) {
-      if (event.snapshot.exists) {
-        Map<String, dynamic> dataValue = jsonDecode(jsonEncode(event.snapshot.value));
-        return Transaction.fromJson(dataValue.entries.first);
-      }
-      return null;
-    });
+    return _ref.doc(id).snapshots().map((event) => event.data());
   }
 
   bool create(
-      double sum,
-      TransactionType transactionType,
-      String accountId,
-      DateTime time,
-      {bool skipZeroSum = true, String? toAccountId, String? categoryId, String? comment,}
-  ) {
+    double sum,
+    TransactionType transactionType,
+    String walletId,
+    DateTime time, {
+    bool skipZeroSum = true,
+    String? toWalletId,
+    String? categoryId,
+    String? comment,
+  }) {
     if (skipZeroSum && sum <= 0) {
       return false;
     }
 
-    var newTransaction = _ref.push();
     switch (transactionType) {
       case TransactionType.setInitialBalance:
-        newTransaction.set(SetBalanceTransaction(
+        _ref.add(SetBalanceTransaction(
           sum: sum,
           transactionType: transactionType,
-          accountId: accountId,
+          walletId: walletId,
           time: time.withoutTime,
           creationTime: DateTime.now(),
-        ).toJson());
+        ));
         break;
       case TransactionType.spend:
       case TransactionType.income:
-      if (categoryId == null) {
-        return false;
-      }
-        newTransaction.set(CommonTransaction(
+        if (categoryId == null) {
+          return false;
+        }
+        _ref.add(CommonTransaction(
           sum: sum,
           transactionType: transactionType,
           categoryId: categoryId,
-          accountId: accountId,
+          walletId: walletId,
           time: time.withoutTime,
           creationTime: DateTime.now(),
           comment: comment,
-        ).toJson());
+        ));
         break;
       case TransactionType.transfer:
-        if (toAccountId == null) {
+        if (toWalletId == null) {
           return false;
         }
-        newTransaction.set(TransferTransaction(
+        _ref.add(TransferTransaction(
           sum: sum,
           transactionType: transactionType,
-          accountId: accountId,
+          walletId: walletId,
           time: time.withoutTime,
           creationTime: DateTime.now(),
           comment: comment,
-          toAccountId: toAccountId,
-        ).toJson());
+          toWalletId: toWalletId,
+        ));
         break;
     }
 
@@ -87,8 +79,7 @@ class LocalTransactionsRepository {
   }
 
   Future<void> remove(String transactionId) async {
-    var localRef = _ref.child(transactionId);
-    await localRef.remove();
+    await _ref.doc(transactionId).delete();
   }
 
   Future<void> edit(
@@ -96,17 +87,16 @@ class LocalTransactionsRepository {
     double? sum,
     TransactionType? transactionType,
     String? categoryId,
-    String? accountId,
+    String? walletId,
     DateTime? time,
     String? comment,
   }) async {
-    var data = _ref.child(transactionId);
+    var data = _ref.doc(transactionId);
 
-    var dbTransaction = (await data.once()).snapshot;
+    var dbTransaction = await data.get();
 
     if (dbTransaction.exists) {
-      var transaction = Transaction.fromJson(
-          MapEntry(transactionId, jsonDecode(jsonEncode(dbTransaction.value))));
+      var transaction = dbTransaction.data()!;
 
       Transaction? newTransaction;
 
@@ -115,23 +105,21 @@ class LocalTransactionsRepository {
             sum: sum,
             transactionType: transactionType,
             categoryId: categoryId,
-            accountId: accountId,
+            walletId: walletId,
             time: time,
-            comment: comment
-        );
+            comment: comment);
       } else if (transaction is CommonTransaction) {
         newTransaction = transaction.copyWith(
             sum: sum,
             transactionType: transactionType,
             categoryId: categoryId,
-            accountId: accountId,
+            walletId: walletId,
             time: time,
-            comment: comment
-        );
+            comment: comment);
       }
 
       if (newTransaction != null && newTransaction != transaction) {
-        data.set(newTransaction.toJson());
+        data.set(newTransaction);
       }
     }
   }

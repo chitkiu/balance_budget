@@ -12,7 +12,7 @@ CommonTransaction _$CommonTransactionFromJson(Map<String, dynamic> json) =>
       transactionType:
           $enumDecode(_$TransactionTypeEnumMap, json['transactionType']),
       categoryId: json['categoryId'] as String,
-      accountId: json['accountId'] as String,
+      walletId: json['walletId'] as String,
       time: const EpochWithoutTimeDateTimeConverter()
           .fromJson(json['time'] as int),
       creationTime:
@@ -24,7 +24,7 @@ Map<String, dynamic> _$CommonTransactionToJson(CommonTransaction instance) =>
     <String, dynamic>{
       'sum': instance.sum,
       'transactionType': _$TransactionTypeEnumMap[instance.transactionType]!,
-      'accountId': instance.accountId,
+      'walletId': instance.walletId,
       'time': const EpochWithoutTimeDateTimeConverter().toJson(instance.time),
       'creationTime':
           const EpochDateTimeConverter().toJson(instance.creationTime),
@@ -45,7 +45,7 @@ SetBalanceTransaction _$SetBalanceTransactionFromJson(
       sum: (json['sum'] as num).toDouble(),
       transactionType:
           $enumDecode(_$TransactionTypeEnumMap, json['transactionType']),
-      accountId: json['accountId'] as String,
+      walletId: json['walletId'] as String,
       time: const EpochWithoutTimeDateTimeConverter()
           .fromJson(json['time'] as int),
       creationTime:
@@ -57,7 +57,7 @@ Map<String, dynamic> _$SetBalanceTransactionToJson(
     <String, dynamic>{
       'sum': instance.sum,
       'transactionType': _$TransactionTypeEnumMap[instance.transactionType]!,
-      'accountId': instance.accountId,
+      'walletId': instance.walletId,
       'time': const EpochWithoutTimeDateTimeConverter().toJson(instance.time),
       'creationTime':
           const EpochDateTimeConverter().toJson(instance.creationTime),
@@ -68,12 +68,12 @@ TransferTransaction _$TransferTransactionFromJson(Map<String, dynamic> json) =>
       sum: (json['sum'] as num).toDouble(),
       transactionType:
           $enumDecode(_$TransactionTypeEnumMap, json['transactionType']),
-      accountId: json['accountId'] as String,
+      walletId: json['walletId'] as String,
       time: const EpochWithoutTimeDateTimeConverter()
           .fromJson(json['time'] as int),
       creationTime:
           const EpochDateTimeConverter().fromJson(json['creationTime'] as int),
-      toAccountId: json['toAccountId'] as String,
+      toWalletId: json['toWalletId'] as String,
       comment: json['comment'] as String?,
     );
 
@@ -82,10 +82,10 @@ Map<String, dynamic> _$TransferTransactionToJson(
     <String, dynamic>{
       'sum': instance.sum,
       'transactionType': _$TransactionTypeEnumMap[instance.transactionType]!,
-      'accountId': instance.accountId,
+      'walletId': instance.walletId,
       'time': const EpochWithoutTimeDateTimeConverter().toJson(instance.time),
       'creationTime':
           const EpochDateTimeConverter().toJson(instance.creationTime),
       'comment': instance.comment,
-      'toAccountId': instance.toAccountId,
+      'toWalletId': instance.toWalletId,
     };
