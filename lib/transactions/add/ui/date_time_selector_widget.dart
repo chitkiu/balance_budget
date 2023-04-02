@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
@@ -8,42 +7,14 @@ import '../../../common/ui/common_ui_settings.dart';
 import 'models/date_selection_type.dart';
 import 'models/select_date_ui_model.dart';
 
-//TODO Add ToggleButtons for cupertino
-class DateTimeSelectorWidget extends PlatformWidgetBase<Widget, Widget> {
+class DateTimeSelectorWidget extends StatelessWidget {
   final Rx<SelectDayUIModel> date;
   final Function(DateSelectionType, DateTime?) onDateChanged;
 
   const DateTimeSelectorWidget(this.date, this.onDateChanged, {super.key});
 
   @override
-  Widget createCupertinoWidget(BuildContext context) {
-    return Obx(() {
-      var selectedDate = date.value.dateTime;
-      return PlatformTextButton(
-        child: Text(
-          Get.localisation.fullDateTimeString(
-              CommonUI.dateFormatter.format(selectedDate)
-          )
-        ),
-        onPressed: () {
-          _showCupertinoDialog(
-            context,
-            CupertinoDatePicker(
-              initialDateTime: DateTime(selectedDate.year, selectedDate.month, selectedDate.day),
-              mode: CupertinoDatePickerMode.date,
-              use24hFormat: true,
-              onDateTimeChanged: (DateTime newTime) {
-                onDateChanged(DateSelectionType.customDate, newTime);
-              },
-            ),
-          );
-        },
-      );
-    });
-  }
-
-  @override
-  Widget createMaterialWidget(BuildContext context) {
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Obx(() {
@@ -105,26 +76,5 @@ class DateTimeSelectorWidget extends PlatformWidgetBase<Widget, Widget> {
         }),
       ],
     );
-  }
-
-  void _showCupertinoDialog(BuildContext context, Widget child) {
-    showCupertinoModalPopup<void>(
-        context: context,
-        builder: (BuildContext context) => Container(
-              height: 216,
-              padding: const EdgeInsets.only(top: 6.0),
-              // The Bottom margin is provided to align the popup above the system
-              // navigation bar.
-              margin: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-              ),
-              // Provide a background color for the popup.
-              color: CupertinoColors.systemBackground.resolveFrom(context),
-              // Use a SafeArea widget to avoid system overlaps.
-              child: SafeArea(
-                top: false,
-                child: child,
-              ),
-            ));
   }
 }
