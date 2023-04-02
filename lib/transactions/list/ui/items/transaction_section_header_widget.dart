@@ -26,12 +26,20 @@ class TransactionSectionHeaderWidget extends StatelessWidget {
               Text(model.title, style: Theme.of(context).textTheme.titleSmall),
               Row(
                 children: <Widget>[
-                  Text(
-                    model.sum,
-                    style: TextStyle(
-                      color: model.sumColor,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  RichText(
+                      text: TextSpan(
+                        //TODO Add translate
+                        text: "Total: ",
+                        style: Theme.of(context).textTheme.titleSmall,
+                        children: [
+                          TextSpan(
+                              text: model.sum,
+                              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                color: model.sumColor
+                              )
+                          )
+                        ]
+                      )
                   ),
                   GestureDetector(
                     onTap: onTap,

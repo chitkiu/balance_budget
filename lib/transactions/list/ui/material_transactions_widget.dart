@@ -107,6 +107,7 @@ class _FilterHeader extends SliverPersistentHeaderDelegate {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
+                      //TODO Add translate
                       '$transactionCount transactions',
                     ),
                   ),
