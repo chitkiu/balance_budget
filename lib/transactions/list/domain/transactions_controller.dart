@@ -56,12 +56,10 @@ class TransactionsController extends GetxController
   }
 
   void onItemClick(TransactionUIModel transaction) async {
-    var binding = TransactionInfoBinding();
-    binding.dependencies();
     await Get.bottomSheet(
-      TransactionInfoScreen(transaction.id),
+      TransactionInfoScreen(
+          transaction.id, bindingCreator: () => TransactionInfoBinding()),
     );
-    binding.delete();
   }
 
   void setNewDate(TransactionsFilterDate date) {

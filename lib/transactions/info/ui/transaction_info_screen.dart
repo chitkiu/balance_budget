@@ -7,13 +7,15 @@ import 'package:intl/intl.dart';
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_ui_settings.dart';
+import '../../../common/ui/get_widget_with_binding.dart';
 import '../../list/ui/models/transaction_ui_model.dart';
+import '../domain/transaction_info_binding.dart';
 import '../domain/transaction_info_controller.dart';
 
-class TransactionInfoScreen extends GetView<TransactionInfoController> {
+class TransactionInfoScreen extends GetWidgetWithBinding<TransactionInfoBinding, TransactionInfoController> {
   final String transactionId;
 
-  TransactionInfoScreen(this.transactionId, {Key? key}) : super(key: key);
+  TransactionInfoScreen(this.transactionId, {required super.bindingCreator, super.key});
 
   final RxBool _isInEditMode = false.obs;
 
@@ -21,7 +23,7 @@ class TransactionInfoScreen extends GetView<TransactionInfoController> {
   final TextEditingController _commentController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget view() {
     return StreamBuilder(
       stream: controller.transactionById(transactionId),
       builder: (context, snapshot) {
@@ -63,12 +65,12 @@ class TransactionInfoScreen extends GetView<TransactionInfoController> {
                     padding: EdgeInsets.zero,
                     onPressed: () => _onTrailing(model),
                     child: Obx(() {
-                        return Text(
-                          _isInEditMode.value
-                              ? Get.localisation.save_bottom_sheet
-                              : Get.localisation.edit_bottom_sheet,
-                        );
-                      },
+                      return Text(
+                        _isInEditMode.value
+                            ? Get.localisation.save_bottom_sheet
+                            : Get.localisation.edit_bottom_sheet,
+                      );
+                    },
                     ),
                   );
                 }

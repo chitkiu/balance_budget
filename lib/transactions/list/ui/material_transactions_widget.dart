@@ -1,6 +1,5 @@
 import 'package:balance_budget/transactions/list/ui/models/complex_transactions_ui_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../common/getx_extensions.dart';
@@ -14,8 +13,7 @@ class MaterialTransactionsWidget extends BaseTransactionsWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        //TODO Add translation
-        title: Text("Resent"),
+        title: Text(Get.localisation.transactionsTabName),
         actions: [
           calendarButton(context),
         ],
@@ -37,36 +35,37 @@ class MaterialTransactionsWidget extends BaseTransactionsWidget {
   }
 
   Widget _searchBar() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      color: Colors.green,
-      height: 64,
-      child: PlatformTextField(
-        cursorColor: Colors.grey,
-        textAlign: TextAlign.start,
-        material: (context, platform) => MaterialTextFieldData(
-            decoration: InputDecoration(
-          fillColor: Colors.white,
-          filled: true,
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30), borderSide: BorderSide.none),
-          hintText: 'Search',
-          hintStyle: TextStyle(
-            color: Colors.grey,
-          ),
-          prefixIcon: Container(
-            padding: EdgeInsets.all(4),
-            child: Icon(Icons.search),
-          ),
-          isDense: true,
-          contentPadding: EdgeInsets.only(top: 8),
-        )),
-      ),
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          height: 64,
+          child: TextField(
+              cursorColor: Colors.grey,
+              textAlign: TextAlign.start,
+              decoration: InputDecoration(
+                fillColor: Colors.grey.withOpacity(0.1),
+                filled: true,
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30), borderSide: BorderSide.none),
+                hintText: 'Search',
+                hintStyle: TextStyle(
+                  color: Colors.grey,
+                ),
+                prefixIcon: Container(
+                  padding: EdgeInsets.all(4),
+                  child: Icon(Icons.search),
+                ),
+                isDense: true,
+                contentPadding: EdgeInsets.only(top: 8),
+              )),
+        ),
+        Divider(height: 1),
+      ],
     );
   }
 
-  Widget _transactionsList(
-      BuildContext context, ComplexTransactionsUIModel? model) {
+  Widget _transactionsList(BuildContext context, ComplexTransactionsUIModel? model) {
     return CustomScrollView(
       slivers: [
         SliverList(
@@ -81,12 +80,9 @@ class MaterialTransactionsWidget extends BaseTransactionsWidget {
         ),
         SliverList(
             delegate: SliverChildListDelegate.fixed(
-                model?.transactions
-                    .map((item) => mapTransactionToUI(context, item))
-                    .toList() ??
-                    [],
-            )
-        )
+          model?.transactions.map((item) => mapTransactionToUI(context, item)).toList() ??
+              [],
+        ))
       ],
     );
   }
@@ -99,41 +95,43 @@ class _FilterHeader extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      color: Colors.red,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 4),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  '$transactionCount transactions',
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 3),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    '$transactionCount transactions',
+                  ),
                 ),
               ),
-            ),
-            GestureDetector(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      Get.localisation.filter,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        CommonIcons.filter,
+              GestureDetector(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        Get.localisation.filter,
                       ),
-                    ),
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          CommonIcons.filter,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
+        const Divider(height: 1),
+      ],
     );
   }
 
