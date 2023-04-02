@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../common/data/date_time_extension.dart';
 import '../../../common/data/models/transaction_type.dart';
+import '../../list/data/models/rich_transaction_model.dart';
 import 'models/transaction.dart';
 
 class LocalTransactionsRepository {
@@ -54,7 +55,7 @@ class LocalTransactionsRepository {
     String? toWalletId,
     String? categoryId,
     String? comment,
-        String? id,
+    RichTransactionModel? model,
   }) {
     if (skipZeroSum && sum <= 0) {
       return false;
@@ -67,7 +68,7 @@ class LocalTransactionsRepository {
           transactionType: transactionType,
           walletId: walletId,
           time: time.withoutTime,
-          creationTime: DateTime.now(),
+          creationTime: model?.transaction.creationTime ?? DateTime.now(),
         );
         break;
       case TransactionType.expense:
@@ -81,7 +82,7 @@ class LocalTransactionsRepository {
           categoryId: categoryId,
           walletId: walletId,
           time: time.withoutTime,
-          creationTime: DateTime.now(),
+          creationTime: model?.transaction.creationTime ?? DateTime.now(),
           comment: comment,
         );
         break;
@@ -94,15 +95,15 @@ class LocalTransactionsRepository {
           transactionType: transactionType,
           walletId: walletId,
           time: time.withoutTime,
-          creationTime: DateTime.now(),
+          creationTime: model?.transaction.creationTime ?? DateTime.now(),
           comment: comment,
           toWalletId: toWalletId,
         );
         break;
     }
 
-    if (id != null) {
-      _ref.doc(id).set(transaction);
+    if (model != null) {
+      _ref.doc(model.transaction.id).set(transaction);
     } else {
       _ref.add(transaction);
     }

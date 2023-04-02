@@ -119,7 +119,7 @@ class UpdateTransactionController extends GetxController {
         selected.month,
         selected.day,
       ),
-      id: model?.transaction.id,
+      model: model,
       comment: currentComment,
       toWalletId: selectedToWallet.value,
       categoryId: categoryId,

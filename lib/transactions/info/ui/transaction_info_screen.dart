@@ -62,7 +62,7 @@ class TransactionInfoScreen
       _getTransactionInfoItem(
           model.walletName, Get.localisation.transactionInfoWalletPrefix, Icons.wallet),
       _getTransactionInfoItem(
-          model.sum, Get.localisation.transactionInfoTimePrefix, Icons.calendar_month),
+          model.formattedDate, Get.localisation.transactionInfoTimePrefix, Icons.calendar_month),
       if (model.comment != null)
         _getTransactionInfoItem(model.comment ?? '',
             Get.localisation.transactionInfoCommentPrefix, Icons.comment),
