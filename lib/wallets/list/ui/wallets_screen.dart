@@ -8,11 +8,8 @@ import '../domain/wallets_controller.dart';
 import 'models/wallet_ui_model.dart';
 
 class WalletsScreen extends CommonScaffoldWithButtonScreen<WalletsController> {
-  WalletsScreen({Key? key}) : super(
-      Get.localisation.walletsTitle,
-      icon: CommonIcons.add,
-      key: key
-  );
+  WalletsScreen({Key? key})
+      : super(Get.localisation.walletsTitle, icon: CommonIcons.add, key: key);
 
   @override
   Widget body(BuildContext context) {
@@ -35,7 +32,14 @@ class WalletsScreen extends CommonScaffoldWithButtonScreen<WalletsController> {
 
         return ListView.separated(
           itemBuilder: (context, index) {
-            return _getWalletWidget(wallets[index]);
+            var wallet = wallets[index];
+            return GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () {
+                controller.onItemClick(wallet);
+              },
+              child: _getWalletWidget(wallet),
+            );
           },
           itemCount: wallets.length,
           separatorBuilder: (context, index) => const Divider(),
@@ -65,7 +69,9 @@ class WalletsScreen extends CommonScaffoldWithButtonScreen<WalletsController> {
           children: [
             Text(wallet.name,
                 style: const TextStyle(fontWeight: FontWeight.w500)),
-            const SizedBox(height: 4,),
+            const SizedBox(
+              height: 4,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -74,8 +80,7 @@ class WalletsScreen extends CommonScaffoldWithButtonScreen<WalletsController> {
               ],
             )
           ],
-        )
-    );
+        ));
   }
 
   Widget _creditWalletWidget(CreditWalletUIModel wallet) {
@@ -86,7 +91,9 @@ class WalletsScreen extends CommonScaffoldWithButtonScreen<WalletsController> {
           children: [
             Text(wallet.name,
                 style: const TextStyle(fontWeight: FontWeight.w500)),
-            const SizedBox(height: 4,),
+            const SizedBox(
+              height: 4,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -109,8 +116,6 @@ class WalletsScreen extends CommonScaffoldWithButtonScreen<WalletsController> {
               ],
             )
           ],
-        )
-    );
+        ));
   }
-
 }

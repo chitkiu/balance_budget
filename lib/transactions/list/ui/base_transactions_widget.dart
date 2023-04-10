@@ -6,9 +6,9 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../common/ui/common_icons.dart';
+import '../../../common/ui/transaction_item/models/transaction_header_ui_model.dart';
+import '../../../common/ui/transaction_item/transaction_section_header_widget.dart';
 import '../domain/models/transactions_filter_date.dart';
-import 'items/transaction_section_header_widget.dart';
-import 'models/transaction_header_ui_model.dart';
 
 abstract class BaseTransactionsWidget extends GetView<TransactionsController> {
   final DateFormat _appBarDateFormatter = DateFormat("dd, MMM");
@@ -16,7 +16,8 @@ abstract class BaseTransactionsWidget extends GetView<TransactionsController> {
   BaseTransactionsWidget({super.key});
 
   @protected
-  Widget mapTransactionToUI(BuildContext context, TransactionHeaderUIModel item) {
+  Widget mapTransactionToUI(
+      BuildContext context, TransactionHeaderUIModel item) {
     return TransactionSectionHeaderWidget(
       model: item,
       onItemClick: controller.onItemClick,
@@ -78,7 +79,7 @@ abstract class BaseTransactionsWidget extends GetView<TransactionsController> {
                   return Text(
                     '${_appBarDateFormatter.format(currentDate.start)} - ${_appBarDateFormatter.format(currentDate.end)}',
                     textAlign: TextAlign.left,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.normal,
                       fontSize: 18,
                       letterSpacing: -0.2,

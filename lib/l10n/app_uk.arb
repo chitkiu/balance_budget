@@ -75,5 +75,7 @@
   "transactions": "{count, plural, =0{Немає транзакцій} =1{1 транзакція} =2{2 транзакції} other{{count} транзакцій}}",
   "total": "Усього: ",
 
-  "save_button": "Зберегти"
+  "save_button": "Зберегти",
+
+  "wallet_info_title": "Інформація про гаманець"
 }

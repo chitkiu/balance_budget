@@ -1,14 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart' hide Transaction;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../../common/data/date_time_extension.dart';
 import '../../../common/data/models/transaction_type.dart';
-import '../../list/data/models/rich_transaction_model.dart';
+import 'models/rich_transaction_model.dart';
 import 'models/transaction.dart';
 
 class LocalTransactionsRepository {
   CollectionReference<Transaction> get _ref => FirebaseFirestore.instance
-      .collection("users/${FirebaseAuth.instance.currentUser!.uid}/transactions")
+      .collection(
+          "users/${FirebaseAuth.instance.currentUser!.uid}/transactions")
       .withConverter<Transaction>(
         fromFirestore: (snapshot, _) =>
             Transaction.fromJson(MapEntry(snapshot.id, snapshot.data()!)),
@@ -19,11 +21,9 @@ class LocalTransactionsRepository {
       _ref.snapshots().map((event) => event.docs.map((e) => e.data()).toList());
 
   Stream<Transaction?> getTransactionById(
-      String id,
-      ) {
-    return _ref.doc(id)
-        .snapshots()
-        .map((event) {
+    String id,
+  ) {
+    return _ref.doc(id).snapshots().map((event) {
       if (event.exists) {
         return event.data();
       } else {
@@ -44,6 +44,23 @@ class LocalTransactionsRepository {
         )
         .snapshots()
         .map((event) => event.docs.map((e) => e.data()).toList());
+  }
+
+  Stream<List<Transaction>> getTransactionsByWalletId(
+    String walletId,
+  ) {
+    final transactionsFromWallet = _ref
+        .where('walletId', isEqualTo: walletId)
+        .snapshots()
+        .map((event) => event.docs.map((e) => e.data()).toList());
+
+    final transferTransactionsFromWallet = _ref
+        .where('toWalletId', isEqualTo: walletId)
+        .snapshots()
+        .map((event) => event.docs.map((e) => e.data()).toList());
+
+    return CombineLatestStream.combine2(transactionsFromWallet,
+        transferTransactionsFromWallet, (a, b) => a + b);
   }
 
   bool createOrUpdate(

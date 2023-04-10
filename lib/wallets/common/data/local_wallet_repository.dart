@@ -7,12 +7,13 @@ import '../../../transactions/common/data/local_transactions_repository.dart';
 import 'models/wallet.dart';
 
 class LocalWalletRepository {
-  CollectionReference<Wallet> get _ref =>
-      FirebaseFirestore.instance.collection("users/${FirebaseAuth.instance.currentUser!.uid}/wallets").withConverter<Wallet>(
-            fromFirestore: (snapshot, _) =>
-                Wallet.fromJson(MapEntry(snapshot.id, snapshot.data()!)),
-            toFirestore: (wallet, _) => wallet.toJson(),
-          );
+  CollectionReference<Wallet> get _ref => FirebaseFirestore.instance
+      .collection("users/${FirebaseAuth.instance.currentUser!.uid}/wallets")
+      .withConverter<Wallet>(
+        fromFirestore: (snapshot, _) =>
+            Wallet.fromJson(MapEntry(snapshot.id, snapshot.data()!)),
+        toFirestore: (wallet, _) => wallet.toJson(),
+      );
 
   LocalTransactionsRepository get _transactionRepo => Get.find();
 
@@ -33,7 +34,8 @@ class LocalWalletRepository {
     _createInitialTransaction(newWallet.id, totalBalance);
   }
 
-  Future<void> createCredit(String name, double ownBalance, double creditBalance) async {
+  Future<void> createCredit(
+      String name, double ownBalance, double creditBalance) async {
     var newWallet = await _ref.add(CreditWallet(
       name: name,
       creditBalance: creditBalance,
@@ -42,8 +44,14 @@ class LocalWalletRepository {
     _createInitialTransaction(newWallet.id, ownBalance);
   }
 
-  Wallet? getWalletById(String id) {
-    // return accounts.firstWhereOrNull((element) => element.id == id);
+  Stream<Wallet?> walletById(String id) {
+    return _ref.doc(id).snapshots().map((event) {
+      if (event.exists) {
+        return event.data();
+      } else {
+        return null;
+      }
+    });
   }
 
   void remove(String walletId) {
@@ -51,7 +59,10 @@ class LocalWalletRepository {
   }
 
   void edit(String id,
-      {String? name, double? totalBalance, double? ownBalance, double? creditBalance}) {
+      {String? name,
+      double? totalBalance,
+      double? ownBalance,
+      double? creditBalance}) {
 /*    var editAccount = accounts.firstWhereOrNull((element) => element.id == id);
     if (editAccount == null) {
       return;
@@ -80,8 +91,8 @@ class LocalWalletRepository {
   }
 
   void _createInitialTransaction(String? walletId, double sum) {
-    _transactionRepo.createOrUpdate(sum, TransactionType.setInitialBalance, walletId ?? '',
-        DateTime.now(),
+    _transactionRepo.createOrUpdate(
+        sum, TransactionType.setInitialBalance, walletId ?? '', DateTime.now(),
         skipZeroSum: false);
   }
 }

@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
 
 import '../../../common/getx_extensions.dart';
+import '../../../common/ui/transaction_item/mappers/transactions_ui_mapper.dart';
+import '../../../common/ui/transaction_item/models/transaction_ui_model.dart';
 import '../../common/data/local_transactions_repository.dart';
-import '../../list/data/models/rich_transaction_model.dart';
+import '../../common/data/models/rich_transaction_model.dart';
 import '../../list/data/transactions_aggregator.dart';
-import '../../list/domain/mappers/transactions_ui_mapper.dart';
-import '../../list/ui/models/transaction_ui_model.dart';
 import '../../update/domain/update_transaction_binding.dart';
 import '../../update/ui/update_transaction_screen.dart';
 
@@ -24,14 +24,15 @@ class TransactionInfoController extends GetxController {
 
   @override
   void onInit() {
-    _dataTransactionModel.bindStream(_transactionsAggregator.transactionById(id));
-    transaction.bindStream(_transactionById(id));
+    transaction.bindStream(_transactionById());
+    _dataTransactionModel
+        .bindStream(_transactionsAggregator.transactionById(id));
 
     super.onInit();
   }
 
-  Stream<TransactionUIModel?> _transactionById(String id) {
-    return _transactionsAggregator.transactionById(id).map((event) {
+  Stream<TransactionUIModel?> _transactionById() {
+    return _dataTransactionModel.stream.map((event) {
       if (event == null) {
         return null;
       } else {
@@ -47,7 +48,8 @@ class TransactionInfoController extends GetxController {
   void goToEdit() {
     UpdateTransactionScreen(
       title: Get.localisation.transactionInfoEditTitle,
-      bindingCreator: () => UpdateTransactionBinding(model: _dataTransactionModel.value),
+      bindingCreator: () =>
+          UpdateTransactionBinding(model: _dataTransactionModel.value),
       model: _dataTransactionModel.value,
     ).open();
   }

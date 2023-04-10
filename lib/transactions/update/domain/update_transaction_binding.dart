@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-import '../../list/data/models/rich_transaction_model.dart';
+import '../../common/data/models/rich_transaction_model.dart';
 import 'update_transaction_controller.dart';
 
 class UpdateTransactionBinding extends Bindings {
@@ -12,5 +12,4 @@ class UpdateTransactionBinding extends Bindings {
   void dependencies() {
     Get.put(UpdateTransactionController(model: model));
   }
-
 }

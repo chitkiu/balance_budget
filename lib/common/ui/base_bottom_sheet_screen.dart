@@ -60,7 +60,7 @@ abstract class BaseBottomSheetScreen<Binding extends Bindings, Controller>
       body(context),
       //TODO Try to fetch uninteractable bottom padding
       SizedBox(
-        height: MediaQuery.of(context).padding.bottom,
+        height: MediaQuery.of(context).padding.bottom + 8,
       ),
     ]));
   }

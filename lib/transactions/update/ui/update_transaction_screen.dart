@@ -6,7 +6,7 @@ import '../../../common/data/models/transaction_type.dart';
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/base_bottom_sheet_screen.dart';
 import '../../../common/ui/common_icons.dart';
-import '../../list/data/models/rich_transaction_model.dart';
+import '../../common/data/models/rich_transaction_model.dart';
 import '../../update/ui/date_time_selector_widget.dart';
 import '../domain/update_transaction_binding.dart';
 import '../domain/update_transaction_controller.dart';
@@ -138,9 +138,6 @@ class UpdateTransactionScreen extends BaseBottomSheetScreen<
             onPressed: onButtonPress,
             child: Text(Get.localisation.save_button),
           ),
-        ),
-        const SizedBox(
-          height: 8,
         ),
       ],
     );

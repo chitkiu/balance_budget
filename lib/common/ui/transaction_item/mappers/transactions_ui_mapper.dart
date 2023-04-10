@@ -1,30 +1,33 @@
-import 'package:balance_budget/transactions/list/ui/models/transaction_header_ui_model.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../categories/common/data/models/category.dart';
-import '../../../../common/data/models/transaction_type.dart';
-import '../../../../common/ui/common_ui_settings.dart';
+import '../../../../transactions/common/data/models/rich_transaction_model.dart';
+import '../../../../transactions/common/data/models/transaction.dart';
 import '../../../../wallets/common/data/models/wallet.dart';
-import '../../../common/data/models/transaction.dart';
-import '../../data/models/rich_transaction_model.dart';
-import '../../ui/models/transaction_ui_model.dart';
+import '../../../data/models/transaction_type.dart';
+import '../../common_ui_settings.dart';
+import '../models/transaction_header_ui_model.dart';
+import '../models/transaction_ui_model.dart';
 
 class TransactionsUIMapper {
-
   final NumberFormat _sumFormatter = NumberFormat("##0.00");
   final DateFormat _headerDateFormat = DateFormat("dd MMMM");
 
   TransactionUIModel? mapFromRich(RichTransactionModel richTransaction) {
     switch (richTransaction.runtimeType) {
       case TransferRichTransactionModel:
-        TransferRichTransactionModel transaction = richTransaction as TransferRichTransactionModel;
-        return _mapTransferModel(transaction.transaction, transaction.fromWallet, transaction.toWallet);
+        TransferRichTransactionModel transaction =
+            richTransaction as TransferRichTransactionModel;
+        return _mapTransferModel(transaction.transaction,
+            transaction.fromWallet, transaction.toWallet);
 
       case CategoryRichTransactionModel:
-        CategoryRichTransactionModel transaction = richTransaction as CategoryRichTransactionModel;
-        return _mapCommonModel(transaction.transaction, transaction.category, transaction.fromWallet);
+        CategoryRichTransactionModel transaction =
+            richTransaction as CategoryRichTransactionModel;
+        return _mapCommonModel(transaction.transaction, transaction.category,
+            transaction.fromWallet);
     }
 
     return null;
@@ -33,14 +36,15 @@ class TransactionsUIMapper {
   TransactionHeaderUIModel mapHeader(
       DateTime date,
       Iterable<RichTransactionModel> transactions,
-      Iterable<TransactionUIModel> transactionsUIModel
-      ) {
+      Iterable<TransactionUIModel> transactionsUIModel) {
     final expenseSum = transactions
-        .where((element) => element.transaction.transactionType == TransactionType.expense)
+        .where((element) =>
+            element.transaction.transactionType == TransactionType.expense)
         .map((e) => e.transaction.sum)
         .sum;
     final incomeSum = transactions
-        .where((element) => element.transaction.transactionType == TransactionType.income)
+        .where((element) =>
+            element.transaction.transactionType == TransactionType.income)
         .map((e) => e.transaction.sum)
         .sum;
     final totalSum = incomeSum - expenseSum;
@@ -61,12 +65,15 @@ class TransactionsUIMapper {
     );
   }
 
-  TransactionUIModel _mapCommonModel(Transaction transaction, Category category, Wallet wallet) {
+  TransactionUIModel _mapCommonModel(
+      Transaction transaction, Category category, Wallet wallet) {
     return CommonTransactionUIModel(
       id: transaction.id,
       sum: _sumFormat(transaction.sum),
       sumDouble: transaction.sum,
-      sumColor: (transaction.transactionType == TransactionType.expense) ? Colors.redAccent : Colors.green,
+      sumColor: (transaction.transactionType == TransactionType.expense)
+          ? Colors.redAccent
+          : Colors.green,
       categoryName: category.title,
       walletName: wallet.name,
       formattedDate: _dateFormat(transaction.time),
@@ -76,9 +83,9 @@ class TransactionsUIMapper {
   }
 
   TransactionUIModel _mapTransferModel(
-      Transaction transaction,
-      Wallet fromWallet,
-      Wallet toWallet,
+    Transaction transaction,
+    Wallet fromWallet,
+    Wallet toWallet,
   ) {
     return TransferTransactionUIModel(
       id: transaction.id,

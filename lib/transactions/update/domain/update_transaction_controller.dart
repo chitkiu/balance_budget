@@ -9,7 +9,7 @@ import '../../../wallets/common/data/local_wallet_repository.dart';
 import '../../../wallets/list/domain/wallets_binding.dart';
 import '../../../wallets/list/ui/wallets_screen.dart';
 import '../../common/data/local_transactions_repository.dart';
-import '../../list/data/models/rich_transaction_model.dart';
+import '../../common/data/models/rich_transaction_model.dart';
 import '../ui/models/date_selection_type.dart';
 import '../ui/models/select_date_ui_model.dart';
 import '../ui/models/transaction_category_ui_model.dart';
@@ -20,11 +20,12 @@ import 'mappers/transaction_wallet_ui_mapper.dart';
 class UpdateTransactionController extends GetxController {
   final RichTransactionModel? model;
 
-  UpdateTransactionController({ this.model });
+  UpdateTransactionController({this.model});
 
   final TransactionCategoryUIMapper _expenseCategoryUIMapper =
       TransactionCategoryUIMapper();
-  final TransactionWalletUIMapper _expenseWalletUIMapper = TransactionWalletUIMapper();
+  final TransactionWalletUIMapper _expenseWalletUIMapper =
+      TransactionWalletUIMapper();
 
   LocalTransactionsRepository get _transactionsRepo => Get.find();
 
@@ -32,9 +33,11 @@ class UpdateTransactionController extends GetxController {
 
   LocalWalletRepository get _walletRepo => Get.find();
 
-  RxList<TransactionCategoryUIModel> categoryList = <TransactionCategoryUIModel>[].obs;
+  RxList<TransactionCategoryUIModel> categoryList =
+      <TransactionCategoryUIModel>[].obs;
 
-  RxList<TransactionWalletUIModel> walletList = <TransactionWalletUIModel>[].obs;
+  RxList<TransactionWalletUIModel> walletList =
+      <TransactionWalletUIModel>[].obs;
 
   Rxn<String> selectedCategory = Rxn();
 
@@ -48,23 +51,20 @@ class UpdateTransactionController extends GetxController {
 
   @override
   void onReady() {
-
     //TODO Move to separate class
-    categoryList.bindStream(
-        rxd.CombineLatestStream.combine3(
-          _categoryRepo.categories,
-          selectedCategory.stream,
-          selectedType.stream,
-          _expenseCategoryUIMapper.map,
-        )
-    );
+    categoryList.bindStream(rxd.CombineLatestStream.combine3(
+      _categoryRepo.categories,
+      selectedCategory.stream,
+      selectedType.stream,
+      _expenseCategoryUIMapper.map,
+    ));
 
     //Add refresh for set initial data
     selectedCategory.refresh();
     selectedType.refresh();
 
-    walletList.bindStream(_walletRepo.wallets
-        .map((event) => _expenseWalletUIMapper.map(event)));
+    walletList.bindStream(
+        _walletRepo.wallets.map((event) => _expenseWalletUIMapper.map(event)));
 
     selectedWallet.refresh();
 

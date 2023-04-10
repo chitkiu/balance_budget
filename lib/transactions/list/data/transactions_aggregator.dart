@@ -1,15 +1,12 @@
-import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../categories/common/data/local_category_repository.dart';
-import '../../../categories/common/data/models/category.dart';
-import '../../../common/data/models/transaction_type.dart';
 import '../../../wallets/common/data/local_wallet_repository.dart';
-import '../../../wallets/common/data/models/wallet.dart';
 import '../../common/data/local_transactions_repository.dart';
-import '../../common/data/models/transaction.dart';
-import 'models/rich_transaction_model.dart';
+import '../../common/data/models/rich_transaction_model.dart';
+import '../../common/data/rich_transaction_comparator.dart';
+import '../../common/data/rich_transaction_mapper.dart';
 
 class TransactionsAggregator {
   LocalCategoryRepository get _categoryRepository => Get.find();
@@ -17,6 +14,9 @@ class TransactionsAggregator {
   LocalTransactionsRepository get _transactionsRepository => Get.find();
 
   LocalWalletRepository get _walletRepository => Get.find();
+
+  final RichTransactionMapper _mapper =
+      const RichTransactionMapper(RichTransactionComparator());
 
   const TransactionsAggregator();
 
@@ -26,93 +26,41 @@ class TransactionsAggregator {
       _categoryRepository.categories,
       _transactionsRepository.transactions,
       _walletRepository.wallets,
-      _mapTransactions,
+      _mapper.mapTransactions,
     );
   }
 
   Stream<List<RichTransactionModel>> transactionsByDate(
-      DateTime start,
-      DateTime end,
+    DateTime start,
+    DateTime end,
   ) {
     return CombineLatestStream.combine3(
       _categoryRepository.categories,
       _transactionsRepository.getTransactionByTimeRange(start, end),
       _walletRepository.wallets,
-      _mapTransactions,
+      _mapper.mapTransactions,
     );
   }
 
   Stream<RichTransactionModel?> transactionById(
-      String id,
+    String id,
   ) {
     return CombineLatestStream.combine3(
       _categoryRepository.categories,
       _transactionsRepository.getTransactionById(id),
       _walletRepository.wallets,
-      _mapTransaction,
+      _mapper.mapTransaction,
     );
   }
 
-  int compare(RichTransactionModel a, RichTransactionModel b) {
-    var result = b.transaction.time.compareTo(a.transaction.time);
-    if (result == 0) {
-      return b.transaction.creationTime.compareTo(a.transaction.creationTime);
-    }
-    return result;
-  }
-
-  RichTransactionModel? _mapTransaction(
-      List<Category> categories, Transaction? transaction, List<Wallet> wallets) {
-    if (transaction == null) {
-      return null;
-    }
-    var wallet =
-    wallets.firstWhereOrNull((element) => element.id == transaction.walletId);
-    if (wallet == null) {
-      return null;
-    }
-    switch (transaction.transactionType) {
-      case TransactionType.setInitialBalance:
-        return null;
-      case TransactionType.transfer:
-        if (transaction is TransferTransaction) {
-          var toWallet = wallets
-              .firstWhereOrNull((element) => element.id == transaction.toWalletId);
-          if (toWallet == null) {
-            return null;
-          }
-          return TransferRichTransactionModel(
-            transaction,
-            wallet,
-            toWallet,
-          );
-        } else {
-          return null;
-        }
-      case TransactionType.expense:
-      case TransactionType.income:
-        if (transaction is CommonTransaction) {
-          var category = categories
-              .firstWhereOrNull((element) => element.id == transaction.categoryId);
-          if (category == null) {
-            return null;
-          }
-          return CategoryRichTransactionModel(transaction, wallet, category);
-        } else {
-          return null;
-        }
-    }
-  }
-
-  List<RichTransactionModel> _mapTransactions(
-      List<Category> categories, List<Transaction> transactions, List<Wallet> wallets) {
-    List<RichTransactionModel> newTransactions = transactions
-        .map((transaction) => _mapTransaction(categories, transaction, wallets) )
-        .whereNotNull()
-        .toList();
-
-    newTransactions.sort(compare);
-
-    return newTransactions;
+  Stream<List<RichTransactionModel>> transactionByWalletId(
+    String walletId,
+  ) {
+    return CombineLatestStream.combine3(
+      _categoryRepository.categories,
+      _transactionsRepository.getTransactionsByWalletId(walletId),
+      _walletRepository.wallets,
+      _mapper.mapTransactions,
+    );
   }
 }

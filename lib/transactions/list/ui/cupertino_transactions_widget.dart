@@ -22,9 +22,12 @@ class CupertinoTransactionsWidget extends BaseTransactionsWidget {
         child: SafeArea(
             child: Column(
           children: [
-            Obx(() => _CupertinoFilterWidget(
-                controller.transactions.value.transactionCount,
-                () => calendarButton(context))),
+            controller.obx(
+              (state) {
+                return _CupertinoFilterWidget(calendarButton(context));
+              },
+              onEmpty: _CupertinoFilterWidget(calendarButton(context)),
+            ),
             Expanded(
                 child: controller.obx(
               (model) {
@@ -48,21 +51,21 @@ class CupertinoTransactionsWidget extends BaseTransactionsWidget {
 }
 
 class _CupertinoFilterWidget extends StatelessWidget {
-  final Function() calendarButton;
-  final int transactionCount;
+  final Widget calendarButton;
 
-  const _CupertinoFilterWidget(this.transactionCount, this.calendarButton);
+  const _CupertinoFilterWidget(this.calendarButton);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16, top: 4, bottom: 3),
+          padding:
+              const EdgeInsets.only(left: 16, right: 16, top: 4, bottom: 3),
           child: Row(
             children: <Widget>[
               Expanded(
-                child: calendarButton(),
+                child: calendarButton,
               ),
               GestureDetector(
                 child: Padding(
