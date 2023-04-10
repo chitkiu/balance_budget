@@ -65,10 +65,6 @@
 
   "loading": "Завантаження...",
 
-  "cancel_bottom_sheet": "закрити",
-  "edit_bottom_sheet": "редагувати",
-  "save_bottom_sheet": "зберегти",
-
   "sign_out": "Вийти",
   "sign_out_confirmation_subtitle": "Ви впевнені що хочете вийти?",
 
@@ -77,5 +73,7 @@
   "filter": "Фільтри",
 
   "transactions": "{count, plural, =0{Немає транзакцій} =1{1 транзакція} =2{2 транзакції} other{{count} транзакцій}}",
-  "total": "Усього: "
+  "total": "Усього: ",
+
+  "save_button": "Зберегти"
 }

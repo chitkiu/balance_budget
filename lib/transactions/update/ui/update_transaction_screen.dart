@@ -12,13 +12,16 @@ import '../domain/update_transaction_binding.dart';
 import '../domain/update_transaction_controller.dart';
 import 'models/transaction_wallet_ui_model.dart';
 
-class UpdateTransactionScreen
-    extends BaseBottomSheetScreen<UpdateTransactionBinding, UpdateTransactionController> {
-
+class UpdateTransactionScreen extends BaseBottomSheetScreen<
+    UpdateTransactionBinding, UpdateTransactionController> {
   final TextEditingController _sumController = TextEditingController();
   final TextEditingController _commentController = TextEditingController();
 
-  UpdateTransactionScreen({RichTransactionModel? model, required super.title, required super.bindingCreator, super.key}) {
+  UpdateTransactionScreen(
+      {RichTransactionModel? model,
+      required super.title,
+      required super.bindingCreator,
+      super.key}) {
     if (model != null) {
       _setupInfoByModel(model);
     }
@@ -34,13 +37,13 @@ class UpdateTransactionScreen
           height: 8,
         ),
         PlatformTextField(
-          keyboardType:
-              const TextInputType.numberWithOptions(signed: true, decimal: true),
+          keyboardType: const TextInputType.numberWithOptions(
+              signed: true, decimal: true),
           controller: _sumController,
           material: (context, platform) {
             return MaterialTextFieldData(
-                decoration:
-                    InputDecoration(labelText: Get.localisation.addTransactionSumHint));
+                decoration: InputDecoration(
+                    labelText: Get.localisation.addTransactionSumHint));
           },
           cupertino: (context, platform) {
             return CupertinoTextFieldData(
@@ -92,12 +95,13 @@ class UpdateTransactionScreen
             return Container();
           }
         }),
-        ..._selectWallet(controller.selectedWallet, (p0) => controller.selectWallet(p0)),
+        ..._selectWallet(
+            controller.selectedWallet, (p0) => controller.selectWallet(p0)),
         Obx(() {
           if (controller.selectedType.value == TransactionType.transfer) {
             return Column(
-              children: _selectWallet(
-                  controller.selectedToWallet, (p0) => controller.selectToWallet(p0)),
+              children: _selectWallet(controller.selectedToWallet,
+                  (p0) => controller.selectToWallet(p0)),
             );
           } else {
             return Container();
@@ -128,10 +132,16 @@ class UpdateTransactionScreen
         const SizedBox(
           height: 8,
         ),
-        PlatformElevatedButton(
-          child: Text("Save"),
-          onPressed: onButtonPress,
-        )
+        SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: PlatformElevatedButton(
+            onPressed: onButtonPress,
+            child: Text(Get.localisation.save_button),
+          ),
+        ),
+        const SizedBox(
+          height: 8,
+        ),
       ],
     );
   }
@@ -172,7 +182,8 @@ class UpdateTransactionScreen
                 child: Row(
                   children: [
                     Text(element.title),
-                    if (selectedWallet.value == element.walletId) Icon(CommonIcons.ok)
+                    if (selectedWallet.value == element.walletId)
+                      Icon(CommonIcons.ok)
                   ],
                 ),
               );
@@ -198,7 +209,8 @@ class UpdateTransactionScreen
           selectedBorderColor: Colors.grey,
           borderColor: Colors.grey,
           selectedColor: Colors.white,
-          fillColor: _getBackgroundColorBySelectedType(controller.selectedType.value),
+          fillColor:
+              _getBackgroundColorBySelectedType(controller.selectedType.value),
           color: Colors.black,
           constraints: BoxConstraints(
             minHeight: 40.0,
@@ -228,7 +240,7 @@ class UpdateTransactionScreen
 
   void _setupInfoByModel(RichTransactionModel model) {
     //TODO Add format
-    _sumController.text = model.transaction.sum.toString() ?? '';
+    _sumController.text = model.transaction.sum.toString();
     _commentController.text = model.transaction.comment ?? '';
   }
 }

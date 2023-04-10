@@ -9,10 +9,7 @@ abstract class BaseBottomSheetScreen<Binding extends Bindings, Controller>
   final String? title;
   final IconData? tailing;
   const BaseBottomSheetScreen(
-      {super.key,
-      this.title,
-      this.tailing,
-      required super.bindingCreator});
+      {super.key, this.title, this.tailing, required super.bindingCreator});
 
   //TODO Maybe find better place
   void open() {
@@ -60,11 +57,11 @@ abstract class BaseBottomSheetScreen<Binding extends Bindings, Controller>
               )
           ],
         ),
-          body(context),
-          //TODO Try to fetch uninteractable bottom padding
-          SizedBox(
-            height: MediaQuery.of(context).padding.bottom ?? 28,
-          ),
+      body(context),
+      //TODO Try to fetch uninteractable bottom padding
+      SizedBox(
+        height: MediaQuery.of(context).padding.bottom,
+      ),
     ]));
   }
 
