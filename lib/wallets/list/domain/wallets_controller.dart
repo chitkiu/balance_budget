@@ -43,8 +43,6 @@ class WalletsController extends GetxController {
   }
 
   void onItemClick(WalletUIModel wallet) {
-    WalletInfoScreen(
-      bindingCreator: () => WalletInfoBinding(wallet.id),
-    ).open();
+    Get.to(() => WalletInfoScreen(), binding: WalletInfoBinding(wallet.id));
   }
 }
