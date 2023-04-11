@@ -59,9 +59,13 @@
   "noWallets": "You don't have wallets",
   "noCategories": "You don't have categories",
 
-  "totalBalance": "Total balance",
-  "ownBalance": "Own balance",
-  "creditLimit": "Credit limit",
+  "totalBalance": "Total balance: {SUM}",
+  "usedCreditLimit": "Used credit limit: {USED}/{TOTAL}",
+
+  "walletNameTitle": "Wallet name:",
+  "totalBalanceTitle": "Total balance:",
+  "ownBalanceTitle": "Own balance:",
+  "usedCreditLimitTitle": "Used credit limit:",
 
   "loading": "Loading...",
 

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:intl/intl.dart';
 
 import '../../../common/data/models/wallet.dart';
@@ -10,9 +12,14 @@ class WalletUIMapper {
 
   WalletUIModel map(Wallet wallet, double balance) {
     if (wallet is CreditWallet) {
+      double spendedCreditSum = 0;
+      if (balance < 0) {
+        spendedCreditSum = balance * -1;
+      }
       return CreditWalletUIModel(
-        creditSum: _sumFormatter.format(wallet.creditBalance),
-        ownSum: _sumFormatter.format(balance),
+        totalCreditSum: _sumFormatter.format(wallet.creditBalance),
+        spendedCreditSum: _sumFormatter.format(spendedCreditSum),
+        ownSum: _sumFormatter.format(max(0, balance)),
         id: wallet.id,
         name: wallet.name,
         balance: _sumFormatter.format(wallet.creditBalance + balance),

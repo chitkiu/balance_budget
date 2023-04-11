@@ -29,6 +29,7 @@ class CommonTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Row(
       mainAxisSize: MainAxisSize.max,
       children: [
@@ -49,17 +50,14 @@ class CommonTile extends StatelessWidget {
             if (textWidget != null)
               textWidget!
             else
-              Text(text!,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w500, fontSize: 14)),
+              Text(text!, style: textTheme.titleSmall),
             if (secondTextWidget != null)
               secondTextWidget!
             else
               Text(secondText!,
-                  style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      color: secondTextColor,
-                      fontSize: 17)),
+                  style: textTheme.titleMedium?.copyWith(
+                    color: secondTextColor,
+                  )),
             if (additionalTextWidget != null) additionalTextWidget!
           ],
         )),

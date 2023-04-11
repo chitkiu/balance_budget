@@ -7,15 +7,18 @@ abstract class WalletUIModel {
 }
 
 class DefaultWalletUIModel extends WalletUIModel {
-  DefaultWalletUIModel({required super.id, required super.name, required super.balance});
+  DefaultWalletUIModel(
+      {required super.id, required super.name, required super.balance});
 }
 
 class CreditWalletUIModel extends WalletUIModel {
-  final String creditSum;
+  final String totalCreditSum;
+  final String spendedCreditSum;
   final String ownSum;
 
   CreditWalletUIModel(
-      {required this.creditSum,
+      {required this.totalCreditSum,
+      required this.spendedCreditSum,
       required this.ownSum,
       required super.id,
       required super.name,

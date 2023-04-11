@@ -59,9 +59,13 @@
   "noWallets": "У Вас немає гаманців!",
   "noCategories": "У Вас немає категорій!",
 
-  "totalBalance": "Загальний баланс",
-  "ownBalance": "Власний баланс",
-  "creditLimit": "Кредитний ліміт",
+  "totalBalance": "Загальний баланс: {SUM}",
+  "usedCreditLimit": "Використаний кредитний ліміт: {USED}/{TOTAL}",
+
+  "walletNameTitle": "Назва гаманця:",
+  "totalBalanceTitle": "Загальний баланс:",
+  "ownBalanceTitle": "Власний баланс:",
+  "usedCreditLimitTitle": "Використаний кредитний ліміт:",
 
   "loading": "Завантаження...",
 

@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
+import '../../../common/ui/common_tile.dart';
+import '../../../common/ui/common_ui_settings.dart';
 import '../domain/wallets_controller.dart';
 import 'models/wallet_ui_model.dart';
 
@@ -31,16 +33,8 @@ class WalletsScreen extends CommonScaffoldWithButtonScreen<WalletsController> {
         }
 
         return ListView.separated(
-          itemBuilder: (context, index) {
-            var wallet = wallets[index];
-            return GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () {
-                controller.onItemClick(wallet);
-              },
-              child: _getWalletWidget(wallet),
-            );
-          },
+          itemBuilder: (context, index) =>
+              _walletWidget(context, wallets[index]),
           itemCount: wallets.length,
           separatorBuilder: (context, index) => const Divider(),
         );
@@ -53,69 +47,36 @@ class WalletsScreen extends CommonScaffoldWithButtonScreen<WalletsController> {
     controller.onAddClick();
   }
 
-  Widget _getWalletWidget(WalletUIModel wallet) {
+  Widget _walletWidget(BuildContext context, WalletUIModel wallet) {
+    final textTheme = Theme.of(context).textTheme;
+
+    Widget? additionalText;
+
     if (wallet is CreditWalletUIModel) {
-      return _creditWalletWidget(wallet);
-    } else {
-      return _defaultWalletWidget(wallet);
+      additionalText = Text(
+          Get.localisation
+              .usedCreditLimit(wallet.totalCreditSum, wallet.spendedCreditSum),
+          style: textTheme.titleSmall);
     }
-  }
 
-  Widget _defaultWalletWidget(WalletUIModel wallet) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 6),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(wallet.name,
-                style: const TextStyle(fontWeight: FontWeight.w500)),
-            const SizedBox(
-              height: 4,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(Get.localisation.totalBalance),
-                Text(wallet.balance),
-              ],
-            )
-          ],
-        ));
-  }
-
-  Widget _creditWalletWidget(CreditWalletUIModel wallet) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 6),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(wallet.name,
-                style: const TextStyle(fontWeight: FontWeight.w500)),
-            const SizedBox(
-              height: 4,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(Get.localisation.totalBalance),
-                Text(wallet.balance),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(Get.localisation.ownBalance),
-                Text(wallet.ownSum),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(Get.localisation.creditLimit),
-                Text(wallet.creditSum),
-              ],
-            )
-          ],
-        ));
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        controller.onItemClick(wallet);
+      },
+      child: Padding(
+        padding: CommonUI.defaultTilePadding,
+        child: CommonTile(
+          icon: CommonIcons.wallet,
+          textWidget: Text(
+            wallet.name,
+            style: textTheme.titleMedium,
+          ),
+          secondTextWidget: Text(Get.localisation.totalBalance(wallet.balance),
+              style: textTheme.titleSmall),
+          additionalTextWidget: additionalText,
+        ),
+      ),
+    );
   }
 }

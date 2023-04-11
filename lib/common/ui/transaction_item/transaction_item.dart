@@ -13,19 +13,18 @@ class TransactionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () => onItemClick(transaction),
       child: CommonTile(
         icon: Icons.no_transfer,
-        textWidget: Text(transaction.categoryName,
-            style: const TextStyle(fontWeight: FontWeight.w500)),
+        textWidget: Text(transaction.categoryName, style: textTheme.titleSmall),
         secondTextWidget: _subtitle(transaction),
         additionalTextWidget:
             _additionalInfo(transaction.comment, CommonIcons.note),
         tailing: Text(transaction.sum,
-            style: TextStyle(
-                fontWeight: FontWeight.w500, color: transaction.sumColor)),
+            style: textTheme.titleSmall?.copyWith(color: transaction.sumColor)),
       ),
     );
   }
@@ -52,7 +51,6 @@ class TransactionItem extends StatelessWidget {
         const SizedBox(width: 6),
         Text(
           text,
-          style: const TextStyle(fontSize: 14),
         )
       ],
     );

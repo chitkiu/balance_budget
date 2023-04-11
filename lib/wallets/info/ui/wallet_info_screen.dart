@@ -7,6 +7,7 @@ import '../../../common/ui/common_scaffold_with_button_screen.dart';
 import '../../../common/ui/common_tile.dart';
 import '../../../common/ui/common_ui_settings.dart';
 import '../../../common/ui/transaction_item/transaction_section_header_widget.dart';
+import '../../list/ui/models/wallet_ui_model.dart';
 import '../domain/wallet_info_controller.dart';
 
 class WalletInfoScreen
@@ -23,43 +24,80 @@ class WalletInfoScreen
             child: CircularProgressIndicator(),
           );
         }
+        final wallet = state.wallet;
         return Padding(
           padding: const EdgeInsets.symmetric(
               horizontal: CommonUI.defaultTileHorizontalPadding),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: CommonUI.defaultTileVerticalPadding,
-                ),
+          child: Column(
+            children: [
+              const SizedBox(
+                height: CommonUI.defaultTileVerticalPadding,
+              ),
+              CommonTile(
+                text: Get.localisation.walletNameTitle,
+                secondText: state.wallet.name,
+                icon: CommonIcons.wallet,
+              ),
+              const SizedBox(
+                height: CommonUI.defaultFullTileVerticalPadding,
+              ),
+              CommonTile(
+                text: Get.localisation.totalBalanceTitle,
+                secondText: state.wallet.balance,
+                icon: Icons.money,
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              if (wallet is CreditWalletUIModel)
                 CommonTile(
-                  text: "Wallet name:",
-                  secondText: state.wallet.name,
-                  icon: CommonIcons.wallet,
+                  text: Get.localisation.ownBalanceTitle,
+                  secondText: wallet.ownSum,
+                  icon: Icons.attach_money,
                 ),
-                const SizedBox(
-                  height: CommonUI.defaultFullTileVerticalPadding,
-                ),
-                CommonTile(
-                  text: "Total balance:",
-                  secondText: state.wallet.balance,
-                  icon: Icons.money,
-                ),
+              if (wallet is CreditWalletUIModel)
                 const SizedBox(
                   height: 16,
                 ),
-                ...state.transactions.transactions
-                    .map((e) => TransactionSectionHeaderWidget(
-                          model: e,
-                          onItemClick: (transaction) {},
-                          itemPadding: const EdgeInsets.symmetric(
-                              horizontal: 4,
-                              vertical: CommonUI.defaultTileVerticalPadding),
-                          titlePadding: const EdgeInsets.symmetric(
-                              horizontal: 0, vertical: 0),
-                        )),
-              ],
-            ),
+              if (wallet is CreditWalletUIModel)
+                CommonTile(
+                  text: Get.localisation.usedCreditLimitTitle,
+                  secondText:
+                      "${wallet.spendedCreditSum}/${wallet.totalCreditSum}",
+                  icon: Icons.credit_card,
+                ),
+              if (wallet is CreditWalletUIModel)
+                const SizedBox(
+                  height: 16,
+                ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Text(
+                  "Transactions:",
+                  textAlign: TextAlign.start,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Expanded(
+                  child: ListView.builder(
+                itemCount: state.transactions.transactions.length,
+                itemBuilder: (context, index) {
+                  final model = state.transactions.transactions[index];
+                  return TransactionSectionHeaderWidget(
+                    model: model,
+                    onItemClick: (transaction) {},
+                    itemPadding: const EdgeInsets.symmetric(
+                        horizontal: 4,
+                        vertical: CommonUI.defaultTileVerticalPadding),
+                    titlePadding:
+                        const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                  );
+                },
+              )),
+            ],
           ),
         );
       },

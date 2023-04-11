@@ -10,9 +10,7 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(const MyApp());
 }
@@ -28,7 +26,9 @@ class MyApp extends StatelessWidget {
         onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        theme: ThemeData(useMaterial3: true),
+        theme: ThemeData(
+            useMaterial3: true,
+            textTheme: TextTheme(titleMedium: TextStyle(fontSize: 17))),
         home: const AuthGate(),
       );
     } else {
@@ -36,7 +36,9 @@ class MyApp extends StatelessWidget {
         onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        theme: const CupertinoThemeData(brightness: Brightness.light),
+        theme: const CupertinoThemeData(
+          brightness: Brightness.light,
+        ),
         home: const AuthGate(),
       );
     }
