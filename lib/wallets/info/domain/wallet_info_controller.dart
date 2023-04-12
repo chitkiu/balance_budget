@@ -1,17 +1,17 @@
 import 'dart:async';
 
-import 'package:balance_budget/transactions/common/data/models/rich_transaction_model.dart';
-import 'package:balance_budget/wallets/common/data/models/wallet.dart';
-import 'package:balance_budget/wallets/list/domain/mappers/wallet_ui_mapper.dart';
 import 'package:get/get.dart';
 import 'package:rxdart/transformers.dart';
 
 import '../../../common/ui/transaction_item/mappers/transactions_header_ui_mapper.dart';
 import '../../../common/ui/transaction_item/mappers/transactions_ui_mapper.dart';
+import '../../../transactions/common/data/models/rich_transaction_model.dart';
 import '../../../transactions/common/data/rich_transaction_comparator.dart';
 import '../../../transactions/list/data/transactions_aggregator.dart';
 import '../../common/data/local_wallet_repository.dart';
+import '../../common/data/models/wallet.dart';
 import '../../common/data/wallet_balance_calculator.dart';
+import '../../list/domain/mappers/wallet_ui_mapper.dart';
 import '../ui/models/rich_wallet_ui_model.dart';
 
 class WalletInfoController extends GetxController

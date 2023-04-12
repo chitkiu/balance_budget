@@ -36,7 +36,7 @@ class RichTransactionMapper {
     }
     switch (transaction.transactionType) {
       case TransactionType.setInitialBalance:
-        return null;
+        return InitialBalanceRichTransactionModel(transaction, wallet);
       case TransactionType.transfer:
         if (transaction is TransferTransaction) {
           var toWallet = wallets.firstWhereOrNull(

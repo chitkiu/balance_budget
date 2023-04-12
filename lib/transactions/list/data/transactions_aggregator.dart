@@ -20,16 +20,6 @@ class TransactionsAggregator {
 
   const TransactionsAggregator();
 
-  //TODO Add filters
-  Stream<List<RichTransactionModel>> transactions() {
-    return CombineLatestStream.combine3(
-      _categoryRepository.categories,
-      _transactionsRepository.transactions,
-      _walletRepository.wallets,
-      _mapper.mapTransactions,
-    );
-  }
-
   Stream<List<RichTransactionModel>> transactionsByDate(
     DateTime start,
     DateTime end,

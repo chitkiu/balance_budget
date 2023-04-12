@@ -22,3 +22,7 @@ class CategoryRichTransactionModel extends RichTransactionModel {
   CategoryRichTransactionModel(
       super.transaction, super.fromWallet, this.category);
 }
+
+class InitialBalanceRichTransactionModel extends RichTransactionModel {
+  InitialBalanceRichTransactionModel(super.transaction, super.fromWallet);
+}
