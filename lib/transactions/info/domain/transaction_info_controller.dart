@@ -54,6 +54,7 @@ class TransactionInfoController extends GetxController {
         return UpdateTransactionScreen(
           title: Get.localisation.addTransactionTitle,
           controller: controller,
+          model: _dataTransactionModel.value,
         );
       },
       UpdateTransactionController(model: _dataTransactionModel.value),

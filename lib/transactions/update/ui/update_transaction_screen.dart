@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../common/data/models/transaction_type.dart';
 import '../../../common/getx_extensions.dart';
@@ -245,9 +246,10 @@ class UpdateTransactionScreen
     }
   }
 
+  final NumberFormat _sumFormatter = NumberFormat("##0.##");
+
   void _setupInfoByModel(RichTransactionModel model) {
-    //TODO Add format
-    _sumController.text = model.transaction.sum.toString();
+    _sumController.text = _sumFormatter.format(model.transaction.sum);
     _commentController.text = model.transaction.comment ?? '';
   }
 }
