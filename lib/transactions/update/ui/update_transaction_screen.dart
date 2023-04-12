@@ -1,4 +1,3 @@
-import 'package:balance_budget/common/ui/get_widget_with_binding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
@@ -9,7 +8,6 @@ import '../../../common/ui/base_bottom_sheet_screen.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../common/data/models/rich_transaction_model.dart';
 import '../../update/ui/date_time_selector_widget.dart';
-import '../domain/update_transaction_binding.dart';
 import '../domain/update_transaction_controller.dart';
 import 'models/transaction_wallet_ui_model.dart';
 
@@ -17,16 +15,18 @@ const double _buttonHeight = 52;
 const double _buttonBottomPadding = 8;
 
 class UpdateTransactionScreen
-    extends GetWidgetWithBinding<UpdateTransactionBinding, UpdateTransactionController> {
+    extends StatelessWidget {
   final TextEditingController _sumController = TextEditingController();
   final TextEditingController _commentController = TextEditingController();
 
   final String title;
 
+  final UpdateTransactionController controller;
+
   UpdateTransactionScreen(
       {RichTransactionModel? model,
       required this.title,
-      required super.bindingCreator,
+      required this.controller,
       super.key})
       : super() {
     if (model != null) {
@@ -35,7 +35,7 @@ class UpdateTransactionScreen
   }
 
   @override
-  Widget view(BuildContext context) {
+  Widget build(BuildContext context) {
     return CommonBottomSheetWidget(
       title: title,
       additionalPadding:

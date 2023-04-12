@@ -8,7 +8,7 @@ import '../../../common/ui/transaction_item/models/transaction_ui_model.dart';
 import '../../common/data/local_transactions_repository.dart';
 import '../../common/data/models/rich_transaction_model.dart';
 import '../../list/data/transactions_aggregator.dart';
-import '../../update/domain/update_transaction_binding.dart';
+import '../../update/domain/update_transaction_controller.dart';
 import '../../update/ui/update_transaction_screen.dart';
 
 class TransactionInfoController extends GetxController {
@@ -48,14 +48,15 @@ class TransactionInfoController extends GetxController {
   }
 
   void goToEdit(BuildContext context) {
-    openModalSheet(
+    openModalSheetWithController(
       context,
-      UpdateTransactionScreen(
-        title: Get.localisation.transactionInfoEditTitle,
-        bindingCreator: () =>
-            UpdateTransactionBinding(model: _dataTransactionModel.value),
-        model: _dataTransactionModel.value,
-      ),
+      (controller) {
+        return UpdateTransactionScreen(
+          title: Get.localisation.addTransactionTitle,
+          controller: controller,
+        );
+      },
+      UpdateTransactionController(model: _dataTransactionModel.value),
     );
   }
 }

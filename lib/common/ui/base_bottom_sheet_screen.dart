@@ -1,11 +1,26 @@
 import 'package:balance_budget/common/ui/common_ui_settings.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'bottom_sheet_hide_icon.dart';
 
 const shape = RoundedRectangleBorder(
     borderRadius: BorderRadius.vertical(top: Radius.circular(28.0)));
+
+void openModalSheetWithController<C extends GetxController>(
+    BuildContext context,
+    Widget Function(C controller) bodyBuilder,
+    C controller,
+) {
+  openModalSheet(
+      context,
+      GetBuilder(
+        builder: bodyBuilder,
+        init: controller,
+      )
+  );
+}
 
 void openModalSheet(BuildContext context, Widget body) {
   if (CommonUI.isCupertino) {

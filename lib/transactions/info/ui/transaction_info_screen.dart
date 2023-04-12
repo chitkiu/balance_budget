@@ -7,18 +7,16 @@ import '../../../common/ui/base_bottom_sheet_screen.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_tile.dart';
 import '../../../common/ui/common_ui_settings.dart';
-import '../../../common/ui/get_widget_with_binding.dart';
 import '../../../common/ui/transaction_item/models/transaction_ui_model.dart';
-import '../domain/transaction_info_binding.dart';
 import '../domain/transaction_info_controller.dart';
 
 //TODO Improve icons
-class TransactionInfoScreen extends GetWidgetWithBinding<
-    TransactionInfoBinding, TransactionInfoController> {
-  const TransactionInfoScreen({required super.bindingCreator, super.key});
+class TransactionInfoScreen extends StatelessWidget {
+  final TransactionInfoController controller;
+  const TransactionInfoScreen({required this.controller, super.key});
 
   @override
-  Widget view(BuildContext context) {
+  Widget build(BuildContext context) {
     return CommonBottomSheetWidget(
       title: Get.localisation.transactionInfoTitle,
       tailing: CommonIcons.edit,
@@ -76,7 +74,7 @@ class TransactionInfoScreen extends GetWidgetWithBinding<
       CommonTile(
           secondText: model.categoryName,
           text: Get.localisation.transactionInfoCategoryPrefix,
-          icon: Icons.category),
+          icon: model.icon),
       const SizedBox(
         height: CommonUI.defaultFullTileVerticalPadding,
       ),

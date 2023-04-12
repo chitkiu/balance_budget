@@ -2,24 +2,22 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
-typedef BindingCreator<S extends Bindings> = S Function();
+typedef ControllerCreator<S extends GetxController> = S Function();
 
-abstract class GetWidgetWithBinding<Binding extends Bindings, Controller> extends GetView<Controller> {
-  final BindingCreator<Binding>? bindingCreator;
+abstract class GetWidgetWithBinding<Controller extends GetxController> extends StatelessWidget {
+  final ControllerCreator<Controller> controllerCreator;
 
-  const GetWidgetWithBinding({super.key, required this.bindingCreator});
+  const GetWidgetWithBinding({super.key, required this.controllerCreator});
 
-  Widget view(BuildContext context);
+  Widget view(BuildContext context, Controller controller);
 
   @nonVirtual
   @override
   Widget build(BuildContext context) {
-    _createBinding();
-    return view(context);
+    return GetBuilder(
+      builder: (controller) => view(context, controller),
+      init: controllerCreator(),
+    );
   }
 
-  void _createBinding() {
-    Binding? binding = bindingCreator?.call();
-    binding?.dependencies();
-  }
 }

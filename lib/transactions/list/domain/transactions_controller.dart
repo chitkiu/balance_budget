@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:balance_budget/transactions/common/data/rich_transaction_comparator.dart';
+import 'package:balance_budget/transactions/update/domain/update_transaction_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rxdart/transformers.dart';
@@ -11,9 +12,8 @@ import '../../../common/ui/transaction_item/mappers/transactions_header_ui_mappe
 import '../../../common/ui/transaction_item/mappers/transactions_ui_mapper.dart';
 import '../../../common/ui/transaction_item/models/complex_transactions_ui_model.dart';
 import '../../../common/ui/transaction_item/models/transaction_ui_model.dart';
-import '../../info/domain/transaction_info_binding.dart';
+import '../../info/domain/transaction_info_controller.dart';
 import '../../info/ui/transaction_info_screen.dart';
-import '../../update/domain/update_transaction_binding.dart';
 import '../../update/ui/update_transaction_screen.dart';
 import '../data/transactions_aggregator.dart';
 import 'models/transactions_filter_date.dart';
@@ -71,20 +71,25 @@ class TransactionsController extends GetxController
   }
 
   void addTransaction(BuildContext context) {
-    openModalSheet(
+    openModalSheetWithController(
       context,
-      UpdateTransactionScreen(
-        title: Get.localisation.addTransactionTitle,
-        bindingCreator: () => UpdateTransactionBinding(),
-      ),
+      (controller) {
+        return UpdateTransactionScreen(
+          title: Get.localisation.addTransactionTitle,
+          controller: controller,
+        );
+      },
+      UpdateTransactionController(),
     );
   }
 
   void onItemClick(BuildContext context, TransactionUIModel transaction) {
-    openModalSheet(
+    openModalSheetWithController(
       context,
-      TransactionInfoScreen(
-          bindingCreator: () => TransactionInfoBinding(transaction.id)),
+      (controller) {
+        return TransactionInfoScreen(controller: controller,);
+      },
+      TransactionInfoController(transaction.id),
     );
   }
 
