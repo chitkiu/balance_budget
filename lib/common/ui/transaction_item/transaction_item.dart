@@ -18,7 +18,7 @@ class TransactionItem extends StatelessWidget {
       behavior: HitTestBehavior.translucent,
       onTap: () => onItemClick(transaction),
       child: CommonTile(
-        icon: Icons.no_transfer,
+        icon: transaction.icon,
         textWidget: Text(transaction.categoryName, style: textTheme.titleSmall),
         secondTextWidget: _subtitle(transaction),
         additionalTextWidget:

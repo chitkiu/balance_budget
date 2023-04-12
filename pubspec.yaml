@@ -28,8 +28,12 @@ dependencies:
   calendar_date_picker2: ^0.5.1
   collection: ^1.17.0
   cloud_firestore: ^4.5.0
-  flutter_iconpicker: ^3.2.2
+  flutter_iconpicker:
+    git:
+      url: https://github.com/kechankrisna/FlutterIconPicker
+      ref: hotfix
   modal_bottom_sheet: ^3.0.0-pre
+  ionicons: ^0.2.2
 
 dev_dependencies:
   flutter_test:

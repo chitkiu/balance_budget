@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../common/data/models/transaction_type.dart';
@@ -16,6 +16,8 @@ class LocalCategoryRepository {
     Category(
       title: Get.localisation.transferCategoryTitle,
       transactionType: TransactionType.transfer,
+      //TODO Change icon
+      icon: Icons.compare_arrows,
     ),
   ];
 
@@ -45,7 +47,7 @@ class LocalCategoryRepository {
         Category(
           title: title,
           transactionType: transactionType,
-          // icon: icon,
+          icon: icon ?? Icons.not_interested,
         )
     );
   }

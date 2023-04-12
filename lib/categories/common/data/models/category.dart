@@ -1,6 +1,7 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import '../../../../common/data/models/icon_converter.dart';
 import '../../../../common/data/models/transaction_type.dart';
 
 part 'category.g.dart';
@@ -12,12 +13,12 @@ class Category {
 
   final String title;
   final TransactionType transactionType;
+  @IconConverter()
+  final IconData icon;
 
   String get id => _id ?? '';
 
-  // final IconData? icon;
-
-  Category({required this.title, required this.transactionType /*, this.icon*/});
+  Category({required this.title, required this.transactionType, this.icon = Icons.not_interested});
 
   factory Category.fromJson(MapEntry<String, dynamic> entry) =>
       _$CategoryFromJson(entry.value).._id = entry.key;
@@ -28,12 +29,12 @@ class Category {
     return Category(
       title: title ?? this.title,
       transactionType: transactionType ?? this.transactionType,
-      // icon: icon ?? this.icon,
+      icon: icon ?? this.icon,
     ).._id = _id;
   }
 
   @override
   String toString() {
-    return 'Category{id: $id, title: $title, transactionType: $transactionType}';
+    return 'Category{id: $id, title: $title, transactionType: $transactionType, icon: $icon}';
   }
 }

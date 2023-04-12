@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
@@ -56,7 +57,27 @@ class AddCategoryScreen extends CommonScaffoldWithButtonScreen<AddCategoryContro
             },
             cupertino: cupertinoDropdownButtonData,
           );
-        })
+        }),
+        const SizedBox(height: 8,),
+        //TODO Improve UI
+        Row(
+          children: [
+            Text("Selected icon:"),
+            Obx(() => Icon(controller.selectedIcon.value)),
+            PlatformElevatedButton(
+              child: Text("Select icon"),
+              onPressed: () async {
+                IconData? icon = await FlutterIconPicker.showIconPicker(
+                    context, iconPackModes: [IconPack.custom],
+                    customIconPack: CommonIcons.icons);
+
+                if (icon != null) {
+                  controller.selectedIcon.value = icon;
+                }
+              },
+            )
+          ],
+        ),
       ],
     );
   }

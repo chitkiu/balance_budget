@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ionicons/ionicons.dart';
 
 import 'common_ui_settings.dart';
 
 class CommonIcons {
   CommonIcons._();
+
+  static Map<String, IconData> icons = ioniconsMapping.map((key, value) =>
+      MapEntry(key, IoniconsData(int.parse(value))));
 
   static bool get _isCupertino => CommonUI.isCupertino;
 
@@ -22,7 +26,8 @@ class CommonIcons {
 
   static IconData get edit => _isCupertino ? CupertinoIcons.pencil : Icons.edit;
 
-  static IconData get dollarCircle => _isCupertino ? CupertinoIcons.money_dollar_circle_fill : Icons.monetization_on;
+  static IconData get dollarCircle =>
+      _isCupertino ? CupertinoIcons.money_dollar_circle_fill : Icons.monetization_on;
 
   static IconData get settings => _isCupertino ? CupertinoIcons.settings : Icons.settings;
 
@@ -36,5 +41,6 @@ class CommonIcons {
 
   static IconData get filter => Icons.filter_list;
 
-  static IconData get calendar => _isCupertino ? CupertinoIcons.calendar_today : Icons.calendar_month;
+  static IconData get calendar =>
+      _isCupertino ? CupertinoIcons.calendar_today : Icons.calendar_month;
 }

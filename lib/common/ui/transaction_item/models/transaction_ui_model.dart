@@ -14,6 +14,7 @@ abstract class TransactionUIModel {
   final DateTime dateTime;
   final String? comment;
   final bool canEdit;
+  final IconData icon;
 
   const TransactionUIModel(
       {required this.id,
@@ -25,7 +26,8 @@ abstract class TransactionUIModel {
       required this.formattedDate,
       required this.dateTime,
       this.comment,
-      required this.canEdit});
+      required this.canEdit,
+      required this.icon});
 }
 
 class CommonTransactionUIModel extends TransactionUIModel {
@@ -38,7 +40,8 @@ class CommonTransactionUIModel extends TransactionUIModel {
       required super.walletName,
       required super.formattedDate,
       required super.dateTime,
-      super.comment})
+      super.comment,
+      required super.icon})
       : super(canEdit: true);
 }
 
@@ -58,5 +61,6 @@ class TransferTransactionUIModel extends TransactionUIModel {
             categoryName: Get.localisation.transferCategoryTitle,
             canEdit: false,
             walletName: fromWalletName,
-            sumColor: Colors.grey);
+            sumColor: Colors.grey,
+            icon: Icons.compare_arrows);
 }

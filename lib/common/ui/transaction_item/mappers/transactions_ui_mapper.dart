@@ -79,6 +79,7 @@ class TransactionsUIMapper {
       formattedDate: _dateFormat(transaction.time),
       dateTime: transaction.time,
       comment: transaction.comment,
+      icon: category.icon,
     );
   }
 
