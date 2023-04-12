@@ -109,7 +109,7 @@ class WalletInfoScreen extends CommonScaffoldWithButtonScreen<WalletInfoControll
   }
 
   @override
-  void onButtonPress() {
+  void onButtonPress(BuildContext context) {
     // TODO: implement onButtonPress
   }
 }

@@ -80,7 +80,7 @@ class CategoryInfoScreen extends CommonScaffoldWithButtonScreen<CategoryInfoCont
   }
 
   @override
-  void onButtonPress() {
+  void onButtonPress(BuildContext context) {
     // TODO: implement onButtonPress
   }
 }

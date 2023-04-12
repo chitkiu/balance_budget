@@ -14,7 +14,7 @@ abstract class CommonScaffoldWithButtonScreen<T> extends GetView<T> {
 
   Widget body(BuildContext context);
 
-  void onButtonPress();
+  void onButtonPress(BuildContext context);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ abstract class CommonScaffoldWithButtonScreen<T> extends GetView<T> {
         cupertino: (context, platform) {
           return CupertinoNavigationBarData(
               trailing: GestureDetector(
-                onTap: onButtonPress,
+                onTap: () => onButtonPress(context),
                 child: Icon(icon),
               )
           );
@@ -36,7 +36,7 @@ abstract class CommonScaffoldWithButtonScreen<T> extends GetView<T> {
       material: (context, platform) {
         return MaterialScaffoldData(
             floatingActionButton: FloatingActionButton(
-              onPressed: onButtonPress,
+              onPressed: () => onButtonPress(context),
               child: Icon(icon),
             )
         );

@@ -23,110 +23,120 @@ class AddWalletScreen extends CommonScaffoldWithButtonScreen<AddWalletController
 
   @override
   Widget body(BuildContext context) {
-    return Column(
-      children: [
-        PlatformTextField(
-          controller: _nameController,
-          material: (context, platform) {
-            return MaterialTextFieldData(
-                decoration: InputDecoration(
-                    labelText: Get.localisation.nameHint
-                )
-            );
-          },
-          cupertino: (context, platform) {
-            return CupertinoTextFieldData(
-                placeholder: Get.localisation.nameHint
-            );
-          },
-        ),
-        const SizedBox(height: 8,),
-        Text(Get.localisation.addWalletTypeSelector),
-        Obx(() {
-          return PlatformDropdownButton(
-            items: WalletType.values.map((e) {
-              return DropdownMenuItem<WalletType>(
-                value: e,
-                child: Text(e.name),
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Column(
+        children: [
+          PlatformTextField(
+            controller: _nameController,
+            material: (context, platform) {
+              return MaterialTextFieldData(
+                  decoration: InputDecoration(
+                      labelText: Get.localisation.nameHint
+                  )
               );
-            }).toList(),
-            value: controller.walletType.value,
-            onChanged: (value) {
-              if (value != null) {
-                controller.walletType.value = value;
-              }
             },
-            cupertino: cupertinoDropdownButtonData,
-          );
-        }),
-        Obx(() {
-          WalletType walletType = controller.walletType.value;
-          switch (walletType) {
-            case WalletType.debit:
-              _totalBalanceController.clear();
-              return PlatformTextField(
-                keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
-                controller: _totalBalanceController,
-                material: (context, platform) {
-                  return MaterialTextFieldData(
-                      decoration: InputDecoration(
-                          labelText: Get.localisation.addWalletTotalBalanceHint
-                      )
-                  );
-                },
-                cupertino: (context, platform) {
-                  return CupertinoTextFieldData(
-                      placeholder: Get.localisation.addWalletTotalBalanceHint
-                  );
-                },
+            cupertino: (context, platform) {
+              return CupertinoTextFieldData(
+                  placeholder: Get.localisation.nameHint
               );
-            case WalletType.credit:
-              _ownBalanceController.clear();
-              _creditBalanceController.clear();
-              return Column(
-                children: [
-                  PlatformTextField(
-                    keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
-                    controller: _ownBalanceController,
-                    material: (context, platform) {
-                      return MaterialTextFieldData(
-                          decoration: InputDecoration(
-                              labelText: Get.localisation.addWalletOwnBalanceHint
-                          )
-                      );
-                    },
-                    cupertino: (context, platform) {
-                      return CupertinoTextFieldData(
-                          placeholder: Get.localisation.addWalletOwnBalanceHint
-                      );
-                    },
-                  ),
-                  PlatformTextField(
-                    keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
-                    controller: _creditBalanceController,
-                    material: (context, platform) {
-                      return MaterialTextFieldData(
-                          decoration: InputDecoration(
-                              labelText: Get.localisation.addWalletCreditLimit
-                          )
-                      );
-                    },
-                    cupertino: (context, platform) {
-                      return CupertinoTextFieldData(
-                          placeholder: Get.localisation.addWalletCreditLimit
-                      );
-                    },
-                  ),
-                ],
-              );
-          }
-        })
-      ],
+            },
+          ),
+          const SizedBox(height: 8,),
+          Text(Get.localisation.addWalletTypeSelector),
+          Obx(() {
+            return PlatformDropdownButton(
+              items: WalletType.values.map((e) {
+                return DropdownMenuItem<WalletType>(
+                  value: e,
+                  child: Text(e.name),
+                );
+              }).toList(),
+              value: controller.walletType.value,
+              onChanged: (value) {
+                if (value != null) {
+                  controller.walletType.value = value;
+                }
+              },
+              onTap: () {
+                FocusScope.of(context).requestFocus(FocusNode());
+              },
+              cupertino: cupertinoDropdownButtonData,
+            );
+          }),
+          Obx(() {
+            WalletType walletType = controller.walletType.value;
+            switch (walletType) {
+              case WalletType.debit:
+                _totalBalanceController.clear();
+                return PlatformTextField(
+                  keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+                  controller: _totalBalanceController,
+                  material: (context, platform) {
+                    return MaterialTextFieldData(
+                        decoration: InputDecoration(
+                            labelText: Get.localisation.addWalletTotalBalanceHint
+                        )
+                    );
+                  },
+                  cupertino: (context, platform) {
+                    return CupertinoTextFieldData(
+                        placeholder: Get.localisation.addWalletTotalBalanceHint
+                    );
+                  },
+                );
+              case WalletType.credit:
+                _ownBalanceController.clear();
+                _creditBalanceController.clear();
+                return Column(
+                  children: [
+                    PlatformTextField(
+                      keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+                      controller: _ownBalanceController,
+                      material: (context, platform) {
+                        return MaterialTextFieldData(
+                            decoration: InputDecoration(
+                                labelText: Get.localisation.addWalletOwnBalanceHint
+                            )
+                        );
+                      },
+                      cupertino: (context, platform) {
+                        return CupertinoTextFieldData(
+                            placeholder: Get.localisation.addWalletOwnBalanceHint
+                        );
+                      },
+                    ),
+                    PlatformTextField(
+                      keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+                      controller: _creditBalanceController,
+                      material: (context, platform) {
+                        return MaterialTextFieldData(
+                            decoration: InputDecoration(
+                                labelText: Get.localisation.addWalletCreditLimit
+                            )
+                        );
+                      },
+                      cupertino: (context, platform) {
+                        return CupertinoTextFieldData(
+                            placeholder: Get.localisation.addWalletCreditLimit
+                        );
+                      },
+                    ),
+                  ],
+                );
+            }
+          })
+        ],
+      ),
     );
   }
 
   @override
-  void onButtonPress() async {
+  void onButtonPress(BuildContext context) async {
+    FocusScope.of(context).requestFocus(FocusNode());
     await controller.onSaveWallet(
       title: _nameController.text,
       totalBalance: _totalBalanceController.text,

@@ -21,69 +21,81 @@ class AddCategoryScreen extends CommonScaffoldWithButtonScreen<AddCategoryContro
 
   @override
   Widget body(BuildContext context) {
-    return Column(
-      children: [
-        PlatformTextField(
-          controller: _nameController,
-          material: (context, platform) {
-            return MaterialTextFieldData(
-                decoration: InputDecoration(
-                    labelText: Get.localisation.nameHint
-                )
-            );
-          },
-          cupertino: (context, platform) {
-            return CupertinoTextFieldData(
-                placeholder: Get.localisation.nameHint
-            );
-          },
-        ),
-
-        const SizedBox(height: 8,),
-        Text(Get.localisation.transactionTypeHint),
-        Obx(() {
-          return PlatformDropdownButton(
-            items: TransactionType.canAddCategory.map((e) {
-              return DropdownMenuItem<TransactionType>(
-                value: e,
-                child: Text(e.name),
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Column(
+        children: [
+          PlatformTextField(
+            controller: _nameController,
+            material: (context, platform) {
+              return MaterialTextFieldData(
+                  decoration: InputDecoration(
+                      labelText: Get.localisation.nameHint
+                  )
               );
-            }).toList(),
-            value: controller.selectedType.value,
-            onChanged: (value) {
-              if (value != null) {
-                controller.selectedType.value = value;
-              }
             },
-            cupertino: cupertinoDropdownButtonData,
-          );
-        }),
-        const SizedBox(height: 8,),
-        //TODO Improve UI
-        Row(
-          children: [
-            Text("Selected icon:"),
-            Obx(() => Icon(controller.selectedIcon.value)),
-            PlatformElevatedButton(
-              child: Text("Select icon"),
-              onPressed: () async {
-                IconData? icon = await FlutterIconPicker.showIconPicker(
-                    context, iconPackModes: [IconPack.custom],
-                    customIconPack: CommonIcons.icons);
+            cupertino: (context, platform) {
+              return CupertinoTextFieldData(
+                  placeholder: Get.localisation.nameHint
+              );
+            },
+          ),
 
-                if (icon != null) {
-                  controller.selectedIcon.value = icon;
+          const SizedBox(height: 8,),
+          Text(Get.localisation.transactionTypeHint),
+          Obx(() {
+            return PlatformDropdownButton(
+              items: TransactionType.canAddCategory.map((e) {
+                return DropdownMenuItem<TransactionType>(
+                  value: e,
+                  child: Text(e.name),
+                );
+              }).toList(),
+              value: controller.selectedType.value,
+              onChanged: (value) {
+                if (value != null) {
+                  controller.selectedType.value = value;
                 }
               },
-            )
-          ],
-        ),
-      ],
+              onTap: () {
+                FocusScope.of(context).requestFocus(FocusNode());
+              },
+              cupertino: cupertinoDropdownButtonData,
+            );
+          }),
+          const SizedBox(height: 8,),
+          //TODO Improve UI
+          Row(
+            children: [
+              Text("Selected icon:"),
+              Obx(() => Icon(controller.selectedIcon.value)),
+              PlatformElevatedButton(
+                child: Text("Select icon"),
+                onPressed: () async {
+                  FocusScope.of(context).requestFocus(FocusNode());
+
+                  IconData? icon = await FlutterIconPicker.showIconPicker(
+                      context, iconPackModes: [IconPack.custom],
+                      customIconPack: CommonIcons.icons);
+
+                  if (icon != null) {
+                    controller.selectedIcon.value = icon;
+                  }
+                },
+              )
+            ],
+          ),
+        ],
+      ),
     );
   }
 
   @override
-  void onButtonPress() {
+  void onButtonPress(BuildContext context) {
+    FocusScope.of(context).requestFocus(FocusNode());
     controller.onSaveCategory(_nameController.text);
   }
 

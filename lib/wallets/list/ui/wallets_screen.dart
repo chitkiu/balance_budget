@@ -43,7 +43,7 @@ class WalletsScreen extends CommonScaffoldWithButtonScreen<WalletsController> {
   }
 
   @override
-  void onButtonPress() {
+  void onButtonPress(BuildContext context) {
     controller.onAddClick();
   }
 

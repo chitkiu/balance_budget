@@ -56,7 +56,7 @@ class CategoriesScreen extends CommonScaffoldWithButtonScreen<CategoriesControll
   }
 
   @override
-  void onButtonPress() {
+  void onButtonPress(BuildContext context) {
     controller.onAddClick();
   }
 }

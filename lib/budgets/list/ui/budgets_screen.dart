@@ -85,7 +85,7 @@ class BudgetsScreen extends CommonScaffoldWithButtonScreen<BudgetsController> {
   }
 
   @override
-  void onButtonPress() {
+  void onButtonPress(BuildContext context) {
     controller.onAddClick();
   }
 

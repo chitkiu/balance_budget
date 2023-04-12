@@ -37,121 +37,143 @@ class UpdateTransactionScreen
 
   @override
   Widget build(BuildContext context) {
-    return CommonBottomSheetWidget(
-      title: title,
-      additionalPadding:
-          const EdgeInsets.only(bottom: _buttonHeight + _buttonBottomPadding),
-      body: Column(
-        children: [
-          Text(Get.localisation.transactionTypeHint),
-          _transactionTypeSelector(),
-          const SizedBox(
-            height: 8,
-          ),
-          PlatformTextField(
-            keyboardType:
-                const TextInputType.numberWithOptions(signed: true, decimal: true),
-            controller: _sumController,
-            material: (context, platform) {
-              return MaterialTextFieldData(
-                  decoration:
-                      InputDecoration(labelText: Get.localisation.addTransactionSumHint));
-            },
-            cupertino: (context, platform) {
-              return CupertinoTextFieldData(
-                  placeholder: Get.localisation.addTransactionSumHint);
-            },
-          ),
-          Obx(() {
-            if (controller.selectedType.value != TransactionType.transfer) {
-              return Column(
-                children: [
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(Get.localisation.addTransactionCategoryHint),
-                      PlatformTextButton(
-                        onPressed: controller.onManageCategoriesClick,
-                        child: Text(Get.localisation.manageCategoriesButtonText),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 50,
-                    child: Obx(() {
-                      return ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: controller.categoryList.map((element) {
-                          return PlatformTextButton(
-                            onPressed: () {
-                              controller.selectCategory(element);
-                            },
-                            child: Row(
-                              children: [
-                                Text(element.title),
-                                if (element.isSelected) Icon(CommonIcons.ok)
-                              ],
-                            ),
-                          );
-                        }).toList(),
-                      );
-                    }),
-                  ),
-                ],
-              );
-            } else {
-              return Container();
-            }
-          }),
-          ..._selectWallet(
-              controller.selectedWallet, (p0) => controller.selectWallet(p0)),
-          Obx(() {
-            if (controller.selectedType.value == TransactionType.transfer) {
-              return Column(
-                children: _selectWallet(
-                    controller.selectedToWallet, (p0) => controller.selectToWallet(p0)),
-              );
-            } else {
-              return Container();
-            }
-          }),
-          const SizedBox(
-            height: 8,
-          ),
-          PlatformTextField(
-            controller: _commentController,
-            material: (context, platform) {
-              return MaterialTextFieldData(
-                  decoration: InputDecoration(
-                      labelText: Get.localisation.addTransactionCommentHint));
-            },
-            cupertino: (context, platform) {
-              return CupertinoTextFieldData(
-                  placeholder: Get.localisation.addTransactionCommentHint);
-            },
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          DateTimeSelectorWidget(
-            controller.selectedDate,
-            controller.selectDateByType,
-          ),
-        ],
-      ),
-      pinToBottomWidget: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: _buttonHeight,
-        child: Padding(
-            padding: const EdgeInsets.only(bottom: _buttonBottomPadding),
-            child: PlatformElevatedButton(
-              onPressed: onButtonPress,
-              child: Text(Get.localisation.save_button),
-            )),
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: CommonBottomSheetWidget(
+        title: title,
+        additionalPadding:
+        const EdgeInsets.only(bottom: _buttonHeight + _buttonBottomPadding),
+        body: Column(
+          children: [
+            Text(Get.localisation.transactionTypeHint),
+            _transactionTypeSelector(),
+            const SizedBox(
+              height: 8,
+            ),
+            PlatformTextField(
+              keyboardType:
+              const TextInputType.numberWithOptions(signed: true, decimal: true),
+              controller: _sumController,
+              material: (context, platform) {
+                return MaterialTextFieldData(
+                    decoration:
+                    InputDecoration(labelText: Get.localisation.addTransactionSumHint));
+              },
+              cupertino: (context, platform) {
+                return CupertinoTextFieldData(
+                    placeholder: Get.localisation.addTransactionSumHint);
+              },
+            ),
+            Obx(() {
+              if (controller.selectedType.value != TransactionType.transfer) {
+                return Column(
+                  children: [
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(Get.localisation.addTransactionCategoryHint),
+                        PlatformTextButton(
+                          onPressed: () {
+                            FocusScope.of(context).requestFocus(FocusNode());
+                            controller.onManageCategoriesClick();
+                          },
+                          child: Text(Get.localisation.manageCategoriesButtonText),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 50,
+                      child: Obx(() {
+                        return ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: controller.categoryList.map((element) {
+                            return PlatformTextButton(
+                              onPressed: () {
+                                FocusScope.of(context).requestFocus(FocusNode());
+                                controller.selectCategory(element);
+                              },
+                              child: Row(
+                                children: [
+                                  Text(element.title),
+                                  if (element.isSelected) Icon(CommonIcons.ok)
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        );
+                      }),
+                    ),
+                  ],
+                );
+              } else {
+                return Container();
+              }
+            }),
+            ..._selectWallet(context,
+                controller.selectedWallet, (p0) {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  controller.selectWallet(p0);
+                }),
+            Obx(() {
+              if (controller.selectedType.value == TransactionType.transfer) {
+                return Column(
+                  children: _selectWallet(context,
+                      controller.selectedToWallet, (p0) {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        controller.selectToWallet(p0);
+                      }),
+                );
+              } else {
+                return Container();
+              }
+            }),
+            const SizedBox(
+              height: 8,
+            ),
+            PlatformTextField(
+              controller: _commentController,
+              material: (context, platform) {
+                return MaterialTextFieldData(
+                    decoration: InputDecoration(
+                        labelText: Get.localisation.addTransactionCommentHint));
+              },
+              cupertino: (context, platform) {
+                return CupertinoTextFieldData(
+                    placeholder: Get.localisation.addTransactionCommentHint);
+              },
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            DateTimeSelectorWidget(
+              controller.selectedDate,
+              (p0, p1) {
+                FocusScope.of(context).requestFocus(FocusNode());
+                controller.selectDateByType(p0, p1);
+              },
+            ),
+          ],
+        ),
+        pinToBottomWidget: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: _buttonHeight,
+          child: Padding(
+              padding: const EdgeInsets.only(bottom: _buttonBottomPadding),
+              child: PlatformElevatedButton(
+                onPressed: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  onButtonPress();
+                },
+                child: Text(Get.localisation.save_button),
+              )),
+        ),
       ),
     );
   }
@@ -161,6 +183,7 @@ class UpdateTransactionScreen
   }
 
   List<Widget> _selectWallet(
+      BuildContext context,
     Rxn<String> selectedWallet,
     void Function(TransactionWalletUIModel) onWalletSelected,
   ) {
@@ -174,7 +197,10 @@ class UpdateTransactionScreen
         children: [
           Text(Get.localisation.addTransactionWalletHint),
           PlatformTextButton(
-            onPressed: controller.onManageWalletsClick,
+            onPressed: () {
+              FocusScope.of(context).requestFocus(FocusNode());
+              controller.onManageWalletsClick();
+            },
             child: Text(Get.localisation.manageWalletsButtonText),
           )
         ],
@@ -208,6 +234,7 @@ class UpdateTransactionScreen
       return Obx(() {
         return ToggleButtons(
           onPressed: (index) async {
+            FocusScope.of(buildContext).requestFocus(FocusNode());
             var type = TransactionType.showInTransactionList[index];
             controller.selectedType.value = type;
           },
