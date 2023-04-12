@@ -1,12 +1,17 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:rxdart/transformers.dart';
 
+import '../../../common/ui/base_bottom_sheet_screen.dart';
 import '../../../common/ui/transaction_item/mappers/transactions_header_ui_mapper.dart';
 import '../../../common/ui/transaction_item/mappers/transactions_ui_mapper.dart';
+import '../../../common/ui/transaction_item/models/transaction_ui_model.dart';
 import '../../../transactions/common/data/models/rich_transaction_model.dart';
 import '../../../transactions/common/data/rich_transaction_comparator.dart';
+import '../../../transactions/info/domain/transaction_info_controller.dart';
+import '../../../transactions/info/ui/transaction_info_screen.dart';
 import '../../../transactions/list/data/transactions_aggregator.dart';
 import '../../common/data/local_wallet_repository.dart';
 import '../../common/data/models/wallet.dart';
@@ -63,6 +68,16 @@ class WalletInfoController extends GetxController
 
     _walletSubscription?.cancel();
     _walletSubscription = null;
+  }
+
+  void onTransactionClicked(BuildContext context, TransactionUIModel transaction) {
+    openModalSheetWithController(
+      context,
+          (controller) {
+        return TransactionInfoScreen(controller: controller,);
+      },
+      TransactionInfoController(transaction.id),
+    );
   }
 
   RichWalletUIModel _mapToUIModel(

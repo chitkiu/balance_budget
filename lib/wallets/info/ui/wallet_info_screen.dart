@@ -89,7 +89,9 @@ class WalletInfoScreen extends CommonScaffoldWithButtonScreen<WalletInfoControll
                     final model = state.transactions.transactions[index];
                     return TransactionSectionHeaderWidget(
                       model: model,
-                      onItemClick: (transaction) {},
+                      onItemClick: (transaction) {
+                        controller.onTransactionClicked(context, transaction);
+                      },
                       itemPadding: const EdgeInsets.symmetric(
                           horizontal: 4, vertical: CommonUI.defaultTileVerticalPadding),
                       titlePadding:

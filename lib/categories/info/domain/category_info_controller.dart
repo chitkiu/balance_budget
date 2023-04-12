@@ -2,13 +2,18 @@ import 'dart:async';
 
 import 'package:balance_budget/categories/common/data/local_category_repository.dart';
 import 'package:balance_budget/categories/list/domain/mappers/category_ui_mapper.dart';
+import 'package:balance_budget/common/ui/transaction_item/models/transaction_ui_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:rxdart/transformers.dart';
 
+import '../../../common/ui/base_bottom_sheet_screen.dart';
 import '../../../common/ui/transaction_item/mappers/transactions_header_ui_mapper.dart';
 import '../../../common/ui/transaction_item/mappers/transactions_ui_mapper.dart';
 import '../../../transactions/common/data/models/rich_transaction_model.dart';
 import '../../../transactions/common/data/rich_transaction_comparator.dart';
+import '../../../transactions/info/domain/transaction_info_controller.dart';
+import '../../../transactions/info/ui/transaction_info_screen.dart';
 import '../../../transactions/list/data/transactions_aggregator.dart';
 import '../../common/data/models/category.dart';
 import '../ui/models/rich_category_ui_model.dart';
@@ -61,6 +66,16 @@ class CategoryInfoController extends GetxController
 
     _categorySubscription?.cancel();
     _categorySubscription = null;
+  }
+
+  void onTransactionClicked(BuildContext context, TransactionUIModel transaction) {
+    openModalSheetWithController(
+      context,
+          (controller) {
+        return TransactionInfoScreen(controller: controller,);
+      },
+      TransactionInfoController(transaction.id),
+    );
   }
 
   RichCategoryUIModel _mapToUIModel(
