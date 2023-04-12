@@ -7,57 +7,60 @@ import '../../../common/ui/base_bottom_sheet_screen.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_tile.dart';
 import '../../../common/ui/common_ui_settings.dart';
+import '../../../common/ui/get_widget_with_binding.dart';
 import '../../../common/ui/transaction_item/models/transaction_ui_model.dart';
 import '../domain/transaction_info_binding.dart';
 import '../domain/transaction_info_controller.dart';
 
 //TODO Improve icons
-class TransactionInfoScreen extends BaseBottomSheetScreen<
+class TransactionInfoScreen extends GetWidgetWithBinding<
     TransactionInfoBinding, TransactionInfoController> {
-  TransactionInfoScreen({required super.bindingCreator, super.key})
-      : super(
-            title: Get.localisation.transactionInfoTitle,
-            tailing: CommonIcons.edit);
+  const TransactionInfoScreen({required super.bindingCreator, super.key});
 
   @override
-  Widget body(BuildContext context) {
-    return Obx(() {
-      final model = controller.transaction.value;
-      if (model == null) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }
+  Widget view(BuildContext context) {
+    return CommonBottomSheetWidget(
+      title: Get.localisation.transactionInfoTitle,
+      tailing: CommonIcons.edit,
+      onTailingClick: _onTailingClick,
+      body: Obx(() {
+        final model = controller.transaction.value;
+        if (model == null) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
 
-      return Padding(
-        padding: const EdgeInsets.symmetric(
-            horizontal: CommonUI.defaultTileHorizontalPadding),
-        child: Column(
-          children: [
-            if (model is CommonTransactionUIModel) ..._commonWidgets(model),
-            if (model is TransferTransactionUIModel) ..._transferWidgets(model),
-            const SizedBox(
-              height: CommonUI.defaultFullTileVerticalPadding,
-            ),
-            PlatformElevatedButton(
-              child: Text(Get.localisation.delete),
-              onPressed: () async {
-                await confirmBeforeActionDialog(
-                  () async {
-                    await controller.deleteTransaction(model.id);
-                    Get.back();
-                  },
-                  title: Get.localisation.confirmToDeleteTitle,
-                  subTitle: Get.localisation.confirmToDeleteText,
-                  confirmAction: Get.localisation.yes,
-                  cancelAction: Get.localisation.no,
-                );
-              },
-            ),
-          ],
-        ),
-      );
-    });
+        return Padding(
+          padding: const EdgeInsets.symmetric(
+              horizontal: CommonUI.defaultTileHorizontalPadding),
+          child: Column(
+            children: [
+              if (model is CommonTransactionUIModel) ..._commonWidgets(model),
+              if (model is TransferTransactionUIModel) ..._transferWidgets(model),
+              const SizedBox(
+                height: CommonUI.defaultFullTileVerticalPadding,
+              ),
+              PlatformElevatedButton(
+                child: Text(Get.localisation.delete),
+                onPressed: () async {
+                  await confirmBeforeActionDialog(
+                        () async {
+                      await controller.deleteTransaction(model.id);
+                      Get.back();
+                    },
+                    title: Get.localisation.confirmToDeleteTitle,
+                    subTitle: Get.localisation.confirmToDeleteText,
+                    confirmAction: Get.localisation.yes,
+                    cancelAction: Get.localisation.no,
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      }),
+    );
   }
 
   List<Widget> _commonWidgets(CommonTransactionUIModel model) {
@@ -133,6 +136,5 @@ class TransactionInfoScreen extends BaseBottomSheetScreen<
     ];
   }
 
-  @override
-  void onTailingClick() => controller.goToEdit();
+  void _onTailingClick(BuildContext context) => controller.goToEdit(context);
 }

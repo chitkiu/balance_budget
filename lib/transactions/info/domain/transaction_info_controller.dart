@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../common/getx_extensions.dart';
+import '../../../common/ui/base_bottom_sheet_screen.dart';
 import '../../../common/ui/transaction_item/mappers/transactions_ui_mapper.dart';
 import '../../../common/ui/transaction_item/models/transaction_ui_model.dart';
 import '../../common/data/local_transactions_repository.dart';
@@ -45,12 +47,15 @@ class TransactionInfoController extends GetxController {
     await _transactionsRepo.remove(id);
   }
 
-  void goToEdit() {
-    UpdateTransactionScreen(
-      title: Get.localisation.transactionInfoEditTitle,
-      bindingCreator: () =>
-          UpdateTransactionBinding(model: _dataTransactionModel.value),
-      model: _dataTransactionModel.value,
-    ).open();
+  void goToEdit(BuildContext context) {
+    openModalSheet(
+      context,
+      UpdateTransactionScreen(
+        title: Get.localisation.transactionInfoEditTitle,
+        bindingCreator: () =>
+            UpdateTransactionBinding(model: _dataTransactionModel.value),
+        model: _dataTransactionModel.value,
+      ),
+    );
   }
 }

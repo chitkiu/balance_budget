@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:balance_budget/transactions/common/data/rich_transaction_comparator.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rxdart/transformers.dart';
 
 import '../../../common/getx_extensions.dart';
+import '../../../common/ui/base_bottom_sheet_screen.dart';
 import '../../../common/ui/transaction_item/mappers/transactions_header_ui_mapper.dart';
 import '../../../common/ui/transaction_item/mappers/transactions_ui_mapper.dart';
 import '../../../common/ui/transaction_item/models/complex_transactions_ui_model.dart';
@@ -68,16 +70,22 @@ class TransactionsController extends GetxController
     });
   }
 
-  void addTransaction() {
-    UpdateTransactionScreen(
-      title: Get.localisation.addTransactionTitle,
-      bindingCreator: () => UpdateTransactionBinding(),
-    ).open();
+  void addTransaction(BuildContext context) {
+    openModalSheet(
+      context,
+      UpdateTransactionScreen(
+        title: Get.localisation.addTransactionTitle,
+        bindingCreator: () => UpdateTransactionBinding(),
+      ),
+    );
   }
 
-  void onItemClick(TransactionUIModel transaction) {
-    TransactionInfoScreen(
-        bindingCreator: () => TransactionInfoBinding(transaction.id)).open();
+  void onItemClick(BuildContext context, TransactionUIModel transaction) {
+    openModalSheet(
+      context,
+      TransactionInfoScreen(
+          bindingCreator: () => TransactionInfoBinding(transaction.id)),
+    );
   }
 
   void setNewDate(TransactionsFilterDate date) {

@@ -1,3 +1,4 @@
+import 'package:balance_budget/common/ui/get_widget_with_binding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
@@ -12,134 +13,145 @@ import '../domain/update_transaction_binding.dart';
 import '../domain/update_transaction_controller.dart';
 import 'models/transaction_wallet_ui_model.dart';
 
-class UpdateTransactionScreen extends BaseBottomSheetScreen<
-    UpdateTransactionBinding, UpdateTransactionController> {
+const double _buttonHeight = 52;
+const double _buttonBottomPadding = 8;
+
+class UpdateTransactionScreen
+    extends GetWidgetWithBinding<UpdateTransactionBinding, UpdateTransactionController> {
   final TextEditingController _sumController = TextEditingController();
   final TextEditingController _commentController = TextEditingController();
 
+  final String title;
+
   UpdateTransactionScreen(
       {RichTransactionModel? model,
-      required super.title,
+      required this.title,
       required super.bindingCreator,
-      super.key}) {
+      super.key})
+      : super() {
     if (model != null) {
       _setupInfoByModel(model);
     }
   }
 
   @override
-  Widget body(BuildContext context) {
-    return Column(
-      children: [
-        Text(Get.localisation.transactionTypeHint),
-        _transactionTypeSelector(),
-        const SizedBox(
-          height: 8,
-        ),
-        PlatformTextField(
-          keyboardType: const TextInputType.numberWithOptions(
-              signed: true, decimal: true),
-          controller: _sumController,
-          material: (context, platform) {
-            return MaterialTextFieldData(
-                decoration: InputDecoration(
-                    labelText: Get.localisation.addTransactionSumHint));
-          },
-          cupertino: (context, platform) {
-            return CupertinoTextFieldData(
-                placeholder: Get.localisation.addTransactionSumHint);
-          },
-        ),
-        Obx(() {
-          if (controller.selectedType.value != TransactionType.transfer) {
-            return Column(
-              children: [
-                const SizedBox(
-                  height: 8,
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(Get.localisation.addTransactionCategoryHint),
-                    PlatformTextButton(
-                      onPressed: controller.onManageCategoriesClick,
-                      child: Text(Get.localisation.manageCategoriesButtonText),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 50,
-                  child: Obx(() {
-                    return ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: controller.categoryList.map((element) {
-                        return PlatformTextButton(
-                          onPressed: () {
-                            controller.selectCategory(element);
-                          },
-                          child: Row(
-                            children: [
-                              Text(element.title),
-                              if (element.isSelected) Icon(CommonIcons.ok)
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  }),
-                ),
-              ],
-            );
-          } else {
-            return Container();
-          }
-        }),
-        ..._selectWallet(
-            controller.selectedWallet, (p0) => controller.selectWallet(p0)),
-        Obx(() {
-          if (controller.selectedType.value == TransactionType.transfer) {
-            return Column(
-              children: _selectWallet(controller.selectedToWallet,
-                  (p0) => controller.selectToWallet(p0)),
-            );
-          } else {
-            return Container();
-          }
-        }),
-        const SizedBox(
-          height: 8,
-        ),
-        PlatformTextField(
-          controller: _commentController,
-          material: (context, platform) {
-            return MaterialTextFieldData(
-                decoration: InputDecoration(
-                    labelText: Get.localisation.addTransactionCommentHint));
-          },
-          cupertino: (context, platform) {
-            return CupertinoTextFieldData(
-                placeholder: Get.localisation.addTransactionCommentHint);
-          },
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        DateTimeSelectorWidget(
-          controller.selectedDate,
-          controller.selectDateByType,
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: PlatformElevatedButton(
-            onPressed: onButtonPress,
-            child: Text(Get.localisation.save_button),
+  Widget view(BuildContext context) {
+    return CommonBottomSheetWidget(
+      title: title,
+      additionalPadding:
+          const EdgeInsets.only(bottom: _buttonHeight + _buttonBottomPadding),
+      body: Column(
+        children: [
+          Text(Get.localisation.transactionTypeHint),
+          _transactionTypeSelector(),
+          const SizedBox(
+            height: 8,
           ),
-        ),
-      ],
+          PlatformTextField(
+            keyboardType:
+                const TextInputType.numberWithOptions(signed: true, decimal: true),
+            controller: _sumController,
+            material: (context, platform) {
+              return MaterialTextFieldData(
+                  decoration:
+                      InputDecoration(labelText: Get.localisation.addTransactionSumHint));
+            },
+            cupertino: (context, platform) {
+              return CupertinoTextFieldData(
+                  placeholder: Get.localisation.addTransactionSumHint);
+            },
+          ),
+          Obx(() {
+            if (controller.selectedType.value != TransactionType.transfer) {
+              return Column(
+                children: [
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(Get.localisation.addTransactionCategoryHint),
+                      PlatformTextButton(
+                        onPressed: controller.onManageCategoriesClick,
+                        child: Text(Get.localisation.manageCategoriesButtonText),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 50,
+                    child: Obx(() {
+                      return ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: controller.categoryList.map((element) {
+                          return PlatformTextButton(
+                            onPressed: () {
+                              controller.selectCategory(element);
+                            },
+                            child: Row(
+                              children: [
+                                Text(element.title),
+                                if (element.isSelected) Icon(CommonIcons.ok)
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      );
+                    }),
+                  ),
+                ],
+              );
+            } else {
+              return Container();
+            }
+          }),
+          ..._selectWallet(
+              controller.selectedWallet, (p0) => controller.selectWallet(p0)),
+          Obx(() {
+            if (controller.selectedType.value == TransactionType.transfer) {
+              return Column(
+                children: _selectWallet(
+                    controller.selectedToWallet, (p0) => controller.selectToWallet(p0)),
+              );
+            } else {
+              return Container();
+            }
+          }),
+          const SizedBox(
+            height: 8,
+          ),
+          PlatformTextField(
+            controller: _commentController,
+            material: (context, platform) {
+              return MaterialTextFieldData(
+                  decoration: InputDecoration(
+                      labelText: Get.localisation.addTransactionCommentHint));
+            },
+            cupertino: (context, platform) {
+              return CupertinoTextFieldData(
+                  placeholder: Get.localisation.addTransactionCommentHint);
+            },
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          DateTimeSelectorWidget(
+            controller.selectedDate,
+            controller.selectDateByType,
+          ),
+        ],
+      ),
+      pinToBottomWidget: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: _buttonHeight,
+        child: Padding(
+            padding: const EdgeInsets.only(bottom: _buttonBottomPadding),
+            child: PlatformElevatedButton(
+              onPressed: onButtonPress,
+              child: Text(Get.localisation.save_button),
+            )),
+      ),
     );
   }
 
@@ -179,8 +191,7 @@ class UpdateTransactionScreen extends BaseBottomSheetScreen<
                 child: Row(
                   children: [
                     Text(element.title),
-                    if (selectedWallet.value == element.walletId)
-                      Icon(CommonIcons.ok)
+                    if (selectedWallet.value == element.walletId) Icon(CommonIcons.ok)
                   ],
                 ),
               );
@@ -206,8 +217,7 @@ class UpdateTransactionScreen extends BaseBottomSheetScreen<
           selectedBorderColor: Colors.grey,
           borderColor: Colors.grey,
           selectedColor: Colors.white,
-          fillColor:
-              _getBackgroundColorBySelectedType(controller.selectedType.value),
+          fillColor: _getBackgroundColorBySelectedType(controller.selectedType.value),
           color: Colors.black,
           constraints: BoxConstraints(
             minHeight: 40.0,

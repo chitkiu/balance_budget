@@ -15,7 +15,7 @@ class CupertinoTransactionsWidget extends BaseTransactionsWidget {
         navigationBar: CupertinoNavigationBar(
           middle: Text(Get.localisation.transactionsTabName),
           trailing: GestureDetector(
-            onTap: controller.addTransaction,
+            onTap: () => controller.addTransaction(context),
             child: Icon(CommonIcons.add),
           ),
         ),

@@ -24,10 +24,12 @@ dependencies:
   json_serializable: ^6.6.1
   json_annotation: ^4.8.0
   firebase_ui_oauth_google: ^1.1.0
-  flutter_launcher_icons: ^0.12.0
-  calendar_date_picker2: ^0.4.9
+  flutter_launcher_icons: ^0.13.0
+  calendar_date_picker2: ^0.5.1
   collection: ^1.17.0
   cloud_firestore: ^4.5.0
+  flutter_iconpicker: ^3.2.2
+  modal_bottom_sheet: ^3.0.0-pre
 
 dev_dependencies:
   flutter_test:

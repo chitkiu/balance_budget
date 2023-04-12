@@ -28,7 +28,7 @@ class MaterialTransactionsWidget extends BaseTransactionsWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: controller.addTransaction,
+        onPressed: () => controller.addTransaction(context),
         child: Icon(CommonIcons.add),
       ),
     );

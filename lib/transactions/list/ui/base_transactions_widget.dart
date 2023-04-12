@@ -20,7 +20,8 @@ abstract class BaseTransactionsWidget extends GetView<TransactionsController> {
       BuildContext context, TransactionHeaderUIModel item) {
     return TransactionSectionHeaderWidget(
       model: item,
-      onItemClick: controller.onItemClick,
+      onItemClick: (transaction) =>
+          controller.onItemClick(context, transaction),
     );
   }
 
