@@ -81,5 +81,10 @@
 
   "save_button": "Save",
 
-  "wallet_info_title": "Wallet info"
+  "transaction_list_subtitle": "Transactions:",
+
+  "wallet_info_title": "Wallet info",
+
+  "category_info_title": "Category info",
+  "category_name_title": "Category name:"
 }

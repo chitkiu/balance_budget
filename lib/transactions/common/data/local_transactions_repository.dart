@@ -63,6 +63,15 @@ class LocalTransactionsRepository {
         transferTransactionsFromWallet, (a, b) => a + b);
   }
 
+  Stream<List<Transaction>> getTransactionsByCategoryId(
+    String categoryId,
+  ) {
+    return _ref
+        .where('categoryId', isEqualTo: categoryId)
+        .snapshots()
+        .map((event) => event.docs.map((e) => e.data()).toList());
+  }
+
   bool createOrUpdate(
     double sum,
     TransactionType transactionType,

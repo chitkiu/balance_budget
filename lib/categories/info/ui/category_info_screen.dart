@@ -7,12 +7,11 @@ import '../../../common/ui/common_scaffold_with_button_screen.dart';
 import '../../../common/ui/common_tile.dart';
 import '../../../common/ui/common_ui_settings.dart';
 import '../../../common/ui/transaction_item/transaction_section_header_widget.dart';
-import '../../list/ui/models/wallet_ui_model.dart';
-import '../domain/wallet_info_controller.dart';
+import '../domain/category_info_controller.dart';
 
-class WalletInfoScreen extends CommonScaffoldWithButtonScreen<WalletInfoController> {
-  WalletInfoScreen({super.key})
-      : super(Get.localisation.wallet_info_title, icon: CommonIcons.edit);
+class CategoryInfoScreen extends CommonScaffoldWithButtonScreen<CategoryInfoController> {
+  CategoryInfoScreen({super.key})
+      : super(Get.localisation.category_info_title, icon: CommonIcons.edit);
 
   @override
   Widget body(BuildContext context) {
@@ -23,7 +22,7 @@ class WalletInfoScreen extends CommonScaffoldWithButtonScreen<WalletInfoControll
             child: CircularProgressIndicator(),
           );
         }
-        final wallet = state.wallet;
+        final category = state.category;
         return Padding(
           padding: const EdgeInsets.symmetric(
               horizontal: CommonUI.defaultTileHorizontalPadding),
@@ -33,41 +32,13 @@ class WalletInfoScreen extends CommonScaffoldWithButtonScreen<WalletInfoControll
                 height: CommonUI.defaultTileVerticalPadding,
               ),
               CommonTile(
-                text: Get.localisation.walletNameTitle,
-                secondText: state.wallet.name,
-                icon: CommonIcons.wallet,
+                text: Get.localisation.category_name_title,
+                secondText: category.name,
+                icon: category.icon,
               ),
               const SizedBox(
                 height: CommonUI.defaultFullTileVerticalPadding,
               ),
-              CommonTile(
-                text: Get.localisation.totalBalanceTitle,
-                secondText: state.wallet.balance,
-                icon: Icons.money,
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              if (wallet is CreditWalletUIModel)
-                CommonTile(
-                  text: Get.localisation.ownBalanceTitle,
-                  secondText: wallet.ownSum,
-                  icon: Icons.attach_money,
-                ),
-              if (wallet is CreditWalletUIModel)
-                const SizedBox(
-                  height: 16,
-                ),
-              if (wallet is CreditWalletUIModel)
-                CommonTile(
-                  text: Get.localisation.usedCreditLimitTitle,
-                  secondText: "${wallet.spendedCreditSum}/${wallet.totalCreditSum}",
-                  icon: Icons.credit_card,
-                ),
-              if (wallet is CreditWalletUIModel)
-                const SizedBox(
-                  height: 16,
-                ),
               if (state.transactions.transactions.isNotEmpty)
                 SizedBox(
                   width: MediaQuery.of(context).size.width,

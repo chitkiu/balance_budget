@@ -66,4 +66,25 @@ class RichTransactionMapper {
         }
     }
   }
+
+  List<RichTransactionModel> mapTransactionsWithPresetCategory(Category? category, List<Transaction> transactions, List<Wallet> wallets) {
+    List<RichTransactionModel> newTransactions = transactions
+        .map((transaction) {
+          var wallet = wallets
+              .firstWhereOrNull((element) => element.id == transaction.walletId);
+          if (wallet == null) {
+            return null;
+          }
+          if (category == null) {
+            return null;
+          }
+          return CategoryRichTransactionModel(transaction, wallet, category);
+        })
+        .whereNotNull()
+        .toList();
+
+    newTransactions.sort(_comparator.compare);
+
+    return newTransactions;
+  }
 }

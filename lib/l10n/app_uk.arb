@@ -81,5 +81,10 @@
 
   "save_button": "Зберегти",
 
-  "wallet_info_title": "Інформація про гаманець"
+  "transaction_list_subtitle": "Транзакції:",
+
+  "wallet_info_title": "Інформація про гаманець",
+
+  "category_info_title": "Інформація про категорію",
+  "category_name_title": "Назва категорії:"
 }

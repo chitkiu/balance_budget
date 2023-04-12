@@ -53,4 +53,15 @@ class TransactionsAggregator {
       _mapper.mapTransactions,
     );
   }
+
+  Stream<List<RichTransactionModel>> transactionByCategoryId(
+    String categoryId,
+  ) {
+    return CombineLatestStream.combine3(
+      _categoryRepository.getCategoryById(categoryId),
+      _transactionsRepository.getTransactionsByCategoryId(categoryId),
+      _walletRepository.wallets,
+      _mapper.mapTransactionsWithPresetCategory,
+    );
+  }
 }

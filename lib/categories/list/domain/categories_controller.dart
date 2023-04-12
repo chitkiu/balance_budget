@@ -12,7 +12,7 @@ import 'mappers/category_ui_mapper.dart';
 class CategoriesController extends GetxController {
   LocalCategoryRepository get _categoryRepo => Get.find();
 
-  final CategoryUIMapper _mapper = CategoryUIMapper();
+  final _mapper = const CategoryUIMapper();
 
   Stream<List<CategoryUIModel>> getCategories() {
     return _categoryRepo.categories.map((event) {

@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:balance_budget/categories/common/data/local_category_repository.dart';
+import 'package:balance_budget/categories/list/domain/mappers/category_ui_mapper.dart';
 import 'package:get/get.dart';
 import 'package:rxdart/transformers.dart';
 
@@ -8,48 +10,44 @@ import '../../../common/ui/transaction_item/mappers/transactions_ui_mapper.dart'
 import '../../../transactions/common/data/models/rich_transaction_model.dart';
 import '../../../transactions/common/data/rich_transaction_comparator.dart';
 import '../../../transactions/list/data/transactions_aggregator.dart';
-import '../../common/data/local_wallet_repository.dart';
-import '../../common/data/models/wallet.dart';
-import '../../common/data/wallet_balance_calculator.dart';
-import '../../list/domain/mappers/wallet_ui_mapper.dart';
-import '../ui/models/rich_wallet_ui_model.dart';
+import '../../common/data/models/category.dart';
+import '../ui/models/rich_category_ui_model.dart';
 
-class WalletInfoController extends GetxController
-    with StateMixin<RichWalletUIModel> {
+class CategoryInfoController extends GetxController
+    with StateMixin<RichCategoryUIModel> {
   final String id;
 
-  WalletInfoController(this.id);
+  CategoryInfoController(this.id);
 
-  LocalWalletRepository get _walletRepo => Get.find();
+  LocalCategoryRepository get _categoryRepo => Get.find();
   TransactionsAggregator get _transactionsAggregator => Get.find();
 
-  final WalletUIMapper _walletUIMapper = const WalletUIMapper();
+  final _categoryUIMapper = const CategoryUIMapper();
 
   final TransactionsHeaderUIMapper _transactionsHeaderUIMapper =
       TransactionsHeaderUIMapper(
     const RichTransactionComparator(),
     TransactionsUIMapper(),
   );
-  final WalletBalanceCalculator _calculator = const WalletBalanceCalculator();
 
-  StreamSubscription? _walletSubscription;
+  StreamSubscription? _categorySubscription;
 
   @override
   void onInit() {
     super.onInit();
 
-    _walletSubscription ??= _walletRepo.walletById(id).switchMap((wallet) {
-      if (wallet == null) {
+    _categorySubscription ??= _categoryRepo.getCategoryById(id).switchMap((category) {
+      if (category == null) {
         return const Stream.empty();
       } else {
         return _transactionsAggregator
-            .transactionByWalletId(wallet.id)
-            .map((transactions) => _mapToUIModel(wallet, transactions));
+            .transactionByCategoryId(category.id)
+            .map((transactions) => _mapToUIModel(category, transactions));
       }
     }).handleError((Object e, StackTrace str) {
       change(null, status: RxStatus.error(str.toString()));
     }).listen((event) {
-      if (event is RichWalletUIModel) {
+      if (event is RichCategoryUIModel) {
         change(event, status: RxStatus.success());
       } else {
         change(null, status: RxStatus.empty());
@@ -61,15 +59,14 @@ class WalletInfoController extends GetxController
   void onClose() {
     super.onClose();
 
-    _walletSubscription?.cancel();
-    _walletSubscription = null;
+    _categorySubscription?.cancel();
+    _categorySubscription = null;
   }
 
-  RichWalletUIModel _mapToUIModel(
-      Wallet wallet, List<RichTransactionModel> transactions) {
-    return RichWalletUIModel(
-        _walletUIMapper.map(
-            wallet, _calculator.calculateBalanceFromRich(transactions, wallet)),
+  RichCategoryUIModel _mapToUIModel(
+      Category category, List<RichTransactionModel> transactions) {
+    return RichCategoryUIModel(
+        _categoryUIMapper.map(category),
         _transactionsHeaderUIMapper.mapTransactionsToUI(transactions));
   }
 }
