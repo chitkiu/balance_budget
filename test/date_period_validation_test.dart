@@ -1,4 +1,3 @@
-import 'package:balance_budget/budgets/common/data/models/budget_date.dart';
 import 'package:balance_budget/budgets/common/data/models/budget_repeat_type.dart';
 import 'package:balance_budget/budgets/list/domain/calculators/date_period_validation.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -8,8 +7,8 @@ void main() {
     DatePeriodValidation validation = const DatePeriodValidation();
     BudgetRepeatType type = BudgetRepeatType.oneTime;
 
-    BudgetDate start = const BudgetDate(year: 2023, month: 2, day: 10);
-    BudgetDate end = const BudgetDate(year: 2023, month: 2, day: 16);
+    DateTime start = DateTime(2023, 2, 10);
+    DateTime end = DateTime(2023, 2, 16);
 
     test('Day before start', () {
       DateTime current = DateTime(2023, 2, 9);
@@ -46,7 +45,7 @@ void main() {
     DatePeriodValidation validation = const DatePeriodValidation();
     BudgetRepeatType type = BudgetRepeatType.monthly;
 
-    BudgetDate start = const BudgetDate(year: 2023, month: 2);
+    DateTime start = DateTime(2023, 2);
 
     test('Month before start', () {
       DateTime current = DateTime(2023, 1);
@@ -67,7 +66,7 @@ void main() {
     });
 
     test('Set end month after current', () {
-      BudgetDate end = const BudgetDate(year: 2023, month: 4);
+      DateTime end = DateTime(2023, 4);
 
       DateTime current = DateTime(2023, 3);
       expect(validation.isInCurrentPeriod(current, type, start, end),
@@ -75,7 +74,7 @@ void main() {
     });
 
     test('Set end month equals current', () {
-      BudgetDate end = const BudgetDate(year: 2023, month: 4);
+      DateTime end = DateTime(2023, 4);
 
       DateTime current = DateTime(2023, 4);
       expect(validation.isInCurrentPeriod(current, type, start, end),
@@ -83,7 +82,7 @@ void main() {
     });
 
     test('Set end month before current', () {
-      BudgetDate end = const BudgetDate(year: 2023, month: 3);
+      DateTime end = DateTime(2023, 3);
 
       DateTime current = DateTime(2023, 4);
       expect(validation.isInCurrentPeriod(current, type, start, end),
@@ -96,11 +95,11 @@ void main() {
     DatePeriodValidation validation = const DatePeriodValidation();
     BudgetRepeatType type = BudgetRepeatType.quarter;
 
-    BudgetDate firstQuarterStart = const BudgetDate(year: 2023, month: 1);
-    BudgetDate firstQuarterEnd = const BudgetDate(year: 2023, month: 3);
+    DateTime firstQuarterStart = DateTime(2023, 1);
+    DateTime firstQuarterEnd = DateTime(2023, 3);
 
-    BudgetDate secondQuarterStart = const BudgetDate(year: 2023, month: 4);
-    BudgetDate secondQuarterEnd = const BudgetDate(year: 2023, month: 6);
+    DateTime secondQuarterStart = DateTime(2023, 4);
+    DateTime secondQuarterEnd = DateTime(2023, 6);
 
     // BudgetDate thirdQuarterStart = const BudgetDate(year: 2023, month: 7);
     // BudgetDate thirdQuarterEnd = const BudgetDate(year: 2023, month: 9);
@@ -250,11 +249,11 @@ void main() {
     DatePeriodValidation validation = const DatePeriodValidation();
     BudgetRepeatType type = BudgetRepeatType.semiYear;
 
-    BudgetDate firstHalfStart = const BudgetDate(year: 2023, month: 1);
-    BudgetDate firstHalfEnd = const BudgetDate(year: 2023, month: 6);
+    DateTime firstHalfStart = DateTime(2023, 1);
+    DateTime firstHalfEnd = DateTime(2023, 6);
 
-    BudgetDate secondHalfStart = const BudgetDate(year: 2023, month: 7);
-    BudgetDate secondHalfEnd = const BudgetDate(year: 2023, month: 12);
+    DateTime secondHalfStart = DateTime(2023, 7);
+    DateTime secondHalfEnd = DateTime(2023, 12);
 
     //////////////////////////FIRST QUARTER/////////////////////////////////////
     test('Start in 1 h, current in 1 h', () {

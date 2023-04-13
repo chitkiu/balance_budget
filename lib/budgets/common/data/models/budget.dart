@@ -1,6 +1,6 @@
+import 'package:balance_budget/common/data/models/epoch_date_time_converter.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import 'budget_date.dart';
 import 'budget_repeat_type.dart';
 import 'category_budget_info.dart';
 
@@ -12,10 +12,10 @@ abstract class Budget {
 
   final String name;
   final BudgetRepeatType repeatType;
-  @BudgetDateConverter()
-  final BudgetDate startDate;
-  @BudgetDateConverter()
-  final BudgetDate? endDate;
+  @EpochWithoutTimeDateTimeConverter()
+  final DateTime startDate;
+  @EpochWithoutTimeDateTimeConverter()
+  final DateTime? endDate;
 
   String get id => _id ?? '';
 

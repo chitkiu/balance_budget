@@ -10,7 +10,6 @@ import '../../../wallets/common/data/local_wallet_repository.dart';
 import '../../../wallets/common/data/models/wallet.dart';
 import '../../common/data/local_budget_repository.dart';
 import '../../common/data/models/budget.dart';
-import '../../common/data/models/budget_date.dart';
 import '../../common/data/models/budget_repeat_type.dart';
 import '../../common/data/models/category_budget_info.dart';
 import '../domain/calculators/date_period_validation.dart';
@@ -111,8 +110,8 @@ class BudgetAggregator {
   RichCategoryBudgetInfo _mapCategoryInfo(
       CategoryBudgetInfo categoryInfo,
       BudgetRepeatType repeatType,
-      BudgetDate startDate,
-      BudgetDate? endDate,
+      DateTime startDate,
+      DateTime? endDate,
       List<Category> categories,
       List<Transaction> transactions,
       List<Wallet> wallets) {

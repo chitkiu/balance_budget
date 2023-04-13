@@ -1,24 +1,17 @@
 import '../../../../common/data/date_time_extension.dart';
-import '../../../common/data/models/budget_date.dart';
 import '../../../common/data/models/budget_repeat_type.dart';
 
 class DatePeriodValidation {
   const DatePeriodValidation();
 
-  bool isInCurrentPeriod(DateTime time, BudgetRepeatType repeatType,
-      BudgetDate start, BudgetDate? end) {
+  bool isInCurrentPeriod(DateTime current, BudgetRepeatType repeatType,
+      DateTime start, DateTime? end) {
     switch (repeatType) {
       case BudgetRepeatType.oneTime:
-        DateTime currentDT = DateTime(time.year, time.month, time.day);
-        DateTime startDT = DateTime(start.year, start.month, start.day ?? 1);
-        DateTime? endDT;
-        if (end != null) {
-          endDT = DateTime(end.year, end.month, end.day ?? 1);
-        }
-        return _checkPeriod(currentDT, startDT, endDT);
+        return _checkPeriod(current, start, end);
 
       case BudgetRepeatType.monthly:
-        DateTime currentDT = DateTime(time.year, time.month);
+        DateTime currentDT = DateTime(current.year, current.month);
         DateTime startDT = DateTime(start.year, start.month);
         DateTime? endDT;
         if (end != null) {
@@ -27,23 +20,23 @@ class DatePeriodValidation {
         return _checkPeriod(currentDT, startDT, endDT);
 
       case BudgetRepeatType.quarter:
-        bool isAfterOrSameAsStart = time.year >= start.year && time.quarter >= start.quarter;
+        bool isAfterOrSameAsStart = current.year >= start.year && current.quarter >= start.quarter;
         if (end != null) {
-          bool isBeforeOrSameAsEnd = time.year <= end.year && time.quarter <= end.quarter;
+          bool isBeforeOrSameAsEnd = current.year <= end.year && current.quarter <= end.quarter;
           return isAfterOrSameAsStart && isBeforeOrSameAsEnd;
         }
         return isAfterOrSameAsStart;
 
       case BudgetRepeatType.semiYear:
-        bool isAfterOrSameAsStart = time.year >= start.year && time.semiYear >= start.semiYear;
+        bool isAfterOrSameAsStart = current.year >= start.year && current.semiYear >= start.semiYear;
         if (end != null) {
-          bool isBeforeOrSameAsEnd = time.year <= end.year && time.semiYear <= end.semiYear;
+          bool isBeforeOrSameAsEnd = current.year <= end.year && current.semiYear <= end.semiYear;
           return isAfterOrSameAsStart && isBeforeOrSameAsEnd;
         }
         return isAfterOrSameAsStart;
 
       case BudgetRepeatType.year:
-        DateTime currentDT = DateTime(time.year);
+        DateTime currentDT = DateTime(current.year);
         DateTime startDT = DateTime(start.year);
         DateTime? endDT;
         if (end != null) {

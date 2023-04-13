@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'models/budget.dart';
-import 'models/budget_date.dart';
 import 'models/budget_repeat_type.dart';
 import 'models/category_budget_info.dart';
 
@@ -12,7 +11,7 @@ class LocalBudgetRepository {
       FirebaseFirestore.instance.collection("users/${FirebaseAuth.instance.currentUser!.uid}/budgets").withConverter<Budget>(
         fromFirestore: (snapshot, _) =>
             Budget.fromJson(MapEntry(snapshot.id, snapshot.data()!)),
-        toFirestore: (category, _) => category.toJson(),
+        toFirestore: (budget, _) => budget.toJson(),
       );
 
   Stream<List<Budget>> get budgets =>
@@ -22,12 +21,12 @@ class LocalBudgetRepository {
     BudgetRepeatType repeatType,
     String name,
     double totalSum, {
-    BudgetDate? startDate,
-    BudgetDate? endDate,
+    DateTime? startDate,
+        DateTime? endDate,
     List<String>? wallets,
   }) {
     _saveBudget(TotalBudget(name, repeatType,
-        startDate ?? BudgetDate.fromNow(), endDate, totalSum, wallets ?? []));
+        startDate ?? DateTime.now(), endDate, totalSum, wallets ?? []));
   }
 
   void createCategoryBudget(
@@ -35,14 +34,14 @@ class LocalBudgetRepository {
     String name,
     double maxSum,
     String categoryId, {
-    BudgetDate? startDate,
-    BudgetDate? endDate,
+    DateTime? startDate,
+        DateTime? endDate,
     List<String>? wallets,
   }) {
     _saveBudget(CategoryBudget(
       name,
       repeatType,
-      startDate ?? BudgetDate.fromNow(),
+      startDate ?? DateTime.now(),
       endDate,
       createCategoryInfo(categoryId, maxSum, wallets: wallets),
     ));
@@ -52,13 +51,13 @@ class LocalBudgetRepository {
     BudgetRepeatType repeatType,
     String name,
     List<CategoryBudgetInfo> categories, {
-    BudgetDate? startDate,
-    BudgetDate? endDate,
+    DateTime? startDate,
+    DateTime? endDate,
   }) {
     _saveBudget(TotalBudgetWithCategories(
       name,
       repeatType,
-      startDate ?? BudgetDate.fromNow(),
+      startDate ?? DateTime.now(),
       endDate,
       categories,
     ));
