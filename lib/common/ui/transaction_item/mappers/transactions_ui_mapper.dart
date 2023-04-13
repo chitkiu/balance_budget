@@ -7,6 +7,7 @@ import '../../../../transactions/common/data/models/rich_transaction_model.dart'
 import '../../../../transactions/common/data/models/transaction.dart';
 import '../../../../wallets/common/data/models/wallet.dart';
 import '../../../data/models/transaction_type.dart';
+import '../../common_colors.dart';
 import '../../common_ui_settings.dart';
 import '../models/transaction_header_ui_model.dart';
 import '../models/transaction_ui_model.dart';
@@ -49,13 +50,13 @@ class TransactionsUIMapper {
         .sum;
     final totalSum = incomeSum - expenseSum;
     String totalSumText = _sumFormatter.format(totalSum.abs());
-    Color sumColor = Colors.grey;
+    Color sumColor = CommonColors.defColor;
     if (totalSum < 0) {
       totalSumText = "-$totalSumText";
-      sumColor = Colors.redAccent;
+      sumColor = CommonColors.expense;
     } else if (totalSum > 0) {
       totalSumText = "+$totalSumText";
-      sumColor = Colors.green;
+      sumColor = CommonColors.income;
     }
     return TransactionHeaderUIModel(
       _headerDateFormat.format(date),
@@ -71,9 +72,7 @@ class TransactionsUIMapper {
       id: transaction.id,
       sum: _sumFormat(transaction.sum),
       sumDouble: transaction.sum,
-      sumColor: (transaction.transactionType == TransactionType.expense)
-          ? Colors.redAccent
-          : Colors.green,
+      sumColor: _getColorByTransactionType(transaction.transactionType),
       categoryName: category.title,
       walletName: wallet.name,
       formattedDate: _dateFormat(transaction.time),
@@ -81,6 +80,18 @@ class TransactionsUIMapper {
       comment: transaction.comment,
       icon: category.icon,
     );
+  }
+
+  Color _getColorByTransactionType(TransactionType type) {
+    switch (type) {
+      case TransactionType.expense:
+        return CommonColors.expense;
+      case TransactionType.income:
+        return CommonColors.income;
+      case TransactionType.setInitialBalance:
+      case TransactionType.transfer:
+      return CommonColors.defColor;
+    }
   }
 
   TransactionUIModel _mapTransferModel(

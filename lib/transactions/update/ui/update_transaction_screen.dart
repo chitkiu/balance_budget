@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../../../common/data/models/transaction_type.dart';
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/base_bottom_sheet_screen.dart';
+import '../../../common/ui/common_colors.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../common/data/models/rich_transaction_model.dart';
 import '../../update/ui/date_time_selector_widget.dart';
@@ -267,13 +268,12 @@ class UpdateTransactionScreen
   Color _getBackgroundColorBySelectedType(TransactionType type) {
     switch (type) {
       case TransactionType.expense:
-        return Colors.redAccent;
+        return CommonColors.expense;
       case TransactionType.income:
-        return Colors.green;
+        return CommonColors.income;
       case TransactionType.transfer:
-        return Colors.grey;
       case TransactionType.setInitialBalance:
-        return Colors.grey;
+        return CommonColors.defColor;
     }
   }
 

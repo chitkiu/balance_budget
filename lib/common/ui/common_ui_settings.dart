@@ -1,11 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import 'dialog_helper.dart';
-import 'platform_dropdown_button.dart';
 
 class CommonUI {
   CommonUI._();
@@ -25,12 +23,6 @@ class CommonUI {
   static const defaultTilePadding = EdgeInsets.symmetric(
       horizontal: defaultTileHorizontalPadding,
       vertical: defaultTileVerticalPadding);
-}
-
-CupertinoDropdownButtonData cupertinoDropdownButtonData(
-    BuildContext context, PlatformTarget platform) {
-  return CupertinoDropdownButtonData(
-      itemHeight: 32, height: MediaQuery.of(context).size.height * 0.35);
 }
 
 Future<void> confirmBeforeActionDialog(
