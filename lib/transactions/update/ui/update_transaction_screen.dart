@@ -12,8 +12,7 @@ import '../../update/ui/date_time_selector_widget.dart';
 import '../domain/update_transaction_controller.dart';
 import 'models/transaction_wallet_ui_model.dart';
 
-const double _buttonHeight = 52;
-const double _buttonBottomPadding = 8;
+const double _buttonHeight = 48;
 
 class UpdateTransactionScreen
     extends StatelessWidget {
@@ -37,6 +36,7 @@ class UpdateTransactionScreen
 
   @override
   Widget build(BuildContext context) {
+    final safeAreaBottomPadding = MediaQuery.of(context).padding.bottom;
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
@@ -44,8 +44,9 @@ class UpdateTransactionScreen
       },
       child: CommonBottomSheetWidget(
         title: title,
-        additionalPadding:
-        const EdgeInsets.only(bottom: _buttonHeight + _buttonBottomPadding),
+        additionalPadding: const EdgeInsets.only(
+            bottom: _buttonHeight + kDefaultBottomPaddingForPinToBottomWidget
+        ),
         body: Column(
           children: [
             Text(Get.localisation.transactionTypeHint),
@@ -162,10 +163,13 @@ class UpdateTransactionScreen
           ],
         ),
         pinToBottomWidget: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: _buttonHeight,
+          height: _buttonHeight + safeAreaBottomPadding,
           child: Padding(
-              padding: const EdgeInsets.only(bottom: _buttonBottomPadding),
+              padding: EdgeInsets.only(
+                  left: 4,
+                  right: 4,
+                  bottom: safeAreaBottomPadding
+              ),
               child: PlatformElevatedButton(
                 onPressed: () {
                   FocusScope.of(context).requestFocus(FocusNode());

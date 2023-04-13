@@ -36,6 +36,9 @@ void openModalSheet(BuildContext context, Widget body) {
   }
 }
 
+/// In most cases it will be bottom padding for widget when keyboard opened
+const kDefaultBottomPaddingForPinToBottomWidget = 8;
+
 class CommonBottomSheetWidget extends StatelessWidget {
   final String? title;
   final IconData? tailing;
@@ -75,7 +78,7 @@ class CommonBottomSheetWidget extends StatelessWidget {
         children: [
           mainWidget,
           Positioned(
-              bottom: MediaQuery.of(context).viewInsets.bottom,
+              bottom: MediaQuery.of(context).viewInsets.bottom + kDefaultBottomPaddingForPinToBottomWidget,
               left: 0,
               right: 0,
               child: pinToBottomWidget!),
