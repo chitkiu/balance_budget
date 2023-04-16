@@ -1,3 +1,4 @@
+import 'package:balance_budget/common/ui/common_toggle_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
@@ -22,55 +23,41 @@ class DateTimeSelectorWidget extends StatelessWidget {
 
           return Column(
             children: [
-              Text(
-                  Get.localisation.dateString(
-                      CommonUI.dateFormatter.format(selectedDate.dateTime)
-                  )
-              ),
-              LayoutBuilder(
-                builder: (buildContext, constraints) {
-                  return ToggleButtons(
-                    onPressed: (index) async {
-                      var type = DateSelectionType.values[index];
-                      switch (type) {
-                        case DateSelectionType.yesterday:
-                          onDateChanged(type, null);
-                          break;
-                        case DateSelectionType.today:
-                          onDateChanged(type, null);
-                          break;
-                        case DateSelectionType.customDate:
-                          var newDate = await showPlatformDatePicker(
-                              context: context,
-                              initialDate: selectedDate.dateTime,
-                              firstDate: DateTime(1),
-                              lastDate: DateTime(9999)
-                          );
-                          onDateChanged(type, newDate ?? selectedDate.dateTime);
-                          break;
-                      }
-                    },
-                    isSelected: [
-                      selectedDate.isYesterday,
-                      selectedDate.isToday,
-                      !selectedDate.isYesterday && !selectedDate.isToday
-                    ],
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                    selectedBorderColor: Colors.green[700],
-                    selectedColor: Colors.white,
-                    fillColor: Colors.green[200],
-                    color: Colors.green[400],
-                    constraints: BoxConstraints(
-                      minHeight: 40.0,
-                      minWidth: (constraints.maxWidth - 8 * 2) / 3,
-                    ),
-                    children: DateSelectionType.values.map((e) {
-                      return Text(e.getTitle());
-                    })
-                        .toList(),
-                  );
+              Text(Get.localisation
+                  .dateString(CommonUI.dateFormatter.format(selectedDate.dateTime))),
+              CommonToggleButtons(
+                onItemClick: (index) async {
+                  var type = DateSelectionType.values[index];
+                  switch (type) {
+                    case DateSelectionType.yesterday:
+                      onDateChanged(type, null);
+                      break;
+                    case DateSelectionType.today:
+                      onDateChanged(type, null);
+                      break;
+                    case DateSelectionType.customDate:
+                      var newDate = await showPlatformDatePicker(
+                          context: context,
+                          initialDate: selectedDate.dateTime,
+                          firstDate: DateTime(1),
+                          lastDate: DateTime(9999));
+                      onDateChanged(type, newDate ?? selectedDate.dateTime);
+                      break;
+                  }
                 },
-              )
+                isSelected: [
+                  selectedDate.isYesterday,
+                  selectedDate.isToday,
+                  !selectedDate.isYesterday && !selectedDate.isToday
+                ],
+                selectedBorderColor: Colors.green[700],
+                selectedColor: Colors.white,
+                fillColor: Colors.green[200]!,
+                color: Colors.green[400],
+                children: DateSelectionType.values.map((e) {
+                  return Text(e.getTitle());
+                }).toList(),
+              ),
             ],
           );
         }),

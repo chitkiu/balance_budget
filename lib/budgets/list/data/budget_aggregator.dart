@@ -41,7 +41,7 @@ class BudgetAggregator {
             } else if (budget is CategoryBudget) {
               return _mapSingleCategoryRichBudget(
                   budget, categories, transactions, wallets);
-            } else if (budget is TotalBudgetWithCategories) {
+            } else if (budget is MultiCategoryBudget) {
               return _mapTotalRichBudgetWithCategory(
                   budget, categories, transactions, wallets);
             } else {
@@ -90,7 +90,7 @@ class BudgetAggregator {
         ));
   }
 
-  RichBudget _mapTotalRichBudgetWithCategory(TotalBudgetWithCategories budget,
+  RichBudget _mapTotalRichBudgetWithCategory(MultiCategoryBudget budget,
       List<Category> categories, List<Transaction> transactions, List<Wallet> wallets) {
     return RichTotalBudgetWithCategory(
         budget,

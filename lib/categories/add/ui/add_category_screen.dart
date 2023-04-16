@@ -8,6 +8,7 @@ import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_colors.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
+import '../../../common/ui/common_toggle_buttons.dart';
 import '../domain/add_category_controller.dart';
 
 class AddCategoryScreen extends CommonScaffoldWithButtonScreen<AddCategoryController> {
@@ -43,34 +44,21 @@ class AddCategoryScreen extends CommonScaffoldWithButtonScreen<AddCategoryContro
             height: 8,
           ),
           Text(Get.localisation.transactionTypeHint),
-          LayoutBuilder(builder: (buildContext, constraints) {
-            return Obx(() {
-              return ToggleButtons(
-                onPressed: (index) async {
-                  FocusScope.of(buildContext).requestFocus(FocusNode());
+          Obx(() {
+            return CommonToggleButtons(
+                onItemClick: (index) async {
+                  FocusScope.of(context).requestFocus(FocusNode());
                   var type = TransactionType.canAddCategory[index];
                   controller.selectedType.value = type;
                 },
                 isSelected: TransactionType.canAddCategory
                     .map((e) => e == controller.selectedType.value)
                     .toList(),
-                borderRadius: const BorderRadius.all(Radius.circular(8)),
-                selectedBorderColor: Colors.grey,
-                borderColor: Colors.grey,
-                selectedColor: Colors.white,
-                fillColor:
-                    _getBackgroundColorBySelectedType(controller.selectedType.value),
-                color: Colors.black,
-                constraints: BoxConstraints(
-                  minHeight: 40.0,
-                  minWidth: (constraints.maxWidth - 8 * 2) /
-                      TransactionType.canAddCategory.length,
-                ),
+                fillColor: _getBackgroundColorBySelectedType(controller.selectedType.value),
                 children: TransactionType.canAddCategory.map((e) {
                   return Text(e.name);
-                }).toList(),
-              );
-            });
+                }).toList()
+            );
           }),
           const SizedBox(
             height: 8,

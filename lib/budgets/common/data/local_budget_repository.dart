@@ -43,30 +43,28 @@ class LocalBudgetRepository {
       repeatType,
       startDate ?? DateTime.now(),
       endDate,
-      createCategoryInfo(categoryId, maxSum, wallets: wallets),
+      CategoryBudgetInfo(
+          categoryId: categoryId,
+          maxSum: maxSum,
+          wallets: wallets ?? []
+      ),
     ));
   }
 
-  void createTotalBudgetWithCategories(
+  void createMultiCategoryBudget(
     BudgetRepeatType repeatType,
     String name,
     List<CategoryBudgetInfo> categories, {
     DateTime? startDate,
     DateTime? endDate,
   }) {
-    _saveBudget(TotalBudgetWithCategories(
+    _saveBudget(MultiCategoryBudget(
       name,
       repeatType,
       startDate ?? DateTime.now(),
       endDate,
       categories,
     ));
-  }
-
-  CategoryBudgetInfo createCategoryInfo(String categoryId, double maxSum,
-      {List<String>? wallets}) {
-    return CategoryBudgetInfo(
-        categoryId: categoryId, maxSum: maxSum, wallets: wallets ?? []);
   }
 
   void _saveBudget(Budget budget) {

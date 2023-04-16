@@ -22,9 +22,9 @@ class UpdateTransactionController extends GetxController {
 
   UpdateTransactionController({this.model});
 
-  final TransactionCategoryUIMapper _expenseCategoryUIMapper =
+  final TransactionCategoryUIMapper _transactionCategoryUIMapper =
       TransactionCategoryUIMapper();
-  final TransactionWalletUIMapper _expenseWalletUIMapper =
+  final TransactionWalletUIMapper _transactionWalletUIMapper =
       TransactionWalletUIMapper();
 
   LocalTransactionsRepository get _transactionsRepo => Get.find();
@@ -56,7 +56,7 @@ class UpdateTransactionController extends GetxController {
       _categoryRepo.categories,
       selectedCategory.stream,
       selectedType.stream,
-      _expenseCategoryUIMapper.map,
+      _transactionCategoryUIMapper.map,
     ));
 
     //Add refresh for set initial data
@@ -64,7 +64,7 @@ class UpdateTransactionController extends GetxController {
     selectedType.refresh();
 
     walletList.bindStream(
-        _walletRepo.wallets.map((event) => _expenseWalletUIMapper.map(event)));
+        _walletRepo.wallets.map((event) => _transactionWalletUIMapper.map(event)));
 
     selectedWallet.refresh();
 

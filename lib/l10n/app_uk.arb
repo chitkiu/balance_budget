@@ -86,5 +86,7 @@
   "wallet_info_title": "Інформація про гаманець",
 
   "category_info_title": "Інформація про категорію",
-  "category_name_title": "Назва категорії:"
+  "category_name_title": "Назва категорії:",
+
+  "add_budget_title": "Додати бюджет"
 }

@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:get/get.dart';
 
+import '../../add/domain/add_budget_binding.dart';
+import '../../add/ui/add_budget_screen.dart';
 import '../../common/data/local_budget_repository.dart';
-import '../../common/data/models/budget_repeat_type.dart';
 import '../data/budget_aggregator.dart';
 import '../ui/models/budget_ui_model.dart';
 import 'mappers/budget_ui_mapper.dart';
@@ -24,14 +25,9 @@ class BudgetsController extends GetxController {
   }
 
   void onAddClick() {
-    _budgetRepo.createTotalBudget(
-      BudgetRepeatType.oneTime, BudgetRepeatType.oneTime.name, 1000,
-      startDate: DateTime.now(),
-      endDate: DateTime.now().add(const Duration(days: 3))
+    Get.to(
+          () => AddBudgetScreen(),
+      binding: AddBudgetBinding(),
     );
-    // Get.to(
-    //       () => AddAccountScreen(),
-    //   binding: AddAccountBinding(),
-    // );
   }
 }

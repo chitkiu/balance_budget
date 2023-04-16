@@ -37,8 +37,8 @@ abstract class Budget {
     String? type = entry.value[_typeName];
     if (type == (CategoryBudget).toString()) {
       return CategoryBudget.fromJson(entry);
-    } else if (type == (TotalBudgetWithCategories).toString()) {
-      return TotalBudgetWithCategories.fromJson(entry);
+    } else if (type == (MultiCategoryBudget).toString()) {
+      return MultiCategoryBudget.fromJson(entry);
     } else {
       return TotalBudget.fromJson(entry);
     }
@@ -70,11 +70,11 @@ class CategoryBudget extends Budget {
 }
 
 @JsonSerializable()
-class TotalBudgetWithCategories extends Budget {
+class MultiCategoryBudget extends Budget {
   @CategoryBudgetInfoConverter()
   final List<CategoryBudgetInfo> categoriesInfo;
 
-  TotalBudgetWithCategories(
+  MultiCategoryBudget(
       super.name,
       super.repeatType,
       super.startDate,
@@ -82,6 +82,7 @@ class TotalBudgetWithCategories extends Budget {
       this.categoriesInfo,
   );
 
+  @JsonKey(includeFromJson: false)
   @override
   double get totalSum {
     var totalSum = 0.0;
@@ -91,7 +92,7 @@ class TotalBudgetWithCategories extends Budget {
     return totalSum;
   }
 
-  factory TotalBudgetWithCategories.fromJson(MapEntry<String, dynamic> entry) =>
+  factory MultiCategoryBudget.fromJson(MapEntry<String, dynamic> entry) =>
       _$TotalBudgetWithCategoriesFromJson(entry.value).._id = entry.key;
 
   @override

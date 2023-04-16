@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,15 +22,15 @@ class LocalCategoryRepository {
     ),
   ];
 
-  CollectionReference<Category> get _ref =>
-      FirebaseFirestore.instance.collection("users/${FirebaseAuth.instance.currentUser!.uid}/categories").withConverter<Category>(
+  CollectionReference<Category> get _ref => FirebaseFirestore.instance
+      .collection("users/${FirebaseAuth.instance.currentUser!.uid}/categories")
+      .withConverter<Category>(
         fromFirestore: (snapshot, _) =>
             Category.fromJson(MapEntry(snapshot.id, snapshot.data()!)),
         toFirestore: (category, _) => category.toJson(),
       );
 
-  Stream<List<Category>> get categories =>
-      _ref.snapshots().map((event) {
+  Stream<List<Category>> get categories => _ref.snapshots().map((event) {
         var result = event.docs.map((e) => e.data()).toList();
         result.addAll(_localCategories);
         return result;
@@ -43,32 +44,39 @@ class LocalCategoryRepository {
   }
 
   void create(String title, TransactionType transactionType, IconData? icon) async {
-    _ref.add(
-        Category(
-          title: title,
-          transactionType: transactionType,
-          icon: icon ?? Icons.not_interested,
-        )
-    );
+    _ref.add(Category(
+      title: title,
+      transactionType: transactionType,
+      icon: icon ?? Icons.not_interested,
+    ));
   }
 
   Stream<Category?> getCategoryById(String id) {
     return _ref.doc(id).snapshots().map((event) => event.data());
   }
 
-  Future<List<Category>> getCategoriesByType(TransactionType type) async {
-    var result = await _ref.orderBy('transactionType')
+  Stream<List<Category>> getCategoriesByType(TransactionType type) {
+    return _ref
         .where('transactionType', isEqualTo: type.name)
-        .get();
-
-    return result.docs.map((e) => e.data()).toList();
+        .snapshots()
+        .map((categories) => categories.docs
+            .map((category) {
+              if (category.exists) {
+                return category.data();
+              } else {
+                return null;
+              }
+            })
+            .whereNotNull()
+            .toList());
   }
 
   void remove(String category) {
     // categories.removeWhere((element) => element.id == category);
   }
 
-  void edit(String category, String? title, TransactionType? transactionType, IconData? icon) {
+  void edit(
+      String category, String? title, TransactionType? transactionType, IconData? icon) {
     // var editCategory = categories.firstWhereOrNull((element) => element.id == category);
     // if (editCategory == null) {
     //   return;

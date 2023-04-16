@@ -51,9 +51,9 @@ Json? _$JsonConverterToJson<Json, Value>(
 ) =>
     value == null ? null : toJson(value);
 
-TotalBudgetWithCategories _$TotalBudgetWithCategoriesFromJson(
+MultiCategoryBudget _$TotalBudgetWithCategoriesFromJson(
         Map<String, dynamic> json) =>
-    TotalBudgetWithCategories(
+    MultiCategoryBudget(
       json['name'] as String,
       $enumDecode(_$BudgetRepeatTypeEnumMap, json['repeatType']),
       const EpochWithoutTimeDateTimeConverter()
@@ -67,7 +67,7 @@ TotalBudgetWithCategories _$TotalBudgetWithCategoriesFromJson(
     );
 
 Map<String, dynamic> _$TotalBudgetWithCategoriesToJson(
-        TotalBudgetWithCategories instance) =>
+        MultiCategoryBudget instance) =>
     <String, dynamic>{
       'name': instance.name,
       'repeatType': _$BudgetRepeatTypeEnumMap[instance.repeatType]!,

@@ -6,6 +6,7 @@ import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_colors.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
+import '../../../common/ui/common_toggle_buttons.dart';
 import '../domain/add_wallet_controller.dart';
 import 'models/wallet_type.dart';
 
@@ -46,33 +47,21 @@ class AddWalletScreen extends CommonScaffoldWithButtonScreen<AddWalletController
           ),
           const SizedBox(height: 8,),
           Text(Get.localisation.addWalletTypeSelector),
-          LayoutBuilder(builder: (buildContext, constraints) {
-            return Obx(() {
-              return ToggleButtons(
-                onPressed: (index) async {
-                  FocusScope.of(buildContext).requestFocus(FocusNode());
-                  var type = WalletType.values[index];
-                  controller.walletType.value = type;
-                },
-                isSelected: WalletType.values
-                    .map((e) => e == controller.walletType.value)
-                    .toList(),
-                borderRadius: const BorderRadius.all(Radius.circular(8)),
-                selectedBorderColor: Colors.grey,
-                borderColor: Colors.grey,
-                selectedColor: Colors.white,
-                fillColor: CommonColors.defColor,
-                color: Colors.black,
-                constraints: BoxConstraints(
-                  minHeight: 40.0,
-                  minWidth: (constraints.maxWidth - 8 * 2) /
-                      WalletType.values.length,
-                ),
-                children: WalletType.values.map((e) {
-                  return Text(e.name);
-                }).toList(),
-              );
-            });
+          Obx(() {
+            return CommonToggleButtons(
+              onItemClick: (index) async {
+                FocusScope.of(context).requestFocus(FocusNode());
+                var type = WalletType.values[index];
+                controller.walletType.value = type;
+              },
+              isSelected: WalletType.values
+                  .map((e) => e == controller.walletType.value)
+                  .toList(),
+              fillColor: CommonColors.defColor,
+              children: WalletType.values.map((e) {
+                return Text(e.name);
+              }).toList(),
+            );
           }),
           Obx(() {
             WalletType walletType = controller.walletType.value;

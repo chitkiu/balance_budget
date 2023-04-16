@@ -9,7 +9,7 @@ class CategoryBudgetInfo {
   @JsonKey(defaultValue: [])
   final List<String> wallets;
 
-  CategoryBudgetInfo({required this.categoryId, required this.maxSum, required this.wallets});
+  CategoryBudgetInfo({required this.categoryId, required this.maxSum, this.wallets = const []});
 
   factory CategoryBudgetInfo.fromJson(Map<String, dynamic> json) => _$CategoryBudgetInfoFromJson(json);
 

@@ -86,5 +86,7 @@
   "wallet_info_title": "Wallet info",
 
   "category_info_title": "Category info",
-  "category_name_title": "Category name:"
+  "category_name_title": "Category name:",
+
+  "add_budget_title": "Add budget"
 }

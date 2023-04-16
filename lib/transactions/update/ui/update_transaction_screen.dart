@@ -1,3 +1,4 @@
+import 'package:balance_budget/common/ui/common_toggle_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
@@ -51,7 +52,22 @@ class UpdateTransactionScreen
         body: Column(
           children: [
             Text(Get.localisation.transactionTypeHint),
-            _transactionTypeSelector(),
+            Obx(() {
+              return CommonToggleButtons(
+                onItemClick: (index) async {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  var type = TransactionType.showInTransactionList[index];
+                  controller.selectedType.value = type;
+                },
+                isSelected: TransactionType.showInTransactionList
+                    .map((e) => e == controller.selectedType.value)
+                    .toList(),
+                fillColor: _getBackgroundColorBySelectedType(controller.selectedType.value),
+                children: TransactionType.showInTransactionList.map((e) {
+                  return Text(e.name);
+                }).toList(),
+              );
+            }),
             const SizedBox(
               height: 8,
             ),
@@ -232,37 +248,6 @@ class UpdateTransactionScreen
         }),
       ),
     ];
-  }
-
-  Widget _transactionTypeSelector() {
-    return LayoutBuilder(builder: (buildContext, constraints) {
-      return Obx(() {
-        return ToggleButtons(
-          onPressed: (index) async {
-            FocusScope.of(buildContext).requestFocus(FocusNode());
-            var type = TransactionType.showInTransactionList[index];
-            controller.selectedType.value = type;
-          },
-          isSelected: TransactionType.showInTransactionList
-              .map((e) => e == controller.selectedType.value)
-              .toList(),
-          borderRadius: const BorderRadius.all(Radius.circular(8)),
-          selectedBorderColor: Colors.grey,
-          borderColor: Colors.grey,
-          selectedColor: Colors.white,
-          fillColor: _getBackgroundColorBySelectedType(controller.selectedType.value),
-          color: Colors.black,
-          constraints: BoxConstraints(
-            minHeight: 40.0,
-            minWidth: (constraints.maxWidth - 8 * 2) /
-                TransactionType.showInTransactionList.length,
-          ),
-          children: TransactionType.showInTransactionList.map((e) {
-            return Text(e.name);
-          }).toList(),
-        );
-      });
-    });
   }
 
   Color _getBackgroundColorBySelectedType(TransactionType type) {
