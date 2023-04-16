@@ -7,7 +7,9 @@ import 'package:get/get.dart';
 import '../../../common/ui/common_colors.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
+import '../../../common/ui/common_selection_list.dart';
 import '../../../common/ui/common_toggle_buttons.dart';
+import '../../../wallets/list/ui/models/wallet_ui_model.dart';
 import '../domain/add_budget_controller.dart';
 
 class AddBudgetScreen extends CommonScaffoldWithButtonScreen<AddBudgetController> {
@@ -84,25 +86,9 @@ class AddBudgetScreen extends CommonScaffoldWithButtonScreen<AddBudgetController
                       ],
                     ),
                     if (!_isAllWalletSelected.value)
-                      SizedBox(
-                        height: 50,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: controller.wallets.map((element) {
-                            return PlatformTextButton(
-                              onPressed: () {
-                                FocusScope.of(context).requestFocus(FocusNode());
-                                controller.selectWallet(element.model);
-                              },
-                              child: Row(
-                                children: [
-                                  Text(element.model.name),
-                                  if (element.isSelected) Icon(CommonIcons.ok)
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                        ),
+                      CommonSelectionList<WalletUIModel>(
+                        items: controller.wallets.value,
+                        onClick: controller.selectWallet,
                       ),
                   ],
                 );
@@ -115,27 +101,9 @@ class AddBudgetScreen extends CommonScaffoldWithButtonScreen<AddBudgetController
                 return Column(
                   children: [
                     Text("Select category"),
-                    SizedBox(
-                      height: 50,
-                      child: Obx(() {
-                        return ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: controller.categories.map((element) {
-                            return PlatformTextButton(
-                              onPressed: () {
-                                FocusScope.of(context).requestFocus(FocusNode());
-                                controller.selectCategory(element.model);
-                              },
-                              child: Row(
-                                children: [
-                                  Text(element.model.name),
-                                  if (element.isSelected) Icon(CommonIcons.ok)
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                        );
-                      }),
+                    CommonSelectionList(
+                        items: controller.categories.value,
+                        onClick: controller.selectCategory
                     ),
                   ],
                 );
@@ -193,29 +161,19 @@ class AddBudgetScreen extends CommonScaffoldWithButtonScreen<AddBudgetController
                         child: Text("Remove category"),
                       ),
                       Text("Select category:"),
-                      SizedBox(
-                        height: 50,
-                        child: Obx(() {
-                          return ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: controller.categories.map((element) {
-                              final isSelected = item.category?.id == element.model.id;
-                              return PlatformTextButton(
-                                onPressed: () {
-                                  FocusScope.of(context).requestFocus(FocusNode());
-                                  controller.changeCategoryInMultiCategory(
-                                      i, element.model);
-                                },
-                                child: Row(
-                                  children: [
-                                    Text(element.model.name),
-                                    if (isSelected) Icon(CommonIcons.ok)
-                                  ],
-                                ),
-                              );
-                            }).toList(),
-                          );
-                        }),
+                      CommonSelectionList(
+                          items: controller.categories.map((element) {
+                            final isSelected = item.category?.id == element.model.id;
+                            return SelectionListItem(
+                                name: element.name,
+                                isSelected: isSelected,
+                                model: element.model
+                            );
+                          }),
+                          onClick: (model) {
+                            controller.changeCategoryInMultiCategory(
+                                i, model);
+                          },
                       ),
                       Text("Select wallet, or keep empty for all wallets"),
                       CommonToggleButtons(
@@ -234,28 +192,18 @@ class AddBudgetScreen extends CommonScaffoldWithButtonScreen<AddBudgetController
                         ],
                       ),
                       if (!item.isAllWalletSelected)
-                        SizedBox(
-                          height: 50,
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: controller.wallets.map((element) {
-                              final isSelected = item.wallets
-                                  .any((wallet) => wallet.id == element.model.id);
-                              return PlatformTextButton(
-                                onPressed: () {
-                                  FocusScope.of(context).requestFocus(FocusNode());
-                                  controller.changeWalletInMultiCategory(
-                                      i, element.model);
-                                },
-                                child: Row(
-                                  children: [
-                                    Text(element.model.name),
-                                    if (isSelected) Icon(CommonIcons.ok)
-                                  ],
-                                ),
-                              );
-                            }).toList(),
-                          ),
+                        CommonSelectionList<WalletUIModel>(
+                          items: controller.wallets.map((wallet) {
+                            return SelectionListItem(
+                              name: wallet.name,
+                              model: wallet.model,
+                              isSelected: item.wallets
+                                        .any((selectedWallet) => selectedWallet.id == wallet.model.id)
+                            );
+                          }),
+                          onClick: (model) {
+                            controller.changeWalletInMultiCategory(i, model);
+                          },
                         ),
                       PlatformTextField(
                         onChanged: (p0) {

@@ -1,4 +1,3 @@
-import 'package:balance_budget/common/ui/common_toggle_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
@@ -8,16 +7,15 @@ import '../../../common/data/models/transaction_type.dart';
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/base_bottom_sheet_screen.dart';
 import '../../../common/ui/common_colors.dart';
-import '../../../common/ui/common_icons.dart';
+import '../../../common/ui/common_selection_list.dart';
+import '../../../common/ui/common_toggle_buttons.dart';
 import '../../common/data/models/rich_transaction_model.dart';
 import '../../update/ui/date_time_selector_widget.dart';
 import '../domain/update_transaction_controller.dart';
-import 'models/transaction_wallet_ui_model.dart';
 
 const double _buttonHeight = 48;
 
-class UpdateTransactionScreen
-    extends StatelessWidget {
+class UpdateTransactionScreen extends StatelessWidget {
   final TextEditingController _sumController = TextEditingController();
   final TextEditingController _commentController = TextEditingController();
 
@@ -47,8 +45,7 @@ class UpdateTransactionScreen
       child: CommonBottomSheetWidget(
         title: title,
         additionalPadding: const EdgeInsets.only(
-            bottom: _buttonHeight + kDefaultBottomPaddingForPinToBottomWidget
-        ),
+            bottom: _buttonHeight + kDefaultBottomPaddingForPinToBottomWidget),
         body: Column(
           children: [
             Text(Get.localisation.transactionTypeHint),
@@ -62,7 +59,8 @@ class UpdateTransactionScreen
                 isSelected: TransactionType.showInTransactionList
                     .map((e) => e == controller.selectedType.value)
                     .toList(),
-                fillColor: _getBackgroundColorBySelectedType(controller.selectedType.value),
+                fillColor:
+                    _getBackgroundColorBySelectedType(controller.selectedType.value),
                 children: TransactionType.showInTransactionList.map((e) {
                   return Text(e.name);
                 }).toList(),
@@ -73,12 +71,12 @@ class UpdateTransactionScreen
             ),
             PlatformTextField(
               keyboardType:
-              const TextInputType.numberWithOptions(signed: true, decimal: true),
+                  const TextInputType.numberWithOptions(signed: true, decimal: true),
               controller: _sumController,
               material: (context, platform) {
                 return MaterialTextFieldData(
-                    decoration:
-                    InputDecoration(labelText: Get.localisation.addTransactionSumHint));
+                    decoration: InputDecoration(
+                        labelText: Get.localisation.addTransactionSumHint));
               },
               cupertino: (context, platform) {
                 return CupertinoTextFieldData(
@@ -106,47 +104,26 @@ class UpdateTransactionScreen
                         )
                       ],
                     ),
-                    SizedBox(
-                      height: 50,
-                      child: Obx(() {
-                        return ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: controller.categoryList.map((element) {
-                            return PlatformTextButton(
-                              onPressed: () {
-                                FocusScope.of(context).requestFocus(FocusNode());
-                                controller.selectCategory(element);
-                              },
-                              child: Row(
-                                children: [
-                                  Text(element.title),
-                                  if (element.isSelected) Icon(CommonIcons.ok)
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                        );
-                      }),
-                    ),
+                    CommonSelectionList(
+                        items: controller.categoryList.value,
+                        onClick: controller.selectCategory),
                   ],
                 );
               } else {
                 return Container();
               }
             }),
-            ..._selectWallet(context,
-                controller.selectedWallet, (p0) {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                  controller.selectWallet(p0);
-                }),
+            Obx(() {
+              return Column(
+                children: _selectWallet(
+                    context, controller.selectedWallet.value, controller.selectWallet),
+              );
+            }),
             Obx(() {
               if (controller.selectedType.value == TransactionType.transfer) {
                 return Column(
-                  children: _selectWallet(context,
-                      controller.selectedToWallet, (p0) {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        controller.selectToWallet(p0);
-                      }),
+                  children: _selectWallet(context, controller.selectedToWallet.value,
+                      controller.selectToWallet),
                 );
               } else {
                 return Container();
@@ -182,11 +159,7 @@ class UpdateTransactionScreen
         pinToBottomWidget: SizedBox(
           height: _buttonHeight + safeAreaBottomPadding,
           child: Padding(
-              padding: EdgeInsets.only(
-                  left: 4,
-                  right: 4,
-                  bottom: safeAreaBottomPadding
-              ),
+              padding: EdgeInsets.only(left: 4, right: 4, bottom: safeAreaBottomPadding),
               child: PlatformElevatedButton(
                 onPressed: () {
                   FocusScope.of(context).requestFocus(FocusNode());
@@ -204,9 +177,9 @@ class UpdateTransactionScreen
   }
 
   List<Widget> _selectWallet(
-      BuildContext context,
-    Rxn<String> selectedWallet,
-    void Function(TransactionWalletUIModel) onWalletSelected,
+    BuildContext context,
+    List<SelectionListItem<String>> selectedWallet,
+    void Function(String) onWalletSelected,
   ) {
     return [
       const SizedBox(
@@ -226,27 +199,7 @@ class UpdateTransactionScreen
           )
         ],
       ),
-      SizedBox(
-        height: 50,
-        child: Obx(() {
-          return ListView(
-            scrollDirection: Axis.horizontal,
-            children: controller.walletList.map((element) {
-              return PlatformTextButton(
-                onPressed: () {
-                  onWalletSelected(element);
-                },
-                child: Row(
-                  children: [
-                    Text(element.title),
-                    if (selectedWallet.value == element.walletId) Icon(CommonIcons.ok)
-                  ],
-                ),
-              );
-            }).toList(),
-          );
-        }),
-      ),
+      CommonSelectionList(items: selectedWallet, onClick: onWalletSelected),
     ];
   }
 

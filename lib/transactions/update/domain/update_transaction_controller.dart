@@ -5,6 +5,7 @@ import '../../../categories/common/data/local_category_repository.dart';
 import '../../../categories/list/domain/categories_binding.dart';
 import '../../../categories/list/ui/categories_screen.dart';
 import '../../../common/data/models/transaction_type.dart';
+import '../../../common/ui/common_selection_list.dart';
 import '../../../wallets/common/data/local_wallet_repository.dart';
 import '../../../wallets/list/domain/wallets_binding.dart';
 import '../../../wallets/list/ui/wallets_screen.dart';
@@ -12,8 +13,6 @@ import '../../common/data/local_transactions_repository.dart';
 import '../../common/data/models/rich_transaction_model.dart';
 import '../ui/models/date_selection_type.dart';
 import '../ui/models/select_date_ui_model.dart';
-import '../ui/models/transaction_category_ui_model.dart';
-import '../ui/models/transaction_wallet_ui_model.dart';
 import 'mappers/transaction_category_ui_mapper.dart';
 import 'mappers/transaction_wallet_ui_mapper.dart';
 
@@ -33,17 +32,15 @@ class UpdateTransactionController extends GetxController {
 
   LocalWalletRepository get _walletRepo => Get.find();
 
-  RxList<TransactionCategoryUIModel> categoryList =
-      <TransactionCategoryUIModel>[].obs;
+  Rxn<String> _selectedCategory = Rxn();
 
-  RxList<TransactionWalletUIModel> walletList =
-      <TransactionWalletUIModel>[].obs;
+  RxList<SelectionListItem<String>> categoryList = RxList();
 
-  Rxn<String> selectedCategory = Rxn();
+  Rxn<String> _selectedWalletId = Rxn();
+  Rxn<String> _selectedToWalletId = Rxn();
 
-  Rxn<String> selectedWallet = Rxn();
-
-  Rxn<String> selectedToWallet = Rxn();
+  RxList<SelectionListItem<String>> selectedWallet = RxList();
+  RxList<SelectionListItem<String>> selectedToWallet = RxList();
 
   Rx<SelectDayUIModel> selectedDate = SelectDayUIModel.now().obs;
 
@@ -54,19 +51,33 @@ class UpdateTransactionController extends GetxController {
     //TODO Move to separate class
     categoryList.bindStream(rxd.CombineLatestStream.combine3(
       _categoryRepo.categories,
-      selectedCategory.stream,
+      _selectedCategory.stream,
       selectedType.stream,
       _transactionCategoryUIMapper.map,
     ));
 
     //Add refresh for set initial data
-    selectedCategory.refresh();
+    _selectedCategory.refresh();
     selectedType.refresh();
 
-    walletList.bindStream(
-        _walletRepo.wallets.map((event) => _transactionWalletUIMapper.map(event)));
+    selectedWallet.bindStream(
+      rxd.CombineLatestStream.combine2(
+          _walletRepo.wallets,
+          _selectedWalletId.stream,
+          _transactionWalletUIMapper.map,
+      )
+    );
 
-    selectedWallet.refresh();
+    selectedToWallet.bindStream(
+      rxd.CombineLatestStream.combine2(
+          _walletRepo.wallets,
+          _selectedToWalletId.stream,
+          _transactionWalletUIMapper.map,
+      )
+    );
+
+    _selectedWalletId.refresh();
+    _selectedToWalletId.refresh();
 
     if (model != null) {
       _setupInitialData(model!);
@@ -86,18 +97,18 @@ class UpdateTransactionController extends GetxController {
       return;
     }
 
-    var categoryId = selectedCategory.value;
+    var categoryId = _selectedCategory.value;
     if (categoryId == null && selectedType.value != TransactionType.transfer) {
       return;
     }
 
-    var walletId = selectedWallet.value;
+    var walletId = _selectedWalletId.value;
     if (walletId == null) {
       return;
     }
 
     if (selectedType.value == TransactionType.transfer) {
-      var toWalletId = selectedToWallet.value;
+      var toWalletId = _selectedToWalletId.value;
 
       if (toWalletId == null) {
         return;
@@ -121,7 +132,7 @@ class UpdateTransactionController extends GetxController {
       ),
       model: model,
       comment: currentComment,
-      toWalletId: selectedToWallet.value,
+      toWalletId: _selectedToWalletId.value,
       categoryId: categoryId,
     );
 
@@ -130,16 +141,28 @@ class UpdateTransactionController extends GetxController {
     }
   }
 
-  void selectCategory(TransactionCategoryUIModel category) {
-    selectedCategory.value = category.categoryId;
+  void selectCategory(String categoryId) {
+    if (_selectedCategory.value == categoryId) {
+      _selectedCategory.value = null;
+    } else {
+      _selectedCategory.value = categoryId;
+    }
   }
 
-  void selectWallet(TransactionWalletUIModel wallet) {
-    selectedWallet.value = wallet.walletId;
+  void selectWallet(String walletId) {
+    if (_selectedWalletId.value == walletId) {
+      _selectedWalletId.value = null;
+    } else {
+      _selectedWalletId.value = walletId;
+    }
   }
 
-  void selectToWallet(TransactionWalletUIModel wallet) {
-    selectedToWallet.value = wallet.walletId;
+  void selectToWallet(String walletId) {
+    if (_selectedToWalletId.value == walletId) {
+      _selectedToWalletId.value = null;
+    } else {
+      _selectedToWalletId.value = walletId;
+    }
   }
 
   void selectDateByType(
@@ -202,13 +225,13 @@ class UpdateTransactionController extends GetxController {
 
   void _setupInitialData(RichTransactionModel model) {
     if (model is CategoryRichTransactionModel) {
-      selectedCategory.value = model.category.id;
+      _selectedCategory.value = model.category.id;
     }
     selectedType.value = model.transaction.transactionType;
     _selectCustomDay(model.transaction.time);
-    selectedWallet.value = model.fromWallet.id;
+    _selectedWalletId.value = model.fromWallet.id;
     if (model is TransferRichTransactionModel) {
-      selectedToWallet.value = model.toWallet.id;
+      _selectedToWalletId.value = model.toWallet.id;
     }
   }
 }

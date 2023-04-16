@@ -1,13 +1,14 @@
+import '../../../../common/ui/common_selection_list.dart';
 import '../../../../wallets/common/data/models/wallet.dart';
-import '../../ui/models/transaction_wallet_ui_model.dart';
 
 class TransactionWalletUIMapper {
 
-  List<TransactionWalletUIModel> map(List<Wallet> wallets) {
-    return wallets.map((category) {
-      return TransactionWalletUIModel(
-        category.id,
-        category.name,
+  List<SelectionListItem<String>> map(List<Wallet> wallets, String? selectedWalletId) {
+    return wallets.map((wallet) {
+      return SelectionListItem(
+        model: wallet.id,
+        name: wallet.name,
+        isSelected: selectedWalletId == wallet.id,
       );
     }).toList();
   }

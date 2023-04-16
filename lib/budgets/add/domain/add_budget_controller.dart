@@ -6,6 +6,7 @@ import '../../../categories/common/data/local_category_repository.dart';
 import '../../../categories/list/domain/mappers/category_ui_mapper.dart';
 import '../../../categories/list/ui/models/category_ui_model.dart';
 import '../../../common/data/models/transaction_type.dart';
+import '../../../common/ui/common_selection_list.dart';
 import '../../../wallets/common/data/local_wallet_repository.dart';
 import '../../../wallets/list/domain/mappers/wallet_ui_mapper.dart';
 import '../../../wallets/list/ui/models/wallet_ui_model.dart';
@@ -13,20 +14,6 @@ import '../../common/data/local_budget_repository.dart';
 import '../../common/data/models/budget_repeat_type.dart';
 import '../../common/data/models/budget_type.dart';
 import '../../common/data/models/category_budget_info.dart';
-
-class BudgetCategoryUIModel {
-  final CategoryUIModel model;
-  final bool isSelected;
-
-  const BudgetCategoryUIModel(this.model, this.isSelected);
-}
-
-class BudgetWalletUIModel {
-  final WalletUIModel model;
-  final bool isSelected;
-
-  const BudgetWalletUIModel(this.model, this.isSelected);
-}
 
 class MultiCategoryBudgetUIModel {
   final List<WalletUIModel> wallets;
@@ -62,10 +49,10 @@ class AddBudgetController extends GetxController {
 
   final budgetType = BudgetType.total.obs;
 
-  final categories = RxList<BudgetCategoryUIModel>();
+  final categories = RxList<SelectionListItem<CategoryUIModel>>();
   final _selectedCategory = Rxn<CategoryUIModel>();
 
-  final wallets = RxList<BudgetWalletUIModel>();
+  final wallets = RxList<SelectionListItem<WalletUIModel>>();
   final _selectedWallets = RxList<WalletUIModel>();
 
   final multiCategories = RxList<MultiCategoryBudgetUIModel>();
@@ -79,8 +66,12 @@ class AddBudgetController extends GetxController {
       _selectedCategory.stream,
       (categories, selectedCategory) {
         return categories.map((category) {
-          return BudgetCategoryUIModel(_categoryUIMapper.map(category),
-              selectedCategory?.id == category.id);
+          final model = _categoryUIMapper.map(category);
+          return SelectionListItem(
+              model: model,
+              name: model.name,
+              isSelected: selectedCategory?.id == model.id
+          );
         }).toList();
       },
     ));
@@ -88,8 +79,12 @@ class AddBudgetController extends GetxController {
     wallets.bindStream(CombineLatestStream.combine2(
         _walletRepo.wallets, _selectedWallets.stream, (wallets, selectedWallet) {
       return wallets.map((e) {
-        return BudgetWalletUIModel(_walletUIMapper.map(e, 0.0),
-            selectedWallet.any((element) => element.id == e.id));
+        final wallet = _walletUIMapper.map(e, 0.0);
+        return SelectionListItem(
+          model: wallet,
+          name: wallet.name,
+          isSelected: selectedWallet.any((element) => element.id == e.id)
+        );
       }).toList();
     }));
 
