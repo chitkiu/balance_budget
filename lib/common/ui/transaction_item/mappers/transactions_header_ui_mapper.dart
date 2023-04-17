@@ -27,10 +27,12 @@ class TransactionsHeaderUIMapper {
       var transactions = element.value;
       transactions.sort(_richTransactionComparator.compare);
       var transactionsUIModels =
-          transactions.map(_transactionsUIMapper.mapFromRich).whereNotNull();
-      totalTransactionCount += transactionsUIModels.length;
-      groupedTransactions.add(_transactionsUIMapper.mapHeader(
-          element.key, transactions, transactionsUIModels));
+      transactions.map(_transactionsUIMapper.mapFromRich).whereNotNull();
+      if (transactionsUIModels.isNotEmpty) {
+        totalTransactionCount += transactionsUIModels.length;
+        groupedTransactions.add(_transactionsUIMapper.mapHeader(
+            element.key, transactions, transactionsUIModels));
+      }
     });
 
     return ComplexTransactionsUIModel(
