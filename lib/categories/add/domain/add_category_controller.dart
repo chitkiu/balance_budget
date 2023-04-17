@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../common/data/models/transaction_type.dart';
@@ -10,16 +9,30 @@ class AddCategoryController extends GetxController {
 
   final selectedType = TransactionType.expense.obs;
 
-  final selectedIcon = Icons.not_interested.obs;
+  final selectedIcon = Rxn();
 
   void onSaveCategory(String title) {
-    if (title.isEmpty) {
+    final titleError = validateName(title);
+
+    if (titleError != null) {
       return;
     }
 
     _categoryRepo.create(title, selectedType.value, selectedIcon.value);
 
     Get.back();
+  }
+
+  //TODO Add translation
+  String? validateName(String? name) {
+    if (name == null || name.isEmpty) {
+      return "Please, enter name";
+    }
+    if (name.length > 50) {
+      return "Please, enter name below 50 symbols";
+    }
+
+    return null;
   }
 
 }

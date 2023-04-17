@@ -20,6 +20,8 @@ class AddCategoryScreen extends CommonScaffoldWithButtonScreen<AddCategoryContro
 
   final TextEditingController _nameController = TextEditingController();
 
+  final _nameInputKey = GlobalKey<FormFieldState>();
+
   @override
   Widget body(BuildContext context) {
     return GestureDetector(
@@ -29,15 +31,20 @@ class AddCategoryScreen extends CommonScaffoldWithButtonScreen<AddCategoryContro
       },
       child: Column(
         children: [
-          PlatformTextField(
+          PlatformTextFormField(
+            widgetKey: _nameInputKey,
             controller: _nameController,
             material: (context, platform) {
-              return MaterialTextFieldData(
+              return MaterialTextFormFieldData(
                   decoration: InputDecoration(labelText: Get.localisation.nameHint));
             },
             cupertino: (context, platform) {
-              return CupertinoTextFieldData(placeholder: Get.localisation.nameHint);
+              return CupertinoTextFormFieldData(
+                  placeholder: Get.localisation.nameHint
+              );
             },
+            validator: controller.validateName,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
           ),
 
           const SizedBox(
@@ -67,7 +74,7 @@ class AddCategoryScreen extends CommonScaffoldWithButtonScreen<AddCategoryContro
           Row(
             children: [
               Text("Selected icon:"),
-              Obx(() => Icon(controller.selectedIcon.value)),
+              Obx(() => Icon(controller.selectedIcon.value ?? Icons.not_interested)),
               PlatformElevatedButton(
                 child: Text("Select icon"),
                 onPressed: () async {
@@ -104,6 +111,9 @@ class AddCategoryScreen extends CommonScaffoldWithButtonScreen<AddCategoryContro
   @override
   void onButtonPress(BuildContext context) {
     FocusScope.of(context).requestFocus(FocusNode());
-    controller.onSaveCategory(_nameController.text);
+
+    if (_nameInputKey.currentState?.validate() == true) {
+      controller.onSaveCategory(_nameController.text);
+    }
   }
 }
