@@ -22,7 +22,7 @@ class CategoryTransactionsAggregator {
   Stream<List<RichTransactionModel>> transactionByCategoryId(String categoryId) {
     return CombineLatestStream.combine3(
       _categoryRepository.categoryById(categoryId),
-      _transactionsRepository.getTransactionsByCategoryId(categoryId),
+      _transactionsRepository.transactionsByCategoryId(categoryId),
       _walletRepository.walletsWithoutArchived,
       _mapper.mapTransactionsWithPresetCategory,
     );

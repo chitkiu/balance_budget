@@ -1,3 +1,4 @@
+import 'package:balance_budget/transactions/common/data/local_transactions_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,6 +32,8 @@ class LocalCategoryRepository {
             Category.fromJson(MapEntry(snapshot.id, snapshot.data()!)),
         toFirestore: (category, _) => category.toJson(),
       );
+
+  LocalTransactionsRepository get _transactionRepo => Get.find();
 
   Stream<List<Category>> get categories => _ref.snapshots().map((event) {
         var result = event.docs.map((e) => e.data()).toList();
@@ -85,8 +88,10 @@ class LocalCategoryRepository {
             .toList());
   }
 
-  void remove(String category) {
-    // categories.removeWhere((element) => element.id == category);
+  Future<void> delete(String categoryId) async {
+    await _ref.doc(categoryId).delete();
+    final transactions = await _transactionRepo.getTransactionsByCategoryId(categoryId);
+    await _transactionRepo.bunchDelete(transactions.map((e) => e.id).toList());
   }
 
   Future<void> edit(

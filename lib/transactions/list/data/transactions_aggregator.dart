@@ -23,7 +23,7 @@ class TransactionsAggregator {
   Stream<List<RichTransactionModel>> transactionsByDate(DateTime start, DateTime end) {
     return CombineLatestStream.combine3(
       _categoryRepository.categoriesWithoutArchived,
-      _transactionsRepository.getTransactionByTimeRange(start, end),
+      _transactionsRepository.transactionByTimeRange(start, end),
       _walletRepository.walletsWithoutArchived,
       _mapper.mapTransactions,
     );
@@ -32,7 +32,7 @@ class TransactionsAggregator {
   Stream<RichTransactionModel?> transactionById(String id) {
     return CombineLatestStream.combine3(
       _categoryRepository.categories,
-      _transactionsRepository.getTransactionById(id),
+      _transactionsRepository.transactionById(id),
       _walletRepository.wallets,
       _mapper.mapTransaction,
     );

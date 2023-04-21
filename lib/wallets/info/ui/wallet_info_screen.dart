@@ -84,7 +84,12 @@ class WalletInfoScreen extends CommonScaffoldWithButtonScreen<WalletInfoControll
                   onPressed: () async {
                     await confirmBeforeActionDialog(
                       () async {
-                        await controller.deleteWallet();
+                        try {
+                          await controller.deleteWallet();
+                          Get.back();
+                        } on Exception catch (e) {
+                          debugPrint(e.toString());
+                        }
                       },
                     );
                   },

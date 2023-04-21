@@ -94,6 +94,6 @@ class CategoryInfoController extends GetxController
   }
 
   Future<void> deleteCategory() async {
-
+    await _categoryRepo.delete(id);
   }
 }

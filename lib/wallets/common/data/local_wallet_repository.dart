@@ -65,8 +65,10 @@ class LocalWalletRepository {
     return (await _ref.doc(id).get()).data();
   }
 
-  void remove(String walletId) {
-    // accounts.removeWhere((element) => element.id == category);
+  Future<void> delete(String walletId) async {
+    await _ref.doc(walletId).delete();
+    final transactions = await _transactionRepo.getTransactionsByWalletId(walletId);
+    await _transactionRepo.bunchDelete(transactions.map((e) => e.id).toList());
   }
 
   Future<void> edit(String id,

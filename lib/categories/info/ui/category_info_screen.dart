@@ -55,7 +55,12 @@ class CategoryInfoScreen extends CommonScaffoldWithButtonScreen<CategoryInfoCont
                   onPressed: () async {
                     await confirmBeforeActionDialog(
                           () async {
-                        await controller.deleteCategory();
+                            try {
+                              await controller.deleteCategory();
+                              Get.back();
+                            } on Exception catch (e) {
+                              debugPrint(e.toString());
+                            }
                       },
                     );
                   },

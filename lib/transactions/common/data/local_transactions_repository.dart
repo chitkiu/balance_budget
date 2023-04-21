@@ -20,7 +20,7 @@ class LocalTransactionsRepository {
   Stream<List<Transaction>> get transactions =>
       _ref.snapshots().map((event) => event.docs.map((e) => e.data()).toList());
 
-  Stream<Transaction?> getTransactionById(
+  Stream<Transaction?> transactionById(
     String id,
   ) {
     return _ref.doc(id).snapshots().map((event) {
@@ -32,7 +32,7 @@ class LocalTransactionsRepository {
     });
   }
 
-  Stream<List<Transaction>> getTransactionByTimeRange(
+  Stream<List<Transaction>> transactionByTimeRange(
     DateTime start,
     DateTime end,
   ) {
@@ -46,7 +46,7 @@ class LocalTransactionsRepository {
         .map((event) => event.docs.map((e) => e.data()).toList());
   }
 
-  Stream<List<Transaction>> getTransactionsByWalletId(
+  Stream<List<Transaction>> transactionsByWalletId(
     String walletId,
   ) {
     final transactionsFromWallet = _ref
@@ -63,13 +63,39 @@ class LocalTransactionsRepository {
         transferTransactionsFromWallet, (a, b) => a + b);
   }
 
-  Stream<List<Transaction>> getTransactionsByCategoryId(
+  Future<List<Transaction>> getTransactionsByWalletId(
+    String walletId,
+  ) async {
+    final transactionsFromWallet = (await _ref
+        .where('walletId', isEqualTo: walletId)
+        .get())
+        .docs.map((event) => event.data()).toList();
+
+    final transferTransactionsFromWallet = (await _ref
+        .where('toWalletId', isEqualTo: walletId)
+        .get())
+        .docs.map((event) => event.data()).toList();
+
+    return transactionsFromWallet + transferTransactionsFromWallet;
+  }
+
+  Stream<List<Transaction>> transactionsByCategoryId(
     String categoryId,
   ) {
     return _ref
         .where('categoryId', isEqualTo: categoryId)
         .snapshots()
         .map((event) => event.docs.map((e) => e.data()).toList());
+  }
+
+  Future<List<Transaction>> getTransactionsByCategoryId(
+    String categoryId,
+  ) async {
+    final items = await _ref
+      .where('categoryId', isEqualTo: categoryId)
+      .get();
+
+    return items.docs.map((event) => event.data()).toList();
   }
 
   bool createOrUpdate(
@@ -139,6 +165,14 @@ class LocalTransactionsRepository {
 
   Future<void> remove(String transactionId) async {
     await _ref.doc(transactionId).delete();
+  }
+
+  Future<void> bunchDelete(List<String> ids) async {
+    FirebaseFirestore.instance.runTransaction((transaction) async {
+      for (var id in ids) {
+        transaction.delete(_ref.doc(id));
+      }
+    });
   }
 
   Future<void> edit(
