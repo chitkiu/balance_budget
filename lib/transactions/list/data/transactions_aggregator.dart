@@ -20,42 +20,21 @@ class TransactionsAggregator {
 
   const TransactionsAggregator();
 
-  Stream<List<RichTransactionModel>> transactionsByDate(DateTime start, DateTime end,
-      {bool skipArchive = false}) {
+  Stream<List<RichTransactionModel>> transactionsByDate(DateTime start, DateTime end) {
     return CombineLatestStream.combine3(
-      _categoryRepository.categories,
+      _categoryRepository.categoriesWithoutArchived,
       _transactionsRepository.getTransactionByTimeRange(start, end),
-      skipArchive ? _walletRepository.walletsWithoutArchived : _walletRepository.wallets,
+      _walletRepository.walletsWithoutArchived,
       _mapper.mapTransactions,
     );
   }
 
-  Stream<RichTransactionModel?> transactionById(String id, {bool skipArchive = false}) {
+  Stream<RichTransactionModel?> transactionById(String id) {
     return CombineLatestStream.combine3(
       _categoryRepository.categories,
       _transactionsRepository.getTransactionById(id),
-      skipArchive ? _walletRepository.walletsWithoutArchived : _walletRepository.wallets,
+      _walletRepository.wallets,
       _mapper.mapTransaction,
-    );
-  }
-
-  Stream<List<RichTransactionModel>> transactionByWalletId(String walletId,
-      {bool skipArchive = false}) {
-    return CombineLatestStream.combine3(
-      _categoryRepository.categories,
-      _transactionsRepository.getTransactionsByWalletId(walletId),
-      skipArchive ? _walletRepository.walletsWithoutArchived : _walletRepository.wallets,
-      _mapper.mapTransactions,
-    );
-  }
-
-  Stream<List<RichTransactionModel>> transactionByCategoryId(String categoryId,
-      {bool skipArchive = false}) {
-    return CombineLatestStream.combine3(
-      _categoryRepository.getCategoryById(categoryId),
-      _transactionsRepository.getTransactionsByCategoryId(categoryId),
-      skipArchive ? _walletRepository.walletsWithoutArchived : _walletRepository.wallets,
-      _mapper.mapTransactionsWithPresetCategory,
     );
   }
 }

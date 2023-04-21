@@ -9,6 +9,7 @@ class CategoryUIMapper {
       category.title,
       category.id,
       category.icon,
+      category.archived,
     );
   }
 }

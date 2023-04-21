@@ -13,12 +13,14 @@ class LocalCategoryRepository {
     Category(
       title: Get.localisation.addInitialBalanceCategoryTitle,
       transactionType: TransactionType.setInitialBalance,
+      archived: false,
     ),
     Category(
       title: Get.localisation.transferCategoryTitle,
       transactionType: TransactionType.transfer,
       //TODO Change icon
       icon: Icons.compare_arrows,
+      archived: false,
     ),
   ];
 
@@ -36,6 +38,13 @@ class LocalCategoryRepository {
         return result;
       });
 
+  Stream<List<Category>> get categoriesWithoutArchived =>
+      _ref.where("archived", isEqualTo: false).snapshots().map((event) {
+        var result = event.docs.map((e) => e.data()).toList();
+        result.addAll(_localCategories);
+        return result;
+      });
+
   LocalCategoryRepository() {
     //TODO Add init default categories
     // create("Car", TransactionType.spend, null);
@@ -48,11 +57,16 @@ class LocalCategoryRepository {
       title: title,
       transactionType: transactionType,
       icon: icon ?? Icons.not_interested,
+      archived: false,
     ));
   }
 
-  Stream<Category?> getCategoryById(String id) {
+  Stream<Category?> categoryById(String id) {
     return _ref.doc(id).snapshots().map((event) => event.data());
+  }
+
+  Future<Category?> getCategoryById(String id) async {
+    return (await _ref.doc(id).get()).data();
   }
 
   Stream<List<Category>> getCategoriesByType(TransactionType type) {
@@ -75,16 +89,19 @@ class LocalCategoryRepository {
     // categories.removeWhere((element) => element.id == category);
   }
 
-  void edit(
-      String category, String? title, TransactionType? transactionType, IconData? icon) {
-    // var editCategory = categories.firstWhereOrNull((element) => element.id == category);
-    // if (editCategory == null) {
-    //   return;
-    // }
-    // var index = categories.lastIndexOf(editCategory);
-    //
-    // categories.removeAt(index);
-    //
-    // categories.insert(index, editCategory.copyWith(title, transactionType, icon, rootCategory));
+  Future<void> edit(
+      String id, {String? title, TransactionType? transactionType, IconData? icon, bool? archived}) async {
+    final data = _ref.doc(id);
+
+    final editCategory = (await data.get()).data();
+
+    if (editCategory == null) {
+      return;
+    }
+
+    Category newCategory = editCategory.copyWith(
+        title: title, transactionType: transactionType, icon: icon, archived: archived);
+
+    await data.set(newCategory);
   }
 }

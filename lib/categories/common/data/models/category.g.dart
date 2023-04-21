@@ -13,12 +13,14 @@ Category _$CategoryFromJson(Map<String, dynamic> json) => Category(
       icon: json['icon'] == null
           ? Icons.not_interested
           : const IconConverter().fromJson(json['icon'] as String?),
+      archived: json['archived'] as bool,
     );
 
 Map<String, dynamic> _$CategoryToJson(Category instance) => <String, dynamic>{
       'title': instance.title,
       'transactionType': _$TransactionTypeEnumMap[instance.transactionType]!,
       'icon': const IconConverter().toJson(instance.icon),
+      'archived': instance.archived,
     };
 
 const _$TransactionTypeEnumMap = {

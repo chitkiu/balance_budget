@@ -1,5 +1,6 @@
 import 'package:balance_budget/common/getx_extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../common/ui/common_icons.dart';
@@ -36,6 +37,30 @@ class CategoryInfoScreen extends CommonScaffoldWithButtonScreen<CategoryInfoCont
                 secondText: category.name,
                 icon: category.icon,
               ),
+              const SizedBox(
+                height: CommonUI.defaultFullTileVerticalPadding,
+              ),
+              PlatformElevatedButton(
+                onPressed: () async {
+                  await confirmBeforeActionDialog(
+                        () async {
+                      await controller.archiveCategory();
+                    },
+                  );
+                },
+                child: Text(category.isArchived ? "Unarchive" : "Archive"),
+              ),
+              if (category.isArchived)
+                PlatformElevatedButton(
+                  onPressed: () async {
+                    await confirmBeforeActionDialog(
+                          () async {
+                        await controller.deleteCategory();
+                      },
+                    );
+                  },
+                  child: Text("Delete"),
+                ),
               const SizedBox(
                 height: CommonUI.defaultFullTileVerticalPadding,
               ),

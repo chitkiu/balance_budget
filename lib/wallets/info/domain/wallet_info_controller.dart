@@ -12,11 +12,11 @@ import '../../../transactions/common/data/models/rich_transaction_model.dart';
 import '../../../transactions/common/data/rich_transaction_comparator.dart';
 import '../../../transactions/info/domain/transaction_info_controller.dart';
 import '../../../transactions/info/ui/transaction_info_screen.dart';
-import '../../../transactions/list/data/transactions_aggregator.dart';
 import '../../common/data/local_wallet_repository.dart';
 import '../../common/data/models/wallet.dart';
 import '../../common/data/wallet_balance_calculator.dart';
 import '../../list/domain/mappers/wallet_ui_mapper.dart';
+import '../data/wallet_transactions_aggregator.dart';
 import '../ui/models/rich_wallet_ui_model.dart';
 
 class WalletInfoController extends GetxController
@@ -26,7 +26,7 @@ class WalletInfoController extends GetxController
   WalletInfoController(this.id);
 
   LocalWalletRepository get _walletRepo => Get.find();
-  TransactionsAggregator get _transactionsAggregator => Get.find();
+  WalletTransactionAggregator get _transactionsAggregator => Get.find();
 
   final WalletUIMapper _walletUIMapper = const WalletUIMapper();
 
