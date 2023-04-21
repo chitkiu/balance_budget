@@ -2,9 +2,10 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../common/data/models/transaction_type.dart';
+import '../../../common/domain/name_validator.dart';
 import '../../common/data/local_category_repository.dart';
 
-class AddCategoryController extends GetxController {
+class AddCategoryController extends GetxController with NameValidator {
 
   LocalCategoryRepository get _categoryRepo => Get.find();
 
@@ -32,18 +33,6 @@ class AddCategoryController extends GetxController {
     _categoryRepo.create(title, selectedType.value, icon);
 
     Get.back();
-  }
-
-  //TODO Add translation
-  String? validateName(String? name) {
-    if (name == null || name.isEmpty) {
-      return "Please, enter name";
-    }
-    if (name.length > 50) {
-      return "Please, enter name below 50 symbols";
-    }
-
-    return null;
   }
 
   void onIconPickerClick() {

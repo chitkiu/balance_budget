@@ -1,9 +1,11 @@
 import 'package:get/get.dart';
 
+import '../../../common/domain/name_validator.dart';
+import '../../../common/domain/number_validator.dart';
 import '../../common/data/local_wallet_repository.dart';
 import '../ui/models/wallet_type.dart';
 
-class AddWalletController extends GetxController {
+class AddWalletController extends GetxController with NameValidator, NumberValidator {
   LocalWalletRepository get _walletRepo => Get.find();
 
   Rx<WalletType> walletType = WalletType.debit.obs;

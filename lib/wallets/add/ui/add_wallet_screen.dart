@@ -21,6 +21,11 @@ class AddWalletScreen extends CommonScaffoldWithButtonScreen<AddWalletController
   final TextEditingController _ownBalanceController = TextEditingController();
   final TextEditingController _creditBalanceController = TextEditingController();
 
+  final _nameInputKey = GlobalKey<FormFieldState>();
+  final _totalBalanceInputKey = GlobalKey<FormFieldState>();
+  final _ownBalanceInputKey = GlobalKey<FormFieldState>();
+  final _creditBalanceInputKey = GlobalKey<FormFieldState>();
+
   @override
   Widget body(BuildContext context) {
     return GestureDetector(
@@ -30,20 +35,22 @@ class AddWalletScreen extends CommonScaffoldWithButtonScreen<AddWalletController
       },
       child: Column(
         children: [
-          PlatformTextField(
+          PlatformTextFormField(
+            widgetKey: _nameInputKey,
             controller: _nameController,
             material: (context, platform) {
-              return MaterialTextFieldData(
+              return MaterialTextFormFieldData(
                   decoration: InputDecoration(
                       labelText: Get.localisation.nameHint
                   )
               );
             },
             cupertino: (context, platform) {
-              return CupertinoTextFieldData(
+              return CupertinoTextFormFieldData(
                   placeholder: Get.localisation.nameHint
               );
             },
+            validator: controller.validateName,
           ),
           const SizedBox(height: 8,),
           Text(Get.localisation.addWalletTypeSelector),
@@ -68,18 +75,20 @@ class AddWalletScreen extends CommonScaffoldWithButtonScreen<AddWalletController
             switch (walletType) {
               case WalletType.debit:
                 _totalBalanceController.clear();
-                return PlatformTextField(
+                return PlatformTextFormField(
+                  widgetKey: _totalBalanceInputKey,
+                  validator: controller.validateNumber,
                   keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
                   controller: _totalBalanceController,
                   material: (context, platform) {
-                    return MaterialTextFieldData(
+                    return MaterialTextFormFieldData(
                         decoration: InputDecoration(
                             labelText: Get.localisation.addWalletTotalBalanceHint
                         )
                     );
                   },
                   cupertino: (context, platform) {
-                    return CupertinoTextFieldData(
+                    return CupertinoTextFormFieldData(
                         placeholder: Get.localisation.addWalletTotalBalanceHint
                     );
                   },
@@ -89,34 +98,38 @@ class AddWalletScreen extends CommonScaffoldWithButtonScreen<AddWalletController
                 _creditBalanceController.clear();
                 return Column(
                   children: [
-                    PlatformTextField(
+                    PlatformTextFormField(
+                      widgetKey: _ownBalanceInputKey,
+                      validator: controller.validateNumber,
                       keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
                       controller: _ownBalanceController,
                       material: (context, platform) {
-                        return MaterialTextFieldData(
+                        return MaterialTextFormFieldData(
                             decoration: InputDecoration(
                                 labelText: Get.localisation.addWalletOwnBalanceHint
                             )
                         );
                       },
                       cupertino: (context, platform) {
-                        return CupertinoTextFieldData(
+                        return CupertinoTextFormFieldData(
                             placeholder: Get.localisation.addWalletOwnBalanceHint
                         );
                       },
                     ),
-                    PlatformTextField(
+                    PlatformTextFormField(
+                      widgetKey: _creditBalanceInputKey,
+                      validator: controller.validateNumber,
                       keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
                       controller: _creditBalanceController,
                       material: (context, platform) {
-                        return MaterialTextFieldData(
+                        return MaterialTextFormFieldData(
                             decoration: InputDecoration(
                                 labelText: Get.localisation.addWalletCreditLimit
                             )
                         );
                       },
                       cupertino: (context, platform) {
-                        return CupertinoTextFieldData(
+                        return CupertinoTextFormFieldData(
                             placeholder: Get.localisation.addWalletCreditLimit
                         );
                       },
@@ -133,12 +146,21 @@ class AddWalletScreen extends CommonScaffoldWithButtonScreen<AddWalletController
   @override
   void onButtonPress(BuildContext context) async {
     FocusScope.of(context).requestFocus(FocusNode());
-    await controller.onSaveWallet(
-      title: _nameController.text,
-      totalBalance: _totalBalanceController.text,
-      ownBalance: _ownBalanceController.text,
-      creditBalance: _creditBalanceController.text,
-    );
+
+    if (_nameInputKey.currentState?.validate() == true) {
+      if (
+      _totalBalanceInputKey.currentState?.validate() == true ||
+          (_ownBalanceInputKey.currentState?.validate() == true &&
+              _creditBalanceInputKey.currentState?.validate() == true)
+      ) {
+        await controller.onSaveWallet(
+          title: _nameController.text,
+          totalBalance: _totalBalanceController.text,
+          ownBalance: _ownBalanceController.text,
+          creditBalance: _creditBalanceController.text,
+        );
+      }
+    }
   }
 
 }
