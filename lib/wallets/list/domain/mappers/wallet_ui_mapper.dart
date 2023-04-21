@@ -23,12 +23,14 @@ class WalletUIMapper {
         id: wallet.id,
         name: wallet.name,
         balance: _sumFormatter.format(wallet.creditBalance + balance),
+        isArchived: wallet.archived,
       );
     }
     return DefaultWalletUIModel(
       id: wallet.id,
       name: wallet.name,
       balance: _sumFormatter.format(balance),
+      isArchived: wallet.archived,
     );
   }
 }

@@ -20,47 +20,41 @@ class TransactionsAggregator {
 
   const TransactionsAggregator();
 
-  Stream<List<RichTransactionModel>> transactionsByDate(
-    DateTime start,
-    DateTime end,
-  ) {
+  Stream<List<RichTransactionModel>> transactionsByDate(DateTime start, DateTime end,
+      {bool skipArchive = false}) {
     return CombineLatestStream.combine3(
       _categoryRepository.categories,
       _transactionsRepository.getTransactionByTimeRange(start, end),
-      _walletRepository.wallets,
+      skipArchive ? _walletRepository.walletsWithoutArchived : _walletRepository.wallets,
       _mapper.mapTransactions,
     );
   }
 
-  Stream<RichTransactionModel?> transactionById(
-    String id,
-  ) {
+  Stream<RichTransactionModel?> transactionById(String id, {bool skipArchive = false}) {
     return CombineLatestStream.combine3(
       _categoryRepository.categories,
       _transactionsRepository.getTransactionById(id),
-      _walletRepository.wallets,
+      skipArchive ? _walletRepository.walletsWithoutArchived : _walletRepository.wallets,
       _mapper.mapTransaction,
     );
   }
 
-  Stream<List<RichTransactionModel>> transactionByWalletId(
-    String walletId,
-  ) {
+  Stream<List<RichTransactionModel>> transactionByWalletId(String walletId,
+      {bool skipArchive = false}) {
     return CombineLatestStream.combine3(
       _categoryRepository.categories,
       _transactionsRepository.getTransactionsByWalletId(walletId),
-      _walletRepository.wallets,
+      skipArchive ? _walletRepository.walletsWithoutArchived : _walletRepository.wallets,
       _mapper.mapTransactions,
     );
   }
 
-  Stream<List<RichTransactionModel>> transactionByCategoryId(
-    String categoryId,
-  ) {
+  Stream<List<RichTransactionModel>> transactionByCategoryId(String categoryId,
+      {bool skipArchive = false}) {
     return CombineLatestStream.combine3(
       _categoryRepository.getCategoryById(categoryId),
       _transactionsRepository.getTransactionsByCategoryId(categoryId),
-      _walletRepository.wallets,
+      skipArchive ? _walletRepository.walletsWithoutArchived : _walletRepository.wallets,
       _mapper.mapTransactionsWithPresetCategory,
     );
   }

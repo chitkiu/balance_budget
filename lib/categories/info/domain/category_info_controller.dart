@@ -46,7 +46,7 @@ class CategoryInfoController extends GetxController
         return const Stream.empty();
       } else {
         return _transactionsAggregator
-            .transactionByCategoryId(category.id)
+            .transactionByCategoryId(category.id, skipArchive: true)
             .map((transactions) => _mapToUIModel(category, transactions));
       }
     }).handleError((Object e, StackTrace str) {

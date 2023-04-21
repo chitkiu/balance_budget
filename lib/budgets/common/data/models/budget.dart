@@ -93,10 +93,10 @@ class MultiCategoryBudget extends Budget {
   }
 
   factory MultiCategoryBudget.fromJson(MapEntry<String, dynamic> entry) =>
-      _$TotalBudgetWithCategoriesFromJson(entry.value).._id = entry.key;
+      _$MultiCategoryBudgetFromJson(entry.value).._id = entry.key;
 
   @override
-  Map<String, dynamic> toJson() => _$TotalBudgetWithCategoriesToJson(this);
+  Map<String, dynamic> toJson() => _$MultiCategoryBudgetToJson(this);
 
 }
 

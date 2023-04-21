@@ -12,8 +12,8 @@ class RichTransactionMapper {
 
   const RichTransactionMapper(this._comparator);
 
-  List<RichTransactionModel> mapTransactions(List<Category> categories,
-      List<Transaction> transactions, List<Wallet> wallets) {
+  List<RichTransactionModel> mapTransactions(
+      List<Category> categories, List<Transaction> transactions, List<Wallet> wallets) {
     List<RichTransactionModel> newTransactions = transactions
         .map((transaction) => mapTransaction(categories, transaction, wallets))
         .whereNotNull()
@@ -24,13 +24,13 @@ class RichTransactionMapper {
     return newTransactions;
   }
 
-  RichTransactionModel? mapTransaction(List<Category> categories,
-      Transaction? transaction, List<Wallet> wallets) {
+  RichTransactionModel? mapTransaction(
+      List<Category> categories, Transaction? transaction, List<Wallet> wallets) {
     if (transaction == null) {
       return null;
     }
-    var wallet = wallets
-        .firstWhereOrNull((element) => element.id == transaction.walletId);
+    var wallet =
+        wallets.firstWhereOrNull((element) => element.id == transaction.walletId);
     if (wallet == null) {
       return null;
     }
@@ -39,8 +39,8 @@ class RichTransactionMapper {
         return InitialBalanceRichTransactionModel(transaction, wallet);
       case TransactionType.transfer:
         if (transaction is TransferTransaction) {
-          var toWallet = wallets.firstWhereOrNull(
-              (element) => element.id == transaction.toWalletId);
+          var toWallet =
+              wallets.firstWhereOrNull((element) => element.id == transaction.toWalletId);
           if (toWallet == null) {
             return null;
           }
@@ -55,8 +55,8 @@ class RichTransactionMapper {
       case TransactionType.expense:
       case TransactionType.income:
         if (transaction is CommonTransaction) {
-          var category = categories.firstWhereOrNull(
-              (element) => element.id == transaction.categoryId);
+          var category = categories
+              .firstWhereOrNull((element) => element.id == transaction.categoryId);
           if (category == null) {
             return null;
           }
@@ -67,11 +67,12 @@ class RichTransactionMapper {
     }
   }
 
-  List<RichTransactionModel> mapTransactionsWithPresetCategory(Category? category, List<Transaction> transactions, List<Wallet> wallets) {
+  List<RichTransactionModel> mapTransactionsWithPresetCategory(
+      Category? category, List<Transaction> transactions, List<Wallet> wallets) {
     List<RichTransactionModel> newTransactions = transactions
         .map((transaction) {
-          var wallet = wallets
-              .firstWhereOrNull((element) => element.id == transaction.walletId);
+          var wallet =
+              wallets.firstWhereOrNull((element) => element.id == transaction.walletId);
           if (wallet == null) {
             return null;
           }

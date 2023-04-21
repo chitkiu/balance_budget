@@ -87,4 +87,16 @@ class WalletInfoController extends GetxController
             wallet, _calculator.calculateBalanceFromRich(transactions, wallet)),
         _transactionsHeaderUIMapper.mapTransactionsToUI(transactions));
   }
+
+  Future<void> archiveWallet() async {
+    final wallet = await _walletRepo.getWalletById(id);
+
+    if (wallet != null) {
+      await _walletRepo.edit(wallet.id, archived: !wallet.archived);
+    }
+  }
+
+  Future<void> deleteWallet() async {
+    throw UnimplementedError();
+  }
 }

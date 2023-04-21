@@ -20,6 +20,11 @@ class LocalWalletRepository {
   Stream<List<Wallet>> get wallets =>
       _ref.snapshots().map((event) => event.docs.map((e) => e.data()).toList());
 
+  Stream<List<Wallet>> get walletsWithoutArchived =>
+      _ref.where("archived", isEqualTo: false)
+          .snapshots()
+          .map((event) => event.docs.map((e) => e.data()).toList());
+
   //TODO Added creating default accounts (cash for example)
   LocalWalletRepository() {
     // createDebit("Mono white", 1000);
@@ -29,6 +34,7 @@ class LocalWalletRepository {
   Future<void> createDebit(String name, double totalBalance) async {
     var newWallet = await _ref.add(DebitWallet(
       name: name,
+      archived: false,
     ));
 
     _createInitialTransaction(newWallet.id, totalBalance);
@@ -39,6 +45,7 @@ class LocalWalletRepository {
     var newWallet = await _ref.add(CreditWallet(
       name: name,
       creditBalance: creditBalance,
+      archived: false,
     ));
 
     _createInitialTransaction(newWallet.id, ownBalance);
@@ -54,40 +61,44 @@ class LocalWalletRepository {
     });
   }
 
+  Future<Wallet?> getWalletById(String id) async {
+    return (await _ref.doc(id).get()).data();
+  }
+
   void remove(String walletId) {
     // accounts.removeWhere((element) => element.id == category);
   }
 
-  void edit(String id,
+  Future<void> edit(String id,
       {String? name,
-      double? totalBalance,
-      double? ownBalance,
-      double? creditBalance}) {
-/*    var editAccount = accounts.firstWhereOrNull((element) => element.id == id);
-    if (editAccount == null) {
+      double? creditBalance,
+      bool? archived}) async {
+    final data = _ref.doc(id);
+
+    final editWallet = (await data.get()).data();
+
+    if (editWallet == null) {
       return;
     }
 
-    var index = accounts.lastIndexOf(editAccount);
+    Wallet? newWallet;
 
-    accounts.removeAt(index);
-
-    Account? newAccount;
-
-    if (editAccount is DebitAccount) {
-      newAccount = editAccount.copyWith(
+    if (editWallet is DebitWallet) {
+      newWallet = editWallet.copyWith(
         name: name,
-        totalBalance: totalBalance,
+        archived: archived,
       );
-    } else if (editAccount is CreditAccount) {
-      newAccount = editAccount.copyWith(
+    } else if (editWallet is CreditWallet) {
+      newWallet = editWallet.copyWith(
         name: name,
-        ownBalance: ownBalance,
         creditBalance: creditBalance,
+        archived: archived,
       );
     }
 
-    accounts.insert(index, newAccount!);*/
+    if (newWallet != null) {
+      await data.set(newWallet);
+    }
   }
 
   void _createInitialTransaction(String? walletId, double sum) {

@@ -51,8 +51,7 @@ Json? _$JsonConverterToJson<Json, Value>(
 ) =>
     value == null ? null : toJson(value);
 
-MultiCategoryBudget _$TotalBudgetWithCategoriesFromJson(
-        Map<String, dynamic> json) =>
+MultiCategoryBudget _$MultiCategoryBudgetFromJson(Map<String, dynamic> json) =>
     MultiCategoryBudget(
       json['name'] as String,
       $enumDecode(_$BudgetRepeatTypeEnumMap, json['repeatType']),
@@ -66,7 +65,7 @@ MultiCategoryBudget _$TotalBudgetWithCategoriesFromJson(
           .toList(),
     );
 
-Map<String, dynamic> _$TotalBudgetWithCategoriesToJson(
+Map<String, dynamic> _$MultiCategoryBudgetToJson(
         MultiCategoryBudget instance) =>
     <String, dynamic>{
       'name': instance.name,

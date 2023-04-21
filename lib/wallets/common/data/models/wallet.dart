@@ -6,10 +6,11 @@ abstract class Wallet {
   @JsonKey(includeFromJson: false)
   String? _id;
   final String name;
+  final bool archived;
 
   String get id => _id ?? '';
 
-  Wallet({required this.name});
+  Wallet({required this.name, required this.archived});
 
   @JsonKey(
       name: _typeName,
@@ -32,7 +33,7 @@ abstract class Wallet {
 
 @JsonSerializable()
 class DebitWallet extends Wallet {
-  DebitWallet({required super.name});
+  DebitWallet({required super.name, required super.archived});
 
   factory DebitWallet.fromJson(MapEntry<dynamic, dynamic> json) =>
       _$DebitWalletFromJson(json.value).._id = json.key;
@@ -40,9 +41,10 @@ class DebitWallet extends Wallet {
   @override
   Map<String, dynamic> toJson() => _$DebitWalletToJson(this);
 
-  DebitWallet copyWith({String? name}) {
+  DebitWallet copyWith({String? name, bool? archived}) {
     return DebitWallet(
       name: name ?? this.name,
+      archived: archived ?? this.archived,
     ).._id = _id;
   }
 }
@@ -51,7 +53,7 @@ class DebitWallet extends Wallet {
 class CreditWallet extends Wallet {
   final double creditBalance;
 
-  CreditWallet({required super.name, required this.creditBalance});
+  CreditWallet({required super.name, required this.creditBalance, required super.archived});
 
   factory CreditWallet.fromJson(MapEntry<dynamic, dynamic> json) =>
       _$CreditWalletFromJson(json.value).._id = json.key;
@@ -59,10 +61,11 @@ class CreditWallet extends Wallet {
   @override
   Map<String, dynamic> toJson() => _$CreditWalletToJson(this);
 
-  CreditWallet copyWith({String? name, double? ownBalance, double? creditBalance}) {
+  CreditWallet copyWith({String? name, double? creditBalance, bool? archived}) {
     return CreditWallet(
       name: name ?? this.name,
       creditBalance: creditBalance ?? this.creditBalance,
+      archived: archived ?? this.archived,
     ).._id = _id;
   }
 }

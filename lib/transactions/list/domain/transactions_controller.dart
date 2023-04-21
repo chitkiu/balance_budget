@@ -63,7 +63,7 @@ class TransactionsController extends GetxController
   Stream<ComplexTransactionsUIModel> _transactionsStream() {
     return _dateStorage.currentDateStream.switchMap((dateRange) {
       return _transactionsAggregator
-          .transactionsByDate(dateRange.start, dateRange.end)
+          .transactionsByDate(dateRange.start, dateRange.end, skipArchive: true)
           .map(_transactionsHeaderUIMapper.mapTransactionsToUI);
     }).handleError((Object e, StackTrace str) {
       change(null, status: RxStatus.error(str.toString()));

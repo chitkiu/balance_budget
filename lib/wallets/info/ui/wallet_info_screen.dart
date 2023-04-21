@@ -1,5 +1,6 @@
 import 'package:balance_budget/common/getx_extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../common/ui/common_icons.dart';
@@ -68,6 +69,30 @@ class WalletInfoScreen extends CommonScaffoldWithButtonScreen<WalletInfoControll
                 const SizedBox(
                   height: 16,
                 ),
+              PlatformElevatedButton(
+                onPressed: () async {
+                  await confirmBeforeActionDialog(
+                    () async {
+                      await controller.archiveWallet();
+                    },
+                  );
+                },
+                child: Text(wallet.isArchived ? "Unarchive" : "Archive"),
+              ),
+              if (wallet.isArchived)
+                PlatformElevatedButton(
+                  onPressed: () async {
+                    await confirmBeforeActionDialog(
+                      () async {
+                        await controller.deleteWallet();
+                      },
+                    );
+                  },
+                  child: Text("Delete"),
+                ),
+              const SizedBox(
+                height: 16,
+              ),
               if (state.transactions.transactions.isNotEmpty)
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
@@ -100,7 +125,10 @@ class WalletInfoScreen extends CommonScaffoldWithButtonScreen<WalletInfoControll
                   },
                 )),
               if (state.transactions.transactions.isEmpty)
-                Expanded(child: Center(child: Text(Get.localisation.noTransactions),))
+                Expanded(
+                    child: Center(
+                  child: Text(Get.localisation.noTransactions),
+                ))
             ],
           ),
         );
