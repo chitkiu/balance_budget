@@ -18,16 +18,16 @@ dependencies:
   intl: any
   async: ^2.10.0
   rxdart: ^0.27.7
-  firebase_core: ^2.9.0
-  firebase_auth: ^4.4.1
-  firebase_ui_auth: ^1.2.1
+  firebase_core: ^2.10.0
+  firebase_auth: ^4.4.2
+  firebase_ui_auth: ^1.2.2
   json_serializable: ^6.6.1
   json_annotation: ^4.8.0
-  firebase_ui_oauth_google: ^1.1.1
-  flutter_launcher_icons: ^0.13.0
+  firebase_ui_oauth_google: ^1.1.2
+  flutter_launcher_icons: ^0.13.1
   calendar_date_picker2: ^0.5.2
   collection: ^1.17.0
-  cloud_firestore: ^4.5.1
+  cloud_firestore: ^4.5.2
   flutter_iconpicker:
     git:
       url: https://github.com/kechankrisna/FlutterIconPicker
