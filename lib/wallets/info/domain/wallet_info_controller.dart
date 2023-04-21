@@ -19,7 +19,6 @@ import '../../list/domain/mappers/wallet_ui_mapper.dart';
 import '../data/wallet_transactions_aggregator.dart';
 import '../ui/models/rich_wallet_ui_model.dart';
 
-//TODO Fix wrong behaviour when archive transaction wallet - wrong calculation
 class WalletInfoController extends GetxController
     with StateMixin<RichWalletUIModel> {
   final String id;

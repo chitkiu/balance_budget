@@ -55,8 +55,11 @@ class UpdateTransactionController extends GetxController with NumberValidator {
   @override
   void onReady() {
     //TODO Move to separate class
+
+    ///TODO think about hiding archived items
+    ///TODO We can have some problem with it if we try to edit transaction with archived category/wallet
     categoryList.bindStream(CombineLatestStream.combine3(
-      _categoryRepo.categories,
+      _categoryRepo.categoriesWithoutArchived,
       _selectedCategory.stream,
       selectedType.stream,
       _transactionCategoryUIMapper.map,
@@ -68,7 +71,7 @@ class UpdateTransactionController extends GetxController with NumberValidator {
 
     selectedWallet.bindStream(
       CombineLatestStream.combine2(
-          _walletRepo.wallets,
+          _walletRepo.walletsWithoutArchived,
           _selectedWalletId.stream,
           _transactionWalletUIMapper.map,
       )
@@ -76,7 +79,7 @@ class UpdateTransactionController extends GetxController with NumberValidator {
 
     selectedToWallet.bindStream(
       CombineLatestStream.combine2(
-          _walletRepo.wallets,
+          _walletRepo.walletsWithoutArchived,
           _selectedToWalletId.stream,
           _transactionWalletUIMapper.map,
       )

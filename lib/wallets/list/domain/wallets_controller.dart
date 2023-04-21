@@ -14,7 +14,6 @@ import '../data/filtered_transactions_repository.dart';
 import '../ui/models/wallet_ui_model.dart';
 import 'mappers/wallet_ui_mapper.dart';
 
-//TODO Fix wrong behaviour when archive transaction wallet - wrong calculation
 class WalletsController extends GetxController {
   LocalWalletRepository get _walletRepo => Get.find();
   FilteredTransactionsRepository get _transactionRepo => Get.find();

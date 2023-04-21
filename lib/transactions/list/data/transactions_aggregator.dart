@@ -24,9 +24,19 @@ class TransactionsAggregator {
     return CombineLatestStream.combine3(
       _categoryRepository.categoriesWithoutArchived,
       _transactionsRepository.transactionByTimeRange(start, end),
-      _walletRepository.walletsWithoutArchived,
+      _walletRepository.wallets,
       _mapper.mapTransactions,
-    );
+    ).map((transactions) {
+      return transactions.where((transaction) {
+        ///Filter only if it's default transaction, if it transfer - we should show it, because it's impact wallet info
+        ///Or hide transfer on all screen, decide it later
+        if (transaction is CategoryRichTransactionModel) {
+          return !transaction.fromWallet.archived;
+        } else {
+          return true;
+        }
+      }).toList();
+    });
   }
 
   Stream<RichTransactionModel?> transactionById(String id) {
