@@ -78,6 +78,7 @@ class AddCategoryScreen extends CommonScaffoldWithButtonScreen<AddCategoryContro
               PlatformElevatedButton(
                 child: Text("Select icon"),
                 onPressed: () async {
+                  controller.onIconPickerClick();
                   FocusScope.of(context).requestFocus(FocusNode());
 
                   IconData? icon = await FlutterIconPicker.showIconPicker(context,
@@ -91,6 +92,18 @@ class AddCategoryScreen extends CommonScaffoldWithButtonScreen<AddCategoryContro
               )
             ],
           ),
+          Obx(() {
+            final errorText = controller.iconError.value;
+            if (errorText != null) {
+              return Text(
+                errorText,
+                style: const TextStyle(color: Colors.red),
+                textAlign: TextAlign.start,
+              );
+            } else {
+              return Container();
+            }
+          })
         ],
       ),
     );

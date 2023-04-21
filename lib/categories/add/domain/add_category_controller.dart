@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../common/data/models/transaction_type.dart';
@@ -9,7 +10,9 @@ class AddCategoryController extends GetxController {
 
   final selectedType = TransactionType.expense.obs;
 
-  final selectedIcon = Rxn();
+  final selectedIcon = Rxn<IconData>();
+
+  final iconError = Rxn<String>();
 
   void onSaveCategory(String title) {
     final titleError = validateName(title);
@@ -18,7 +21,15 @@ class AddCategoryController extends GetxController {
       return;
     }
 
-    _categoryRepo.create(title, selectedType.value, selectedIcon.value);
+    final icon = selectedIcon.value;
+
+    if (icon == null) {
+      //TODO Add translation
+      iconError.value = "No icon selected!";
+      return;
+    }
+
+    _categoryRepo.create(title, selectedType.value, icon);
 
     Get.back();
   }
@@ -33,6 +44,10 @@ class AddCategoryController extends GetxController {
     }
 
     return null;
+  }
+
+  void onIconPickerClick() {
+    iconError.value = null;
   }
 
 }
