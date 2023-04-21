@@ -19,6 +19,8 @@ class UpdateTransactionScreen extends StatelessWidget {
   final TextEditingController _sumController = TextEditingController();
   final TextEditingController _commentController = TextEditingController();
 
+  final _sumInputKey = GlobalKey<FormFieldState>();
+
   final String title;
 
   final UpdateTransactionController controller;
@@ -53,8 +55,7 @@ class UpdateTransactionScreen extends StatelessWidget {
               return CommonToggleButtons(
                 onItemClick: (index) async {
                   FocusScope.of(context).requestFocus(FocusNode());
-                  var type = TransactionType.showInTransactionList[index];
-                  controller.selectedType.value = type;
+                  controller.selectType(TransactionType.showInTransactionList[index]);
                 },
                 isSelected: TransactionType.showInTransactionList
                     .map((e) => e == controller.selectedType.value)
@@ -69,22 +70,25 @@ class UpdateTransactionScreen extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            PlatformTextField(
+            PlatformTextFormField(
+              widgetKey: _sumInputKey,
+              validator: controller.validateNumber,
               keyboardType:
                   const TextInputType.numberWithOptions(signed: true, decimal: true),
               controller: _sumController,
               material: (context, platform) {
-                return MaterialTextFieldData(
+                return MaterialTextFormFieldData(
                     decoration: InputDecoration(
                         labelText: Get.localisation.addTransactionSumHint));
               },
               cupertino: (context, platform) {
-                return CupertinoTextFieldData(
+                return CupertinoTextFormFieldData(
                     placeholder: Get.localisation.addTransactionSumHint);
               },
             ),
             Obx(() {
               if (controller.selectedType.value != TransactionType.transfer) {
+                final categoryError = controller.categoryError.value;
                 return Column(
                   children: [
                     const SizedBox(
@@ -107,6 +111,10 @@ class UpdateTransactionScreen extends StatelessWidget {
                     CommonSelectionList(
                         items: controller.categoryList.value,
                         onClick: controller.selectCategory),
+                    if (categoryError != null)
+                      Text(
+                        categoryError, style: const TextStyle(color: Colors.red),
+                        textAlign: TextAlign.start,),
                   ],
                 );
               } else {
@@ -114,16 +122,30 @@ class UpdateTransactionScreen extends StatelessWidget {
               }
             }),
             Obx(() {
+              final fromWalletError = controller.fromWalletError.value;
               return Column(
-                children: _selectWallet(
-                    context, controller.selectedWallet.value, controller.selectWallet),
+                children: [
+                  ..._selectWallet(
+                      context, controller.selectedWallet.value, controller.selectWallet),
+                  if (fromWalletError != null)
+                    Text(
+                      fromWalletError, style: const TextStyle(color: Colors.red),
+                      textAlign: TextAlign.start,),
+                ],
               );
             }),
             Obx(() {
               if (controller.selectedType.value == TransactionType.transfer) {
+                final toWalletError = controller.toWalletError.value;
                 return Column(
-                  children: _selectWallet(context, controller.selectedToWallet.value,
-                      controller.selectToWallet),
+                  children: [
+                    ..._selectWallet(context, controller.selectedToWallet.value,
+                        controller.selectToWallet),
+                    if (toWalletError != null)
+                      Text(
+                        toWalletError, style: const TextStyle(color: Colors.red),
+                        textAlign: TextAlign.start,),
+                  ],
                 );
               } else {
                 return Container();
@@ -173,7 +195,9 @@ class UpdateTransactionScreen extends StatelessWidget {
   }
 
   void onButtonPress() {
-    controller.onSaveTransaction(_sumController.text, _commentController.text);
+    if (_sumInputKey.currentState?.validate() == true) {
+      controller.onSaveTransaction(_sumController.text, _commentController.text);
+    }
   }
 
   List<Widget> _selectWallet(

@@ -1,10 +1,12 @@
 import 'package:get/get.dart';
-import 'package:rxdart/rxdart.dart' as rxd;
+import 'package:rxdart/streams.dart';
 
 import '../../../categories/common/data/local_category_repository.dart';
+import '../../../categories/common/data/models/category.dart';
 import '../../../categories/list/domain/categories_binding.dart';
 import '../../../categories/list/ui/categories_screen.dart';
 import '../../../common/data/models/transaction_type.dart';
+import '../../../common/domain/number_validator.dart';
 import '../../../common/ui/common_selection_list.dart';
 import '../../../wallets/common/data/local_wallet_repository.dart';
 import '../../../wallets/list/domain/wallets_binding.dart';
@@ -16,7 +18,7 @@ import '../ui/models/select_date_ui_model.dart';
 import 'mappers/transaction_category_ui_mapper.dart';
 import 'mappers/transaction_wallet_ui_mapper.dart';
 
-class UpdateTransactionController extends GetxController {
+class UpdateTransactionController extends GetxController with NumberValidator {
   final RichTransactionModel? model;
 
   UpdateTransactionController({this.model});
@@ -32,12 +34,12 @@ class UpdateTransactionController extends GetxController {
 
   LocalWalletRepository get _walletRepo => Get.find();
 
-  Rxn<String> _selectedCategory = Rxn();
+  final Rxn<Category> _selectedCategory = Rxn();
 
-  RxList<SelectionListItem<String>> categoryList = RxList();
+  RxList<SelectionListItem<Category>> categoryList = RxList();
 
-  Rxn<String> _selectedWalletId = Rxn();
-  Rxn<String> _selectedToWalletId = Rxn();
+  final Rxn<String> _selectedWalletId = Rxn();
+  final Rxn<String> _selectedToWalletId = Rxn();
 
   RxList<SelectionListItem<String>> selectedWallet = RxList();
   RxList<SelectionListItem<String>> selectedToWallet = RxList();
@@ -46,10 +48,14 @@ class UpdateTransactionController extends GetxController {
 
   final selectedType = TransactionType.expense.obs;
 
+  final categoryError = Rxn<String>();
+  final fromWalletError = Rxn<String>();
+  final toWalletError = Rxn<String>();
+
   @override
   void onReady() {
     //TODO Move to separate class
-    categoryList.bindStream(rxd.CombineLatestStream.combine3(
+    categoryList.bindStream(CombineLatestStream.combine3(
       _categoryRepo.categories,
       _selectedCategory.stream,
       selectedType.stream,
@@ -61,7 +67,7 @@ class UpdateTransactionController extends GetxController {
     selectedType.refresh();
 
     selectedWallet.bindStream(
-      rxd.CombineLatestStream.combine2(
+      CombineLatestStream.combine2(
           _walletRepo.wallets,
           _selectedWalletId.stream,
           _transactionWalletUIMapper.map,
@@ -69,7 +75,7 @@ class UpdateTransactionController extends GetxController {
     );
 
     selectedToWallet.bindStream(
-      rxd.CombineLatestStream.combine2(
+      CombineLatestStream.combine2(
           _walletRepo.wallets,
           _selectedToWalletId.stream,
           _transactionWalletUIMapper.map,
@@ -92,29 +98,41 @@ class UpdateTransactionController extends GetxController {
       currentComment = null;
     }
 
-    //TODO Add error
     if (double.tryParse(sum) == null) {
       return;
     }
 
-    var categoryId = _selectedCategory.value;
-    if (categoryId == null && selectedType.value != TransactionType.transfer) {
+    final type = selectedType.value;
+
+    var category = _selectedCategory.value;
+
+    if (type != TransactionType.transfer) {
+      if (category == null) {
+        categoryError.value = "Please, select category!";
+        return;
+      }
+      if (category.transactionType != type) {
+        categoryError.value = "Please, select correct category or transaction type";
+        return;
+      }
+    }
+
+    var fromWalletId = _selectedWalletId.value;
+    if (fromWalletId == null) {
+      fromWalletError.value = "Please, select wallet!";
       return;
     }
 
-    var walletId = _selectedWalletId.value;
-    if (walletId == null) {
-      return;
-    }
-
-    if (selectedType.value == TransactionType.transfer) {
+    if (type == TransactionType.transfer) {
       var toWalletId = _selectedToWalletId.value;
 
       if (toWalletId == null) {
+        toWalletError.value = "Please, select wallet!";
         return;
       }
 
-      if (toWalletId == walletId) {
+      if (toWalletId == fromWalletId) {
+        toWalletError.value = "Please, select different wallet as target!";
         return;
       }
     }
@@ -123,8 +141,8 @@ class UpdateTransactionController extends GetxController {
 
     var addTransactionResult = _transactionsRepo.createOrUpdate(
       double.parse(sum),
-      selectedType.value,
-      walletId,
+      type,
+      fromWalletId,
       DateTime(
         selected.year,
         selected.month,
@@ -133,7 +151,7 @@ class UpdateTransactionController extends GetxController {
       model: model,
       comment: currentComment,
       toWalletId: _selectedToWalletId.value,
-      categoryId: categoryId,
+      categoryId: category?.id,
     );
 
     if (addTransactionResult) {
@@ -141,12 +159,18 @@ class UpdateTransactionController extends GetxController {
     }
   }
 
-  void selectCategory(String categoryId) {
-    if (_selectedCategory.value == categoryId) {
+  void selectCategory(Category category) {
+    final type = selectedType.value;
+    if (type != category.transactionType) {
+      categoryError.value = "Please, select correct category or transaction type";
+      return;
+    }
+    if (_selectedCategory.value?.id == category.id) {
       _selectedCategory.value = null;
     } else {
-      _selectedCategory.value = categoryId;
+      _selectedCategory.value = category;
     }
+    categoryError.value = null;
   }
 
   void selectWallet(String walletId) {
@@ -155,6 +179,7 @@ class UpdateTransactionController extends GetxController {
     } else {
       _selectedWalletId.value = walletId;
     }
+    fromWalletError.value = null;
   }
 
   void selectToWallet(String walletId) {
@@ -163,6 +188,19 @@ class UpdateTransactionController extends GetxController {
     } else {
       _selectedToWalletId.value = walletId;
     }
+    toWalletError.value = null;
+  }
+
+  void selectType(TransactionType type) {
+    if (type == TransactionType.transfer) {
+      categoryError.value = null;
+      _selectedCategory.value = null;
+    } else {
+      toWalletError.value = null;
+      _selectedToWalletId.value = null;
+    }
+
+    selectedType.value = type;
   }
 
   void selectDateByType(
@@ -225,7 +263,7 @@ class UpdateTransactionController extends GetxController {
 
   void _setupInitialData(RichTransactionModel model) {
     if (model is CategoryRichTransactionModel) {
-      _selectedCategory.value = model.category.id;
+      _selectedCategory.value = model.category;
     }
     selectedType.value = model.transaction.transactionType;
     _selectCustomDay(model.transaction.time);
