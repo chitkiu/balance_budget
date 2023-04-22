@@ -20,11 +20,9 @@ class BudgetsScreen extends CommonScaffoldWithButtonScreen<BudgetsController> {
       stream: controller.getBudgets(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          if (!snapshot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         }
         var budgets = snapshot.data;
         if (budgets == null || budgets.isEmpty) {

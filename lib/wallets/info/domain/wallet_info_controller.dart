@@ -70,13 +70,13 @@ class WalletInfoController extends GetxController
     _walletSubscription = null;
   }
 
-  void onTransactionClicked(BuildContext context, TransactionUIModel transaction) {
+  void onTransactionClicked(BuildContext context, TransactionUIModel transaction, bool canEdit) {
     openModalSheetWithController(
       context,
           (controller) {
         return TransactionInfoScreen(controller: controller,);
       },
-      TransactionInfoController(transaction.id),
+      TransactionInfoController(transaction.id, canEdit),
     );
   }
 

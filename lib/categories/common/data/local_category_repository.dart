@@ -92,6 +92,7 @@ class LocalCategoryRepository {
     await _ref.doc(categoryId).delete();
     final transactions = await _transactionRepo.getTransactionsByCategoryId(categoryId);
     await _transactionRepo.bunchDelete(transactions.map((e) => e.id).toList());
+    //TODO Add budget removing
   }
 
   Future<void> edit(

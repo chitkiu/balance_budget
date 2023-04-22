@@ -69,6 +69,7 @@ class LocalWalletRepository {
     await _ref.doc(walletId).delete();
     final transactions = await _transactionRepo.getTransactionsByWalletId(walletId);
     await _transactionRepo.bunchDelete(transactions.map((e) => e.id).toList());
+    //TODO Add budget removing
   }
 
   Future<void> edit(String id,

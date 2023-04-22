@@ -89,7 +89,7 @@ class TransactionsController extends GetxController
       (controller) {
         return TransactionInfoScreen(controller: controller,);
       },
-      TransactionInfoController(transaction.id),
+      TransactionInfoController(transaction.id, true),
     );
   }
 

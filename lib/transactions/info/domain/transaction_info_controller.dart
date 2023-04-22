@@ -13,8 +13,9 @@ import '../../update/ui/update_transaction_screen.dart';
 
 class TransactionInfoController extends GetxController {
   final String id;
+  final bool canEdit;
 
-  TransactionInfoController(this.id);
+  TransactionInfoController(this.id, this.canEdit);
 
   LocalTransactionsRepository get _transactionsRepo => Get.find();
   TransactionsAggregator get _transactionsAggregator => Get.find();
@@ -48,6 +49,7 @@ class TransactionInfoController extends GetxController {
   }
 
   void goToEdit(BuildContext context) {
+    if (!canEdit) return;
     openModalSheetWithController(
       context,
       (controller) {

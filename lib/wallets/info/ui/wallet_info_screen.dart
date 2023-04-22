@@ -120,7 +120,7 @@ class WalletInfoScreen extends CommonScaffoldWithButtonScreen<WalletInfoControll
                     return TransactionSectionHeaderWidget(
                       model: model,
                       onItemClick: (transaction) {
-                        controller.onTransactionClicked(context, transaction);
+                        controller.onTransactionClicked(context, transaction, !wallet.isArchived);
                       },
                       itemPadding: const EdgeInsets.symmetric(
                           horizontal: 4, vertical: CommonUI.defaultTileVerticalPadding),

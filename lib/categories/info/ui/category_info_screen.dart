@@ -91,7 +91,7 @@ class CategoryInfoScreen extends CommonScaffoldWithButtonScreen<CategoryInfoCont
                     return TransactionSectionHeaderWidget(
                       model: model,
                       onItemClick: (transaction) {
-                        controller.onTransactionClicked(context, transaction);
+                        controller.onTransactionClicked(context, transaction, !category.isArchived);
                       },
                       itemPadding: const EdgeInsets.symmetric(
                           horizontal: 4, vertical: CommonUI.defaultTileVerticalPadding),

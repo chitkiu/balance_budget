@@ -19,7 +19,7 @@ class TransactionInfoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return CommonBottomSheetWidget(
       title: Get.localisation.transactionInfoTitle,
-      tailing: CommonIcons.edit,
+      tailing: controller.canEdit ? CommonIcons.edit : null,
       onTailingClick: _onTailingClick,
       body: Obx(() {
         final model = controller.transaction.value;
