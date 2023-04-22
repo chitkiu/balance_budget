@@ -15,31 +15,21 @@ class WalletsScreen extends CommonScaffoldWithButtonScreen<WalletsController> {
 
   @override
   Widget body(BuildContext context) {
-    return StreamBuilder(
-      stream: controller.getWallets(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          if (!snapshot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        }
-        var wallets = snapshot.data;
-        if (wallets == null || wallets.isEmpty) {
-          return Center(
-            child: Text(Get.localisation.noWallets),
-          );
-        }
-
-        return ListView.separated(
-          itemBuilder: (context, index) =>
-              _walletWidget(context, wallets[index]),
-          itemCount: wallets.length,
-          separatorBuilder: (context, index) => const Divider(),
+    return controller.obx((wallets) {
+      if (wallets == null || wallets.isEmpty) {
+        return Center(
+          child: Text(Get.localisation.noWallets),
         );
-      },
-    );
+      }
+      return ListView.separated(
+        itemBuilder: (context, index) => _walletWidget(context, wallets[index]),
+        itemCount: wallets.length,
+        separatorBuilder: (context, index) => const Divider(),
+      );
+    },
+        onEmpty: Center(
+          child: Text(Get.localisation.noWallets),
+        ));
   }
 
   @override

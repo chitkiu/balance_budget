@@ -8,37 +8,25 @@ import '../domain/budgets_controller.dart';
 import 'models/budget_ui_model.dart';
 
 class BudgetsScreen extends CommonScaffoldWithButtonScreen<BudgetsController> {
-  BudgetsScreen({Key? key}) : super(
-      Get.localisation.budgetTabName,
-      icon: CommonIcons.add,
-      key: key
-  );
+  BudgetsScreen({Key? key})
+      : super(Get.localisation.budgetTabName, icon: CommonIcons.add, key: key);
 
   @override
   Widget body(BuildContext context) {
-    return StreamBuilder(
-      stream: controller.getBudgets(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        var budgets = snapshot.data;
-        if (budgets == null || budgets.isEmpty) {
+    return controller.obx(
+      (budgets) {
+        if (budgets == null) {
           return Center(
             child: Text(Get.localisation.noBudgets),
           );
         }
-
         return ListView.separated(
           itemBuilder: (context, index) {
             var budget = budgets[index];
             if (budget is TotalBudgetUIModel) {
               return Column(
                 children: [
-                  const Text("Total",
-                      style: TextStyle(fontWeight: FontWeight.w500)),
+                  const Text("Total", style: TextStyle(fontWeight: FontWeight.w500)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -60,16 +48,17 @@ class BudgetsScreen extends CommonScaffoldWithButtonScreen<BudgetsController> {
             } else if (budget is TotalBudgetWithCategoryUIModel) {
               return Column(
                 children: <Widget>[
-                  const Text("Multi category",
-                      style: TextStyle(fontWeight: FontWeight.w500)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(budget.name),
-                      Text("${budget.expenseSum}/${budget.totalSum}"),
-                    ],
-                  )
-                ] + budget.categoriesInfoUIModel.map(_categoryInfo).toList(),
+                      const Text("Multi category",
+                          style: TextStyle(fontWeight: FontWeight.w500)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(budget.name),
+                          Text("${budget.expenseSum}/${budget.totalSum}"),
+                        ],
+                      )
+                    ] +
+                    budget.categoriesInfoUIModel.map(_categoryInfo).toList(),
               );
             } else {
               return const Placeholder();
@@ -79,6 +68,9 @@ class BudgetsScreen extends CommonScaffoldWithButtonScreen<BudgetsController> {
           separatorBuilder: (context, index) => const Divider(),
         );
       },
+      onEmpty: Center(
+        child: Text(Get.localisation.noBudgets),
+      ),
     );
   }
 
@@ -96,5 +88,4 @@ class BudgetsScreen extends CommonScaffoldWithButtonScreen<BudgetsController> {
       ],
     );
   }
-
 }

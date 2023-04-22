@@ -16,41 +16,34 @@ class CategoriesScreen extends CommonScaffoldWithButtonScreen<CategoriesControll
 
   @override
   Widget body(BuildContext context) {
-    return StreamBuilder(
-        stream: controller.getCategories(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            if (!snapshot.hasData) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          }
-          var categories = snapshot.data;
-          if (categories == null || categories.isEmpty) {
-            return Center(
-              child: Text(Get.localisation.noCategories),
-            );
-          }
-          return ListView.separated(
-            itemBuilder: (context, index) {
-              var category = categories[index];
-              return GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: () {
-                  Get.to(() => CategoryInfoScreen(),
-                      binding: CategoryInfoBinding(category.id));
-                },
-                child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: CommonUI.defaultTileHorizontalPadding),
-                    child: CommonTile(icon: category.icon, text: category.name)),
-              );
+    return controller.obx((categories) {
+      if (categories == null || categories.isEmpty) {
+        return Center(
+          child: Text(Get.localisation.noCategories),
+        );
+      }
+      return ListView.separated(
+        itemBuilder: (context, index) {
+          var category = categories[index];
+          return GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              Get.to(() => CategoryInfoScreen(),
+                  binding: CategoryInfoBinding(category.id));
             },
-            separatorBuilder: (context, index) => const Divider(),
-            itemCount: categories.length,
+            child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: CommonUI.defaultTileHorizontalPadding),
+                child: CommonTile(icon: category.icon, text: category.name)),
           );
-        });
+        },
+        separatorBuilder: (context, index) => const Divider(),
+        itemCount: categories.length,
+      );
+    },
+        onEmpty: Center(
+          child: Text(Get.localisation.noCategories),
+        ));
   }
 
   @override
