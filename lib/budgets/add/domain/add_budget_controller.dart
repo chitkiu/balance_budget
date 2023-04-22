@@ -77,7 +77,7 @@ class AddBudgetController extends GetxController {
     ));
 
     wallets.bindStream(CombineLatestStream.combine2(
-        _walletRepo.wallets, _selectedWallets.stream, (wallets, selectedWallet) {
+        _walletRepo.walletsWithoutArchived, _selectedWallets.stream, (wallets, selectedWallet) {
       return wallets.map((e) {
         final wallet = _walletUIMapper.map(e, 0.0);
         return SelectionListItem(

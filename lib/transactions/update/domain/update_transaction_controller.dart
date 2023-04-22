@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:rxdart/streams.dart';
+import 'package:rxdart/transformers.dart';
 
 import '../../../categories/common/data/local_category_repository.dart';
 import '../../../categories/common/data/models/category.dart';
@@ -58,10 +59,9 @@ class UpdateTransactionController extends GetxController with NumberValidator {
 
     ///TODO think about hiding archived items
     ///TODO We can have some problem with it if we try to edit transaction with archived category/wallet
-    categoryList.bindStream(CombineLatestStream.combine3(
-      _categoryRepo.categoriesWithoutArchived,
+    categoryList.bindStream(CombineLatestStream.combine2(
+      selectedType.stream.switchMap(_categoryRepo.getCategoriesByType),
       _selectedCategory.stream,
-      selectedType.stream,
       _transactionCategoryUIMapper.map,
     ));
 

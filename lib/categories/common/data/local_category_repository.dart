@@ -75,6 +75,7 @@ class LocalCategoryRepository {
   Stream<List<Category>> getCategoriesByType(TransactionType type) {
     return _ref
         .where('transactionType', isEqualTo: type.name)
+        .where("archived", isEqualTo: false)
         .snapshots()
         .map((categories) => categories.docs
             .map((category) {
