@@ -1,10 +1,12 @@
 import 'package:balance_budget/categories/info/domain/category_info_binding.dart';
+import 'package:balance_budget/common/ui/common_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
+import '../../../common/ui/common_ui_settings.dart';
 import '../../info/ui/category_info_screen.dart';
 import '../domain/categories_controller.dart';
 
@@ -36,17 +38,13 @@ class CategoriesScreen extends CommonScaffoldWithButtonScreen<CategoriesControll
               return GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
-                  Get.to(() => CategoryInfoScreen(), binding: CategoryInfoBinding(category.id));
+                  Get.to(() => CategoryInfoScreen(),
+                      binding: CategoryInfoBinding(category.id));
                 },
                 child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 6),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(category.name,
-                            style: const TextStyle(fontWeight: FontWeight.w500)),
-                      ],
-                    )),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: CommonUI.defaultTileHorizontalPadding),
+                    child: CommonTile(icon: category.icon, text: category.name)),
               );
             },
             separatorBuilder: (context, index) => const Divider(),

@@ -24,8 +24,7 @@ class CommonTile extends StatelessWidget {
     this.secondTextColor,
     this.additionalTextWidget,
     this.tailing,
-  })  : assert(text != null || textWidget != null),
-        assert(secondText != null || secondTextWidget != null);
+  })  : assert(text != null || textWidget != null);
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +52,7 @@ class CommonTile extends StatelessWidget {
               Text(text!, style: textTheme.titleSmall),
             if (secondTextWidget != null)
               secondTextWidget!
-            else
+            else if(secondText != null)
               Text(secondText!,
                   style: textTheme.titleMedium?.copyWith(
                     color: secondTextColor,
