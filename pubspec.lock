@@ -165,10 +165,10 @@ packages:
     dependency: "direct main"
     description:
       name: cloud_firestore
-      sha256: "17b4bac19f367ba1bd84239493a9a4182730221e4780334dd9cd57c4f13eccb7"
+      sha256: "7e15d929d3d82774bffaf4b2c0bfc85b429fe08dff7280a601c43f309cea1ebf"
       url: "https://pub.dev"
     source: hosted
-    version: "4.5.2"
+    version: "4.5.3"
   cloud_firestore_platform_interface:
     dependency: transitive
     description:
@@ -333,10 +333,10 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_ui_auth
-      sha256: "5e2b33c906586f458f035e70a0982b5254664f61fe314c3e10ed70be6487758e"
+      sha256: cb261e7e7e910c17cbed1d612a01ce2d33eb0fea6a3b9e867e565aad0d4dcd29
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.2"
+    version: "1.2.3"
   firebase_ui_localizations:
     dependency: transitive
     description:
@@ -349,18 +349,18 @@ packages:
     dependency: transitive
     description:
       name: firebase_ui_oauth
-      sha256: "9c4e3145ac17b3811468594898577f8fd822e11c72e84a1d0bedcea4bdc8d0d7"
+      sha256: "66790853299aea3c5fc9dccbf8c4b7af637cf42434ce8bb9d2c59cee2cd5df5f"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.2"
+    version: "1.2.3"
   firebase_ui_oauth_google:
     dependency: "direct main"
     description:
       name: firebase_ui_oauth_google
-      sha256: ed1631e7d8c2d6cbae3ba6ac0fa4d76aac74d176ba3871d61c0b5b0aa8c7cc13
+      sha256: "13e4b54fa03d8dd197a2e04b592abbf30917cb56d609c52330e86827e8c3934a"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.2"
+    version: "1.1.3"
   firebase_ui_shared:
     dependency: transitive
     description:
@@ -416,10 +416,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_platform_widgets
-      sha256: a10d674f1135a885fbef69ed50dbc1fe9fb6c4435154804b598446290fa9b5c4
+      sha256: "53b3f61a9a974eebf3a366ca816dc56b22883619143ab041e100d0622f166e87"
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.1"
+    version: "3.3.2"
   flutter_svg:
     dependency: transitive
     description:
