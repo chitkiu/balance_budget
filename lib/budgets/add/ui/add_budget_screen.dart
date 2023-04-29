@@ -1,15 +1,16 @@
-import 'package:balance_budget/budgets/common/data/models/budget_type.dart';
 import 'package:balance_budget/common/getx_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../common/ui/common_colors.dart';
+import '../../../common/ui/common_edit_text.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
 import '../../../common/ui/common_selection_list.dart';
 import '../../../common/ui/common_toggle_buttons.dart';
 import '../../../wallets/list/ui/models/wallet_ui_model.dart';
+import '../../common/data/models/budget_type.dart';
 import '../domain/add_budget_controller.dart';
 
 class AddBudgetScreen extends CommonScaffoldWithButtonScreen<AddBudgetController> {
@@ -34,15 +35,9 @@ class AddBudgetScreen extends CommonScaffoldWithButtonScreen<AddBudgetController
         },
         child: Column(
           children: [
-            PlatformTextField(
+            CommonEditText(
               controller: _nameController,
-              material: (context, platform) {
-                return MaterialTextFieldData(
-                    decoration: InputDecoration(labelText: Get.localisation.nameHint));
-              },
-              cupertino: (context, platform) {
-                return CupertinoTextFieldData(placeholder: Get.localisation.nameHint);
-              },
+              hintText: Get.localisation.nameHint,
             ),
             const SizedBox(
               height: 8,
@@ -115,15 +110,9 @@ class AddBudgetScreen extends CommonScaffoldWithButtonScreen<AddBudgetController
               if (controller.budgetType.value != BudgetType.multiCategory) {
                 return Column(
                   children: [
-                    PlatformTextField(
+                    CommonEditText(
                       controller: _amountController,
-                      material: (context, platform) {
-                        return MaterialTextFieldData(
-                            decoration: InputDecoration(labelText: "Sum"));
-                      },
-                      cupertino: (context, platform) {
-                        return CupertinoTextFieldData(placeholder: "Sum");
-                      },
+                      hintText: "Sum",
                     ),
                   ],
                 );
@@ -205,17 +194,11 @@ class AddBudgetScreen extends CommonScaffoldWithButtonScreen<AddBudgetController
                             controller.changeWalletInMultiCategory(i, model);
                           },
                         ),
-                      PlatformTextField(
+                      CommonEditText(
                         onChanged: (p0) {
                           controller.changeAmountInMultiCategory(i, p0);
                         },
-                        material: (context, platform) {
-                          return MaterialTextFieldData(
-                              decoration: InputDecoration(labelText: "Sum"));
-                        },
-                        cupertino: (context, platform) {
-                          return CupertinoTextFieldData(placeholder: "Sum");
-                        },
+                        hintText: "Sum",
                       ),
                       const Divider(),
                     ]);

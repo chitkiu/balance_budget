@@ -45,7 +45,7 @@ class WalletsScreen extends CommonScaffoldWithButtonScreen<WalletsController> {
     if (wallet is CreditWalletUIModel) {
       additionalText = Text(
           Get.localisation
-              .usedCreditLimit(wallet.totalCreditSum, wallet.spendedCreditSum),
+              .usedCreditLimit(wallet.totalCreditSum, wallet.spendCreditSum),
           style: textTheme.titleSmall);
     }
 

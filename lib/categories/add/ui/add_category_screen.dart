@@ -1,3 +1,4 @@
+import 'package:balance_budget/common/ui/common_edit_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
@@ -31,19 +32,11 @@ class AddCategoryScreen extends CommonScaffoldWithButtonScreen<AddCategoryContro
       },
       child: Column(
         children: [
-          PlatformTextFormField(
+          CommonEditText(
             widgetKey: _nameInputKey,
             controller: _nameController,
-            material: (context, platform) {
-              return MaterialTextFormFieldData(
-                  decoration: InputDecoration(labelText: Get.localisation.nameHint));
-            },
-            cupertino: (context, platform) {
-              return CupertinoTextFormFieldData(
-                  placeholder: Get.localisation.nameHint
-              );
-            },
             validator: controller.validateName,
+            hintText: Get.localisation.nameHint,
             autovalidateMode: AutovalidateMode.onUserInteraction,
           ),
 

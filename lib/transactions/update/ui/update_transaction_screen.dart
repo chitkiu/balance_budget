@@ -7,6 +7,7 @@ import '../../../common/data/models/transaction_type.dart';
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/base_bottom_sheet_screen.dart';
 import '../../../common/ui/common_colors.dart';
+import '../../../common/ui/common_edit_text.dart';
 import '../../../common/ui/common_selection_list.dart';
 import '../../../common/ui/common_toggle_buttons.dart';
 import '../../common/data/models/rich_transaction_model.dart';
@@ -70,21 +71,12 @@ class UpdateTransactionScreen extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            PlatformTextFormField(
+            CommonEditText(
               widgetKey: _sumInputKey,
               validator: controller.validateNumber,
-              keyboardType:
-                  const TextInputType.numberWithOptions(signed: true, decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
               controller: _sumController,
-              material: (context, platform) {
-                return MaterialTextFormFieldData(
-                    decoration: InputDecoration(
-                        labelText: Get.localisation.addTransactionSumHint));
-              },
-              cupertino: (context, platform) {
-                return CupertinoTextFormFieldData(
-                    placeholder: Get.localisation.addTransactionSumHint);
-              },
+              hintText: Get.localisation.addTransactionSumHint,
             ),
             Obx(() {
               if (controller.selectedType.value != TransactionType.transfer) {
@@ -154,17 +146,9 @@ class UpdateTransactionScreen extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            PlatformTextField(
+            CommonEditText(
               controller: _commentController,
-              material: (context, platform) {
-                return MaterialTextFieldData(
-                    decoration: InputDecoration(
-                        labelText: Get.localisation.addTransactionCommentHint));
-              },
-              cupertino: (context, platform) {
-                return CupertinoTextFieldData(
-                    placeholder: Get.localisation.addTransactionCommentHint);
-              },
+              hintText: Get.localisation.addTransactionCommentHint,
             ),
             const SizedBox(
               height: 8,

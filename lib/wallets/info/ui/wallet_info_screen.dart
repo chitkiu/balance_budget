@@ -62,7 +62,7 @@ class WalletInfoScreen extends CommonScaffoldWithButtonScreen<WalletInfoControll
               if (wallet is CreditWalletUIModel)
                 CommonTile(
                   text: Get.localisation.usedCreditLimitTitle,
-                  secondText: "${wallet.spendedCreditSum}/${wallet.totalCreditSum}",
+                  secondText: "${wallet.spendCreditSum}/${wallet.totalCreditSum}",
                   icon: Icons.credit_card,
                 ),
               if (wallet is CreditWalletUIModel)

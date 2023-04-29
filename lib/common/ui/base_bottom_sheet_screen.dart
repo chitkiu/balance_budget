@@ -5,7 +5,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'bottom_sheet_hide_icon.dart';
 
-const shape = RoundedRectangleBorder(
+const _kShape = RoundedRectangleBorder(
     borderRadius: BorderRadius.vertical(top: Radius.circular(28.0)));
 
 void openModalSheetWithController<C extends GetxController>(
@@ -25,14 +25,14 @@ void openModalSheetWithController<C extends GetxController>(
 void openModalSheet(BuildContext context, Widget body) {
   if (CommonUI.isCupertino) {
     showCupertinoModalBottomSheet(
-        context: context, shape: shape, builder: (context) => body);
+        context: context, shape: _kShape, builder: (context) => body);
   } else {
     showMaterialModalBottomSheet(
         context: context,
         builder: (context) => body,
         isDismissible: true,
         enableDrag: true,
-        shape: shape);
+        shape: _kShape);
   }
 }
 

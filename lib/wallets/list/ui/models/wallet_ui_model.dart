@@ -14,12 +14,12 @@ class DefaultWalletUIModel extends WalletUIModel {
 
 class CreditWalletUIModel extends WalletUIModel {
   final String totalCreditSum;
-  final String spendedCreditSum;
+  final String spendCreditSum;
   final String ownSum;
 
   CreditWalletUIModel(
       {required this.totalCreditSum,
-      required this.spendedCreditSum,
+      required this.spendCreditSum,
       required this.ownSum,
       required super.id,
       required super.name,

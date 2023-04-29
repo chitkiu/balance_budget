@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_colors.dart';
+import '../../../common/ui/common_edit_text.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
 import '../../../common/ui/common_toggle_buttons.dart';
@@ -35,21 +35,10 @@ class AddWalletScreen extends CommonScaffoldWithButtonScreen<AddWalletController
       },
       child: Column(
         children: [
-          PlatformTextFormField(
+          CommonEditText(
             widgetKey: _nameInputKey,
             controller: _nameController,
-            material: (context, platform) {
-              return MaterialTextFormFieldData(
-                  decoration: InputDecoration(
-                      labelText: Get.localisation.nameHint
-                  )
-              );
-            },
-            cupertino: (context, platform) {
-              return CupertinoTextFormFieldData(
-                  placeholder: Get.localisation.nameHint
-              );
-            },
+            hintText: Get.localisation.nameHint,
             validator: controller.validateName,
           ),
           const SizedBox(height: 8,),
@@ -75,64 +64,31 @@ class AddWalletScreen extends CommonScaffoldWithButtonScreen<AddWalletController
             switch (walletType) {
               case WalletType.debit:
                 _totalBalanceController.clear();
-                return PlatformTextFormField(
+                return CommonEditText(
                   widgetKey: _totalBalanceInputKey,
                   validator: controller.validateNumber,
                   keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
                   controller: _totalBalanceController,
-                  material: (context, platform) {
-                    return MaterialTextFormFieldData(
-                        decoration: InputDecoration(
-                            labelText: Get.localisation.addWalletTotalBalanceHint
-                        )
-                    );
-                  },
-                  cupertino: (context, platform) {
-                    return CupertinoTextFormFieldData(
-                        placeholder: Get.localisation.addWalletTotalBalanceHint
-                    );
-                  },
+                  hintText: Get.localisation.addWalletTotalBalanceHint,
                 );
               case WalletType.credit:
                 _ownBalanceController.clear();
                 _creditBalanceController.clear();
                 return Column(
                   children: [
-                    PlatformTextFormField(
+                    CommonEditText(
                       widgetKey: _ownBalanceInputKey,
                       validator: controller.validateNumber,
                       keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
                       controller: _ownBalanceController,
-                      material: (context, platform) {
-                        return MaterialTextFormFieldData(
-                            decoration: InputDecoration(
-                                labelText: Get.localisation.addWalletOwnBalanceHint
-                            )
-                        );
-                      },
-                      cupertino: (context, platform) {
-                        return CupertinoTextFormFieldData(
-                            placeholder: Get.localisation.addWalletOwnBalanceHint
-                        );
-                      },
+                      hintText: Get.localisation.addWalletOwnBalanceHint,
                     ),
-                    PlatformTextFormField(
+                    CommonEditText(
                       widgetKey: _creditBalanceInputKey,
                       validator: controller.validateNumber,
                       keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
                       controller: _creditBalanceController,
-                      material: (context, platform) {
-                        return MaterialTextFormFieldData(
-                            decoration: InputDecoration(
-                                labelText: Get.localisation.addWalletCreditLimit
-                            )
-                        );
-                      },
-                      cupertino: (context, platform) {
-                        return CupertinoTextFormFieldData(
-                            placeholder: Get.localisation.addWalletCreditLimit
-                        );
-                      },
+                      hintText: Get.localisation.addWalletCreditLimit,
                     ),
                   ],
                 );
