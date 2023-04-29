@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
+import '../../../categories/info/domain/category_info_binding.dart';
+import '../../../categories/info/ui/category_info_screen.dart';
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/base_bottom_sheet_screen.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_tile.dart';
 import '../../../common/ui/common_ui_settings.dart';
 import '../../../common/ui/transaction_item/models/transaction_ui_model.dart';
+import '../../../wallets/info/domain/wallet_info_binding.dart';
+import '../../../wallets/info/ui/wallet_info_screen.dart';
 import '../domain/transaction_info_controller.dart';
 
 //TODO Improve icons
@@ -43,7 +47,7 @@ class TransactionInfoScreen extends StatelessWidget {
                 child: Text(Get.localisation.delete),
                 onPressed: () async {
                   await confirmBeforeActionDialog(
-                        () async {
+                    () async {
                       await controller.deleteTransaction(model.id);
                       Get.back();
                     },
@@ -71,17 +75,39 @@ class TransactionInfoScreen extends StatelessWidget {
       const SizedBox(
         height: CommonUI.defaultFullTileVerticalPadding,
       ),
-      CommonTile(
-          secondText: model.categoryName,
-          text: Get.localisation.transactionInfoCategoryPrefix,
-          icon: model.icon),
+      GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          Get.back();
+          Get.to(
+            () => CategoryInfoScreen(model.categoryId),
+            binding: CategoryInfoBinding(model.categoryId),
+            preventDuplicates: false,
+          );
+        },
+        child: CommonTile(
+            secondText: model.categoryName,
+            text: Get.localisation.transactionInfoCategoryPrefix,
+            icon: model.icon),
+      ),
       const SizedBox(
         height: CommonUI.defaultFullTileVerticalPadding,
       ),
-      CommonTile(
-          secondText: model.walletName,
-          text: Get.localisation.transactionInfoWalletPrefix,
-          icon: Icons.wallet),
+      GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          Get.back();
+          Get.to(
+            () => WalletInfoScreen(model.fromWalletId),
+            binding: WalletInfoBinding(model.fromWalletId),
+            preventDuplicates: false,
+          );
+        },
+        child: CommonTile(
+            secondText: model.fromWalletName,
+            text: Get.localisation.transactionInfoWalletPrefix,
+            icon: Icons.wallet),
+      ),
       const SizedBox(
         height: CommonUI.defaultFullTileVerticalPadding,
       ),
@@ -110,18 +136,40 @@ class TransactionInfoScreen extends StatelessWidget {
       const SizedBox(
         height: CommonUI.defaultFullTileVerticalPadding,
       ),
-      CommonTile(
-        secondText: model.fromWalletName,
-        text: Get.localisation.transactionInfoWalletPrefix,
-        icon: Icons.arrow_drop_up,
+      GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          Get.back();
+          Get.to(
+            () => WalletInfoScreen(model.fromWalletId),
+            binding: WalletInfoBinding(model.fromWalletId),
+            preventDuplicates: false,
+          );
+        },
+        child: CommonTile(
+          secondText: model.fromWalletName,
+          text: Get.localisation.transactionInfoWalletPrefix,
+          icon: Icons.arrow_drop_up,
+        ),
       ),
       const SizedBox(
         height: CommonUI.defaultFullTileVerticalPadding,
       ),
-      CommonTile(
-        secondText: model.toWalletName,
-        text: Get.localisation.transactionInfoWalletPrefix,
-        icon: Icons.arrow_drop_down,
+      GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          Get.back();
+          Get.to(
+            () => WalletInfoScreen(model.toWalletId),
+            binding: WalletInfoBinding(model.toWalletId),
+            preventDuplicates: false,
+          );
+        },
+        child: CommonTile(
+          secondText: model.toWalletName,
+          text: Get.localisation.transactionInfoWalletPrefix,
+          icon: Icons.arrow_drop_down,
+        ),
       ),
       const SizedBox(
         height: CommonUI.defaultFullTileVerticalPadding,

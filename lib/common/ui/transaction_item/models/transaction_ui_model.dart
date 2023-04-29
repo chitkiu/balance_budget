@@ -9,7 +9,8 @@ abstract class TransactionUIModel {
   final double sumDouble;
   final Color sumColor;
   final String categoryName;
-  final String walletName;
+  final String fromWalletName;
+  final String fromWalletId;
   final String formattedDate;
   final DateTime dateTime;
   final String? comment;
@@ -22,7 +23,8 @@ abstract class TransactionUIModel {
       required this.sumDouble,
       required this.sumColor,
       required this.categoryName,
-      required this.walletName,
+      required this.fromWalletName,
+      required this.fromWalletId,
       required this.formattedDate,
       required this.dateTime,
       this.comment,
@@ -31,13 +33,17 @@ abstract class TransactionUIModel {
 }
 
 class CommonTransactionUIModel extends TransactionUIModel {
+  final String categoryId;
+
   CommonTransactionUIModel(
       {required super.id,
       required super.sum,
       required super.sumDouble,
       required super.sumColor,
       required super.categoryName,
-      required super.walletName,
+      required this.categoryId,
+      required super.fromWalletName,
+      required super.fromWalletId,
       required super.formattedDate,
       required super.dateTime,
       super.comment,
@@ -46,21 +52,22 @@ class CommonTransactionUIModel extends TransactionUIModel {
 }
 
 class TransferTransactionUIModel extends TransactionUIModel {
-  final String fromWalletName;
   final String toWalletName;
+  final String toWalletId;
 
   TransferTransactionUIModel(
       {required super.id,
       required super.sum,
       required super.sumDouble,
-      required this.fromWalletName,
+      required super.fromWalletName,
+      required super.fromWalletId,
       required this.toWalletName,
+      required this.toWalletId,
       required super.formattedDate,
       required super.dateTime})
       : super(
             categoryName: Get.localisation.transferCategoryTitle,
             canEdit: false,
-            walletName: fromWalletName,
             sumColor: Colors.grey,
             icon: Icons.compare_arrows);
 }

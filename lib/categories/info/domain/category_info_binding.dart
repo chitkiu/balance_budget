@@ -14,6 +14,6 @@ class CategoryInfoBinding extends Bindings {
     Get.lazyPut(() => const CategoryTransactionsAggregator());
     ///Added for transaction info screen
     Get.lazyPut(() => const TransactionsAggregator());
-    Get.put(CategoryInfoController(id));
+    Get.put(CategoryInfoController(id), tag: id);
   }
 }

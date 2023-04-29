@@ -12,8 +12,14 @@ import '../../list/ui/models/wallet_ui_model.dart';
 import '../domain/wallet_info_controller.dart';
 
 class WalletInfoScreen extends CommonScaffoldWithButtonScreen<WalletInfoController> {
-  WalletInfoScreen({super.key})
+
+  final String id;
+
+  WalletInfoScreen(this.id, {super.key})
       : super(Get.localisation.wallet_info_title, icon: CommonIcons.edit);
+
+  @override
+  String? get tag => id;
 
   @override
   Widget body(BuildContext context) {

@@ -34,7 +34,7 @@ class TransactionItem extends StatelessWidget {
     if (model is TransferTransactionUIModel) {
       subtitleText = "${model.fromWalletName} => ${model.toWalletName}";
     } else {
-      subtitleText = model.walletName;
+      subtitleText = model.fromWalletName;
     }
 
     return _additionalInfo(subtitleText, CommonIcons.wallet)!;

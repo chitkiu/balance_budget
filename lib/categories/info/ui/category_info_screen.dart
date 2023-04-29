@@ -11,8 +11,12 @@ import '../../../common/ui/transaction_item/transaction_section_header_widget.da
 import '../domain/category_info_controller.dart';
 
 class CategoryInfoScreen extends CommonScaffoldWithButtonScreen<CategoryInfoController> {
-  CategoryInfoScreen({super.key})
+  final String id;
+  CategoryInfoScreen(this.id, {super.key})
       : super(Get.localisation.category_info_title, icon: CommonIcons.edit);
+
+  @override
+  String? get tag => id;
 
   @override
   Widget body(BuildContext context) {

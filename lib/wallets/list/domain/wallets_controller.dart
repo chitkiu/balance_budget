@@ -67,6 +67,6 @@ class WalletsController extends GetxController with StateMixin<List<WalletUIMode
   }
 
   void onItemClick(WalletUIModel wallet) {
-    Get.to(() => WalletInfoScreen(), binding: WalletInfoBinding(wallet.id));
+    Get.to(() => WalletInfoScreen(wallet.id), binding: WalletInfoBinding(wallet.id));
   }
 }

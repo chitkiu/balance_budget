@@ -28,7 +28,7 @@ class CategoriesScreen extends CommonScaffoldWithButtonScreen<CategoriesControll
           return GestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
-              Get.to(() => CategoryInfoScreen(),
+              Get.to(() => CategoryInfoScreen(category.id),
                   binding: CategoryInfoBinding(category.id));
             },
             child: Padding(

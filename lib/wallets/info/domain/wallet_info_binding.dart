@@ -14,6 +14,6 @@ class WalletInfoBinding extends Bindings {
     Get.lazyPut(() => const WalletTransactionAggregator());
     ///Added for transaction info screen
     Get.lazyPut(() => const TransactionsAggregator());
-    Get.put(WalletInfoController(id));
+    Get.put(WalletInfoController(id), tag: id);
   }
 }
