@@ -30,74 +30,77 @@ class AddCategoryScreen extends CommonScaffoldWithButtonScreen<AddCategoryContro
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
       },
-      child: Column(
-        children: [
-          CommonEditText(
-            widgetKey: _nameInputKey,
-            controller: _nameController,
-            validator: controller.validateName,
-            hintText: Get.localisation.nameHint,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-          ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Column(
+          children: [
+            CommonEditText(
+              widgetKey: _nameInputKey,
+              controller: _nameController,
+              validator: controller.validateName,
+              hintText: Get.localisation.nameHint,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+            ),
 
-          const SizedBox(
-            height: 8,
-          ),
-          Text(Get.localisation.transactionTypeHint),
-          Obx(() {
-            return CommonToggleButtons(
-                onItemClick: (index) async {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                  var type = TransactionType.canAddCategory[index];
-                  controller.selectedType.value = type;
-                },
-                isSelected: TransactionType.canAddCategory
-                    .map((e) => e == controller.selectedType.value)
-                    .toList(),
-                fillColor: _getBackgroundColorBySelectedType(controller.selectedType.value),
-                children: TransactionType.canAddCategory.map((e) {
-                  return Text(e.name);
-                }).toList()
-            );
-          }),
-          const SizedBox(
-            height: 8,
-          ),
-          //TODO Improve UI
-          Row(
-            children: [
-              Text("Selected icon:"),
-              Obx(() => Icon(controller.selectedIcon.value ?? Icons.not_interested)),
-              PlatformElevatedButton(
-                child: Text("Select icon"),
-                onPressed: () async {
-                  controller.onIconPickerClick();
-                  FocusScope.of(context).requestFocus(FocusNode());
-
-                  IconData? icon = await FlutterIconPicker.showIconPicker(context,
-                      iconPackModes: [IconPack.custom],
-                      customIconPack: CommonIcons.icons);
-
-                  if (icon != null) {
-                    controller.selectedIcon.value = icon;
-                  }
-                },
-              )
-            ],
-          ),
-          Obx(() {
-            final errorText = controller.iconError.value;
-            if (errorText != null) {
-              return Text(
-                errorText,
-                style: const TextStyle(color: Colors.red),
-                textAlign: TextAlign.start,
+            const SizedBox(
+              height: 8,
+            ),
+            Text(Get.localisation.transactionTypeHint),
+            Obx(() {
+              return CommonToggleButtons(
+                  onItemClick: (index) async {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    var type = TransactionType.canAddCategory[index];
+                    controller.selectedType.value = type;
+                  },
+                  isSelected: TransactionType.canAddCategory
+                      .map((e) => e == controller.selectedType.value)
+                      .toList(),
+                  fillColor: _getBackgroundColorBySelectedType(controller.selectedType.value),
+                  children: TransactionType.canAddCategory.map((e) {
+                    return Text(e.name);
+                  }).toList()
               );
-            } else {
-              return Container();
-            }
-          })
-        ],
+            }),
+            const SizedBox(
+              height: 8,
+            ),
+            //TODO Improve UI
+            Row(
+              children: [
+                Text("Selected icon:"),
+                Obx(() => Icon(controller.selectedIcon.value ?? Icons.not_interested)),
+                PlatformElevatedButton(
+                  child: Text("Select icon"),
+                  onPressed: () async {
+                    controller.onIconPickerClick();
+                    FocusScope.of(context).requestFocus(FocusNode());
+
+                    IconData? icon = await FlutterIconPicker.showIconPicker(context,
+                        iconPackModes: [IconPack.custom],
+                        customIconPack: CommonIcons.icons);
+
+                    if (icon != null) {
+                      controller.selectedIcon.value = icon;
+                    }
+                  },
+                )
+              ],
+            ),
+            Obx(() {
+              final errorText = controller.iconError.value;
+              if (errorText != null) {
+                return Text(
+                  errorText,
+                  style: const TextStyle(color: Colors.red),
+                  textAlign: TextAlign.start,
+                );
+              } else {
+                return Container();
+              }
+            })
+          ],
+        ),
       ),
     );
   }

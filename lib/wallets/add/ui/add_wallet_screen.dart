@@ -33,68 +33,73 @@ class AddWalletScreen extends CommonScaffoldWithButtonScreen<AddWalletController
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
       },
-      child: Column(
-        children: [
-          CommonEditText(
-            widgetKey: _nameInputKey,
-            controller: _nameController,
-            hintText: Get.localisation.nameHint,
-            validator: controller.validateName,
-          ),
-          const SizedBox(height: 8,),
-          Text(Get.localisation.addWalletTypeSelector),
-          Obx(() {
-            return CommonToggleButtons(
-              onItemClick: (index) async {
-                FocusScope.of(context).requestFocus(FocusNode());
-                var type = WalletType.values[index];
-                controller.walletType.value = type;
-              },
-              isSelected: WalletType.values
-                  .map((e) => e == controller.walletType.value)
-                  .toList(),
-              fillColor: CommonColors.defColor,
-              children: WalletType.values.map((e) {
-                return Text(e.name);
-              }).toList(),
-            );
-          }),
-          Obx(() {
-            WalletType walletType = controller.walletType.value;
-            switch (walletType) {
-              case WalletType.debit:
-                _totalBalanceController.clear();
-                return CommonEditText(
-                  widgetKey: _totalBalanceInputKey,
-                  validator: controller.validateNumber,
-                  keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
-                  controller: _totalBalanceController,
-                  hintText: Get.localisation.addWalletTotalBalanceHint,
-                );
-              case WalletType.credit:
-                _ownBalanceController.clear();
-                _creditBalanceController.clear();
-                return Column(
-                  children: [
-                    CommonEditText(
-                      widgetKey: _ownBalanceInputKey,
-                      validator: controller.validateNumber,
-                      keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
-                      controller: _ownBalanceController,
-                      hintText: Get.localisation.addWalletOwnBalanceHint,
-                    ),
-                    CommonEditText(
-                      widgetKey: _creditBalanceInputKey,
-                      validator: controller.validateNumber,
-                      keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
-                      controller: _creditBalanceController,
-                      hintText: Get.localisation.addWalletCreditLimit,
-                    ),
-                  ],
-                );
-            }
-          })
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+            horizontal: 8,
+        ),
+        child: Column(
+          children: [
+            CommonEditText(
+              widgetKey: _nameInputKey,
+              controller: _nameController,
+              hintText: Get.localisation.nameHint,
+              validator: controller.validateName,
+            ),
+            const SizedBox(height: 8,),
+            Text(Get.localisation.addWalletTypeSelector),
+            Obx(() {
+              return CommonToggleButtons(
+                onItemClick: (index) async {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  var type = WalletType.values[index];
+                  controller.walletType.value = type;
+                },
+                isSelected: WalletType.values
+                    .map((e) => e == controller.walletType.value)
+                    .toList(),
+                fillColor: CommonColors.defColor,
+                children: WalletType.values.map((e) {
+                  return Text(e.name);
+                }).toList(),
+              );
+            }),
+            Obx(() {
+              WalletType walletType = controller.walletType.value;
+              switch (walletType) {
+                case WalletType.debit:
+                  _totalBalanceController.clear();
+                  return CommonEditText(
+                    widgetKey: _totalBalanceInputKey,
+                    validator: controller.validateNumber,
+                    keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+                    controller: _totalBalanceController,
+                    hintText: Get.localisation.addWalletTotalBalanceHint,
+                  );
+                case WalletType.credit:
+                  _ownBalanceController.clear();
+                  _creditBalanceController.clear();
+                  return Column(
+                    children: [
+                      CommonEditText(
+                        widgetKey: _ownBalanceInputKey,
+                        validator: controller.validateNumber,
+                        keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+                        controller: _ownBalanceController,
+                        hintText: Get.localisation.addWalletOwnBalanceHint,
+                      ),
+                      CommonEditText(
+                        widgetKey: _creditBalanceInputKey,
+                        validator: controller.validateNumber,
+                        keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+                        controller: _creditBalanceController,
+                        hintText: Get.localisation.addWalletCreditLimit,
+                      ),
+                    ],
+                  );
+              }
+            })
+          ],
+        ),
       ),
     );
   }

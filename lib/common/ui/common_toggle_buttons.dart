@@ -38,7 +38,7 @@ class CommonToggleButtons extends StatelessWidget {
         color: color ?? Colors.black,
         constraints: BoxConstraints(
           minHeight: 40.0,
-          minWidth: (constraints.maxWidth - 8 * 2) / max(children.length, isSelected.length),
+          minWidth: (constraints.maxWidth - (children.length + 1)) / max(children.length, isSelected.length),
         ),
         children: children,
       );

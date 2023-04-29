@@ -48,6 +48,8 @@ class UpdateTransactionScreen extends StatelessWidget {
       child: CommonBottomSheetWidget(
         title: title,
         additionalPadding: const EdgeInsets.only(
+            left: 8,
+            right: 8,
             bottom: _buttonHeight + kDefaultBottomPaddingForPinToBottomWidget),
         body: Column(
           children: [
@@ -74,7 +76,8 @@ class UpdateTransactionScreen extends StatelessWidget {
             CommonEditText(
               widgetKey: _sumInputKey,
               validator: controller.validateNumber,
-              keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(signed: true, decimal: true),
               controller: _sumController,
               hintText: Get.localisation.addTransactionSumHint,
             ),
@@ -105,8 +108,10 @@ class UpdateTransactionScreen extends StatelessWidget {
                         onClick: controller.selectCategory),
                     if (categoryError != null)
                       Text(
-                        categoryError, style: const TextStyle(color: Colors.red),
-                        textAlign: TextAlign.start,),
+                        categoryError,
+                        style: const TextStyle(color: Colors.red),
+                        textAlign: TextAlign.start,
+                      ),
                   ],
                 );
               } else {
@@ -121,8 +126,10 @@ class UpdateTransactionScreen extends StatelessWidget {
                       context, controller.selectedWallet.value, controller.selectWallet),
                   if (fromWalletError != null)
                     Text(
-                      fromWalletError, style: const TextStyle(color: Colors.red),
-                      textAlign: TextAlign.start,),
+                      fromWalletError,
+                      style: const TextStyle(color: Colors.red),
+                      textAlign: TextAlign.start,
+                    ),
                 ],
               );
             }),
@@ -135,8 +142,10 @@ class UpdateTransactionScreen extends StatelessWidget {
                         controller.selectToWallet),
                     if (toWalletError != null)
                       Text(
-                        toWalletError, style: const TextStyle(color: Colors.red),
-                        textAlign: TextAlign.start,),
+                        toWalletError,
+                        style: const TextStyle(color: Colors.red),
+                        textAlign: TextAlign.start,
+                      ),
                   ],
                 );
               } else {

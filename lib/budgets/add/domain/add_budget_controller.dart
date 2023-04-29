@@ -148,21 +148,23 @@ class AddBudgetController extends GetxController {
     multiCategories.insert(index, oldItem.copyWith(amount: amount ?? ""));
   }
 
-  void saveBudget(String? name, String? amount, bool isAllWallet) {
+  void changeSelectedBudgetType(BudgetType budgetType) {
+    this.budgetType.value = budgetType;
+  }
+
+  void saveBudget(String? name, String? amount) {
     bool result;
     switch (budgetType.value) {
       case BudgetType.category:
         result = _saveCategoryBudget(
           name ?? BudgetType.category.name,
           amount ?? "",
-          isAllWallet,
         );
         break;
       case BudgetType.total:
         result = _saveTotalBudget(
           name ?? BudgetType.total.name,
           amount ?? "",
-          isAllWallet,
         );
         break;
       case BudgetType.multiCategory:
@@ -175,7 +177,7 @@ class AddBudgetController extends GetxController {
     }
   }
 
-  bool _saveCategoryBudget(String name, String amount, bool isAllWallet) {
+  bool _saveCategoryBudget(String name, String amount) {
     final doubleAmount = double.tryParse(amount ?? "");
     if (doubleAmount == null) {
       return false;
@@ -184,10 +186,6 @@ class AddBudgetController extends GetxController {
     final categoryId = _selectedCategory.value?.id;
 
     if (categoryId == null) {
-      return false;
-    }
-
-    if (_selectedWallets.isEmpty && !isAllWallet) {
       return false;
     }
 
@@ -202,13 +200,9 @@ class AddBudgetController extends GetxController {
     return true;
   }
 
-  bool _saveTotalBudget(String name, String amount, bool isAllWallet) {
+  bool _saveTotalBudget(String name, String amount) {
     final doubleAmount = double.tryParse(amount ?? "");
     if (doubleAmount == null) {
-      return false;
-    }
-
-    if (_selectedWallets.isEmpty && !isAllWallet) {
       return false;
     }
 
