@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
@@ -31,16 +32,18 @@ class LocalWalletRepository {
     // createCredit("Mono black", 0, 1000);
   }
 
-  Future<void> createDebit(String name, double totalBalance) async {
+  Future<Wallet> createDebit(String name, double totalBalance) async {
     var newWallet = await _ref.add(DebitWallet(
       name: name,
       archived: false,
     ));
 
     _createInitialTransaction(newWallet.id, totalBalance);
+
+    return (await newWallet.get()).data()!;
   }
 
-  Future<void> createCredit(
+  Future<Wallet> createCredit(
       String name, double ownBalance, double creditBalance) async {
     var newWallet = await _ref.add(CreditWallet(
       name: name,
@@ -49,6 +52,8 @@ class LocalWalletRepository {
     ));
 
     _createInitialTransaction(newWallet.id, ownBalance);
+
+    return (await newWallet.get()).data()!;
   }
 
   Stream<Wallet?> walletById(String id) {
@@ -59,6 +64,19 @@ class LocalWalletRepository {
         return null;
       }
     });
+  }
+
+  Future<Wallet?> getWalletByName(String name) async {
+    final wallets = await _ref.where('name', isEqualTo: name).get();
+    return wallets.docs.map((event) {
+      if (event.exists) {
+        return event.data();
+      } else {
+        return null;
+      }
+    })
+        .whereNotNull()
+        .firstOrNull;
   }
 
   Future<Wallet?> getWalletById(String id) async {

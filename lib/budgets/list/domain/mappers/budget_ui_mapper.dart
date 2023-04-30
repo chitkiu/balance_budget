@@ -40,7 +40,7 @@ class BudgetUIMapper {
     return CategoryInfoUIModel(
       categoryBudgetInfo.totalSum,
       categoryBudgetInfo.totalExpenseSum,
-      categoryBudgetInfo.category.title,
+      categoryBudgetInfo.category.name,
     );
   }
 }

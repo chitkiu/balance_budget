@@ -7,7 +7,7 @@ class TransactionCategoryUIMapper {
     return categories.map((category) {
       return SelectionListItem(
         model: category,
-        name: category.title,
+        name: category.name,
         isSelected: category.id == selectedCategory?.id,
       );
     }).toList();

@@ -6,7 +6,7 @@ class CategoryUIMapper {
 
   CategoryUIModel map(Category category) {
     return CategoryUIModel(
-      category.title,
+      category.name,
       category.id,
       category.icon,
       category.archived,

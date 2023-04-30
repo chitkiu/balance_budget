@@ -73,7 +73,7 @@ class TransactionsUIMapper {
       sum: _sumFormat(transaction.sum),
       sumDouble: transaction.sum,
       sumColor: _getColorByTransactionType(transaction.transactionType),
-      categoryName: category.title,
+      categoryName: category.name,
       categoryId: category.id,
       fromWalletName: wallet.name,
       fromWalletId: wallet.id,

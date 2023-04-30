@@ -7,7 +7,7 @@ part of 'category.dart';
 // **************************************************************************
 
 Category _$CategoryFromJson(Map<String, dynamic> json) => Category(
-      title: json['title'] as String,
+      name: json['name'] as String,
       transactionType:
           $enumDecode(_$TransactionTypeEnumMap, json['transactionType']),
       icon: json['icon'] == null
@@ -17,7 +17,7 @@ Category _$CategoryFromJson(Map<String, dynamic> json) => Category(
     );
 
 Map<String, dynamic> _$CategoryToJson(Category instance) => <String, dynamic>{
-      'title': instance.title,
+      'name': instance.name,
       'transactionType': _$TransactionTypeEnumMap[instance.transactionType]!,
       'icon': const IconConverter().toJson(instance.icon),
       'archived': instance.archived,

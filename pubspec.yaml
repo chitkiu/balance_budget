@@ -34,6 +34,8 @@ dependencies:
       ref: hotfix
   modal_bottom_sheet: ^3.0.0-pre
   ionicons: ^0.2.2
+  csv: ^5.0.2
+  file_picker: ^5.2.11
 
 dev_dependencies:
   flutter_test:

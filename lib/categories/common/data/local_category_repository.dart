@@ -12,12 +12,12 @@ import 'models/category.dart';
 class LocalCategoryRepository {
   final List<Category> _localCategories = [
     Category(
-      title: Get.localisation.addInitialBalanceCategoryTitle,
+      name: Get.localisation.addInitialBalanceCategoryTitle,
       transactionType: TransactionType.setInitialBalance,
       archived: false,
     ),
     Category(
-      title: Get.localisation.transferCategoryTitle,
+      name: Get.localisation.transferCategoryTitle,
       transactionType: TransactionType.transfer,
       //TODO Change icon
       icon: Icons.compare_arrows,
@@ -55,13 +55,15 @@ class LocalCategoryRepository {
     // create("Salary", TransactionType.income, null);
   }
 
-  void create(String title, TransactionType transactionType, IconData? icon) async {
-    _ref.add(Category(
-      title: title,
+  Future<Category> create(String title, TransactionType transactionType, IconData? icon) async {
+    final newCategory = await _ref.add(Category(
+      name: title,
       transactionType: transactionType,
       icon: icon ?? Icons.not_interested,
       archived: false,
     ));
+
+    return (await newCategory.get()).data()!;
   }
 
   Stream<Category?> categoryById(String id) {
@@ -70,6 +72,19 @@ class LocalCategoryRepository {
 
   Future<Category?> getCategoryById(String id) async {
     return (await _ref.doc(id).get()).data();
+  }
+
+  Future<Category?> getCategoryByName(String name) async {
+    final categories = await _ref.where('name', isEqualTo: name).get();
+    return categories.docs.map((event) {
+      if (event.exists) {
+        return event.data();
+      } else {
+        return null;
+      }
+    })
+        .whereNotNull()
+        .firstOrNull;
   }
 
   Stream<List<Category>> getCategoriesByType(TransactionType type) {
@@ -107,7 +122,7 @@ class LocalCategoryRepository {
     }
 
     Category newCategory = editCategory.copyWith(
-        title: title, transactionType: transactionType, icon: icon, archived: archived);
+        name: title, transactionType: transactionType, icon: icon, archived: archived);
 
     await data.set(newCategory);
   }
