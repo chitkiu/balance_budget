@@ -34,13 +34,13 @@ class DialogHelper {
             CupertinoDialogAction(
               child: cancelActionText != null
                   ? Text(cancelActionText)
-                  : Icon(CupertinoIcons.clear),
+                  : const Icon(CupertinoIcons.clear),
               onPressed: () => Navigator.of(context).pop(false),
             ),
             CupertinoDialogAction(
-              child: Text(action ?? title),
               onPressed: () => Navigator.of(context).pop(true),
               isDestructiveAction: isDangerousAction,
+              child: Text(action ?? title),
             ),
           ],
         ),

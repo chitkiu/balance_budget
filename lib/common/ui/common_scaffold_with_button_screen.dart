@@ -4,17 +4,17 @@ import 'package:get/get.dart';
 
 abstract class CommonScaffoldWithButtonScreen<T> extends GetView<T> {
   final String title;
-  final IconData icon;
+  final IconData? icon;
 
   const CommonScaffoldWithButtonScreen(
     this.title, {
     super.key,
-    required this.icon,
+    this.icon,
   });
 
   Widget body(BuildContext context);
 
-  void onButtonPress(BuildContext context);
+  void onButtonPress(BuildContext context) {}
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +23,12 @@ abstract class CommonScaffoldWithButtonScreen<T> extends GetView<T> {
         title: Text(title),
         cupertino: (context, platform) {
           return CupertinoNavigationBarData(
-              trailing: GestureDetector(
-                onTap: () => onButtonPress(context),
-                child: Icon(icon),
-              )
-          );
+              trailing: icon != null
+                  ? GestureDetector(
+                      onTap: () => onButtonPress(context),
+                      child: Icon(icon),
+                    )
+                  : null);
         },
       ),
       body: SafeArea(
@@ -35,11 +36,12 @@ abstract class CommonScaffoldWithButtonScreen<T> extends GetView<T> {
       ),
       material: (context, platform) {
         return MaterialScaffoldData(
-            floatingActionButton: FloatingActionButton(
-              onPressed: () => onButtonPress(context),
-              child: Icon(icon),
-            )
-        );
+            floatingActionButton: icon != null
+                ? FloatingActionButton(
+                    onPressed: () => onButtonPress(context),
+                    child: Icon(icon),
+                  )
+                : null);
       },
     );
   }

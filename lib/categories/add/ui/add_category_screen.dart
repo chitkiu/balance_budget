@@ -68,10 +68,10 @@ class AddCategoryScreen extends CommonScaffoldWithButtonScreen<AddCategoryContro
             //TODO Improve UI
             Row(
               children: [
-                Text("Selected icon:"),
+                Text(Get.localisation.selected_category_icon),
                 Obx(() => Icon(controller.selectedIcon.value ?? Icons.not_interested)),
                 PlatformElevatedButton(
-                  child: Text("Select icon"),
+                  child: Text(Get.localisation.select_category_icon),
                   onPressed: () async {
                     controller.onIconPickerClick();
                     FocusScope.of(context).requestFocus(FocusNode());

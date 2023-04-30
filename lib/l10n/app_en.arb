@@ -50,6 +50,11 @@
   "confirmToDeleteText": "It's can be undone!",
   "yes": "Yes",
   "no": "No",
+  "archive": "Archive",
+  "unarchive": "Unarchive",
+  "confirmToArchiveTitle": "Are you sure to archive?",
+  "confirmToUnarchiveTitle": "Are you sure to unarchive?",
+  "confirmToChangeArchiveText": "You can change state later",
 
   "addInitialBalanceCategoryTitle": "Add initial balance",
   "transferCategoryTitle": "Transfer",
@@ -88,5 +93,14 @@
   "category_info_title": "Category info",
   "category_name_title": "Category name:",
 
-  "add_budget_title": "Add budget"
+  "selected_category_icon": "Selected icon:",
+  "select_category_icon": "Select icon",
+
+  "add_budget_title": "Add budget",
+
+  "select_wallet_or_keep_empty": "Select wallet, or keep empty for all wallets",
+  "select_category": "Select category",
+  "empty_add_category_to_multi_category": "You don't add any categories, please press plus for add",
+  "add_category_to_multi_category": "Add new category",
+  "remove_category_from_multi_category": "Remove category"
 }

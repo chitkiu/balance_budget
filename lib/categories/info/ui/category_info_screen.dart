@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
-import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
 import '../../../common/ui/common_tile.dart';
 import '../../../common/ui/common_ui_settings.dart';
@@ -13,7 +12,7 @@ import '../domain/category_info_controller.dart';
 class CategoryInfoScreen extends CommonScaffoldWithButtonScreen<CategoryInfoController> {
   final String id;
   CategoryInfoScreen(this.id, {super.key})
-      : super(Get.localisation.category_info_title, icon: CommonIcons.edit);
+      : super(Get.localisation.category_info_title);
 
   @override
   String? get tag => id;
@@ -47,28 +46,34 @@ class CategoryInfoScreen extends CommonScaffoldWithButtonScreen<CategoryInfoCont
               PlatformElevatedButton(
                 onPressed: () async {
                   await confirmBeforeActionDialog(
-                        () async {
+                    () async {
                       await controller.archiveCategory();
                     },
                   );
                 },
-                child: Text(category.isArchived ? "Unarchive" : "Archive"),
+                child: Text(category.isArchived
+                    ? Get.localisation.unarchive
+                    : Get.localisation.archive),
               ),
               if (category.isArchived)
                 PlatformElevatedButton(
                   onPressed: () async {
                     await confirmBeforeActionDialog(
-                          () async {
-                            try {
-                              await controller.deleteCategory();
-                              Get.back();
-                            } on Exception catch (e) {
-                              debugPrint(e.toString());
-                            }
+                      () async {
+                        try {
+                          await controller.deleteCategory();
+                          Get.back();
+                        } on Exception catch (e) {
+                          debugPrint(e.toString());
+                        }
                       },
+                      title: Get.localisation.confirmToDeleteTitle,
+                      subTitle: Get.localisation.confirmToDeleteText,
+                      confirmAction: Get.localisation.yes,
+                      cancelAction: Get.localisation.no,
                     );
                   },
-                  child: Text("Delete"),
+                  child: Text(Get.localisation.delete),
                 ),
               const SizedBox(
                 height: CommonUI.defaultFullTileVerticalPadding,
@@ -95,7 +100,8 @@ class CategoryInfoScreen extends CommonScaffoldWithButtonScreen<CategoryInfoCont
                     return TransactionSectionHeaderWidget(
                       model: model,
                       onItemClick: (transaction) {
-                        controller.onTransactionClicked(context, transaction, !category.isArchived);
+                        controller.onTransactionClicked(
+                            context, transaction, !category.isArchived);
                       },
                       itemPadding: const EdgeInsets.symmetric(
                           horizontal: 4, vertical: CommonUI.defaultTileVerticalPadding),
@@ -105,16 +111,14 @@ class CategoryInfoScreen extends CommonScaffoldWithButtonScreen<CategoryInfoCont
                   },
                 )),
               if (state.transactions.transactions.isEmpty)
-                Expanded(child: Center(child: Text(Get.localisation.noTransactions),))
+                Expanded(
+                    child: Center(
+                  child: Text(Get.localisation.noTransactions),
+                ))
             ],
           ),
         );
       },
     );
-  }
-
-  @override
-  void onButtonPress(BuildContext context) {
-    // TODO: implement onButtonPress
   }
 }

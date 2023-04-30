@@ -50,6 +50,11 @@
   "confirmToDeleteText": "Це неможливо відмінити!",
   "yes": "Так",
   "no": "Ні",
+  "archive": "Archive",
+  "unarchive": "Unarchive",
+  "confirmToArchiveTitle": "Are you sure to archive?",
+  "confirmToUnarchiveTitle": "Are you sure to unarchive?",
+  "confirmToChangeArchiveText": "You can change state later",
 
   "addInitialBalanceCategoryTitle": "Налаштований стандартний баланс",
   "transferCategoryTitle": "Переказ",
@@ -87,6 +92,14 @@
 
   "category_info_title": "Інформація про категорію",
   "category_name_title": "Назва категорії:",
+  "selected_category_icon": "Selected icon:",
+  "select_category_icon": "Select icon",
 
-  "add_budget_title": "Додати бюджет"
+  "add_budget_title": "Додати бюджет",
+
+  "select_wallet_or_keep_empty": "Select wallet, or keep empty for all wallets",
+  "select_category": "Select category",
+  "empty_add_category_to_multi_category": "You don't add any categories, please press plus for add",
+  "add_category_to_multi_category": "Add new category",
+  "remove_category_from_multi_category": "Remove category"
 }

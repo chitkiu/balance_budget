@@ -1,5 +1,7 @@
+import 'package:balance_budget/common/getx_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:get/get.dart';
 
 import '../../../categories/list/ui/models/category_ui_model.dart';
 import '../../../common/ui/common_edit_text.dart';
@@ -31,7 +33,7 @@ class CommonBudgetWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text("Select wallet, or keep empty for all wallets"),
+        Text(Get.localisation.select_wallet_or_keep_empty),
         CommonSelectionList<WalletUIModel>(
           items: wallets,
           onClick: selectWallet,
@@ -39,7 +41,7 @@ class CommonBudgetWidget extends StatelessWidget {
         const SizedBox(
           height: 8,
         ),
-        if (showCategory) Text("Select category"),
+        if (showCategory) Text(Get.localisation.select_category),
         if (showCategory)
           CommonSelectionList<CategoryUIModel>(
             items: categories,
@@ -87,7 +89,7 @@ class MultiCategoryBudgetWidget extends StatelessWidget {
       return Center(
         child: Column(
           children: [
-            Text("You don't add any categories, please press plus for add"),
+            Text(Get.localisation.empty_add_category_to_multi_category),
             PlatformElevatedButton(
               child: const Icon(Icons.add), //TODO
               onPressed: () {
@@ -107,7 +109,7 @@ class MultiCategoryBudgetWidget extends StatelessWidget {
               FocusScope.of(context).requestFocus(FocusNode());
               removeMultiCategory(i);
             },
-            child: Text("Remove category"),
+            child: Text(Get.localisation.remove_category_from_multi_category),
           ),
           CommonBudgetWidget(
             changeAmount: (amount) {
@@ -139,7 +141,7 @@ class MultiCategoryBudgetWidget extends StatelessWidget {
 
       children.add(Row(
         children: [
-          Text("Add new category"),
+          Text(Get.localisation.add_category_to_multi_category),
           PlatformElevatedButton(
             child: const Icon(Icons.add), //TODO
             onPressed: () {

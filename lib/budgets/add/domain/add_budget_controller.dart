@@ -178,7 +178,7 @@ class AddBudgetController extends GetxController {
   }
 
   bool _saveCategoryBudget(String name, String amount) {
-    final doubleAmount = double.tryParse(amount ?? "");
+    final doubleAmount = double.tryParse(amount);
     if (doubleAmount == null) {
       return false;
     }
@@ -201,7 +201,7 @@ class AddBudgetController extends GetxController {
   }
 
   bool _saveTotalBudget(String name, String amount) {
-    final doubleAmount = double.tryParse(amount ?? "");
+    final doubleAmount = double.tryParse(amount);
     if (doubleAmount == null) {
       return false;
     }
@@ -234,7 +234,7 @@ class AddBudgetController extends GetxController {
           }
         }
 
-        final doubleAmount = double.tryParse(element.amount ?? "");
+        final doubleAmount = double.tryParse(element.amount);
         if (doubleAmount == null) {
           return null;
         }

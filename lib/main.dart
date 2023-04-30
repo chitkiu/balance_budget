@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         supportedLocales: AppLocalizations.supportedLocales,
         theme: ThemeData(
             useMaterial3: true,
-            textTheme: TextTheme(titleMedium: TextStyle(fontSize: 17))),
+            textTheme: const TextTheme(titleMedium: TextStyle(fontSize: 17))),
         home: const AuthGate(),
       );
     } else {

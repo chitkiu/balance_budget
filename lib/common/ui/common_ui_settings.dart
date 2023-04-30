@@ -1,3 +1,4 @@
+import 'package:balance_budget/common/getx_extensions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -36,8 +37,8 @@ Future<void> confirmBeforeActionDialog(
       title: title ?? 'Are you sure?',
       isDangerousAction: true,
       query: subTitle ?? 'It\'s can\'t be undone!',
-      action: confirmAction ?? 'Yes',
-      cancelActionText: cancelAction ?? 'No');
+      action: confirmAction ?? Get.localisation.yes,
+      cancelActionText: cancelAction ?? Get.localisation.no);
   if (isConfirm == true) {
     await action();
   }

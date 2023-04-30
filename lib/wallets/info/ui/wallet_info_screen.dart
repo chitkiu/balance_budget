@@ -1,8 +1,8 @@
-import 'package:balance_budget/common/getx_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
+import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_scaffold_with_button_screen.dart';
 import '../../../common/ui/common_tile.dart';
@@ -12,11 +12,10 @@ import '../../list/ui/models/wallet_ui_model.dart';
 import '../domain/wallet_info_controller.dart';
 
 class WalletInfoScreen extends CommonScaffoldWithButtonScreen<WalletInfoController> {
-
   final String id;
 
   WalletInfoScreen(this.id, {super.key})
-      : super(Get.localisation.wallet_info_title, icon: CommonIcons.edit);
+      : super(Get.localisation.wallet_info_title);
 
   @override
   String? get tag => id;
@@ -81,9 +80,15 @@ class WalletInfoScreen extends CommonScaffoldWithButtonScreen<WalletInfoControll
                     () async {
                       await controller.archiveWallet();
                     },
+                    title: wallet.isArchived
+                        ? Get.localisation.confirmToUnarchiveTitle
+                        : Get.localisation.confirmToArchiveTitle,
+                    subTitle: Get.localisation.confirmToChangeArchiveText,
                   );
                 },
-                child: Text(wallet.isArchived ? "Unarchive" : "Archive"),
+                child: Text(wallet.isArchived
+                    ? Get.localisation.unarchive
+                    : Get.localisation.archive),
               ),
               if (wallet.isArchived)
                 PlatformElevatedButton(
@@ -97,9 +102,13 @@ class WalletInfoScreen extends CommonScaffoldWithButtonScreen<WalletInfoControll
                           debugPrint(e.toString());
                         }
                       },
+                      title: Get.localisation.confirmToDeleteTitle,
+                      subTitle: Get.localisation.confirmToDeleteText,
+                      confirmAction: Get.localisation.yes,
+                      cancelAction: Get.localisation.no,
                     );
                   },
-                  child: Text("Delete"),
+                  child: Text(Get.localisation.delete),
                 ),
               const SizedBox(
                 height: 16,
@@ -126,7 +135,8 @@ class WalletInfoScreen extends CommonScaffoldWithButtonScreen<WalletInfoControll
                     return TransactionSectionHeaderWidget(
                       model: model,
                       onItemClick: (transaction) {
-                        controller.onTransactionClicked(context, transaction, !wallet.isArchived);
+                        controller.onTransactionClicked(
+                            context, transaction, !wallet.isArchived);
                       },
                       itemPadding: const EdgeInsets.symmetric(
                           horizontal: 4, vertical: CommonUI.defaultTileVerticalPadding),
@@ -145,10 +155,5 @@ class WalletInfoScreen extends CommonScaffoldWithButtonScreen<WalletInfoControll
         );
       },
     );
-  }
-
-  @override
-  void onButtonPress(BuildContext context) {
-    // TODO: implement onButtonPress
   }
 }
