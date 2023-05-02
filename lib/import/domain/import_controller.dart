@@ -19,7 +19,17 @@ class ImportController extends GetxController {
 
   ImportController({required this.columnNames, required this.transactions});
 
-  Future<void> parseData() async {
+  Iterable<String>? getAllCategories() {
+    int categoryIndex = items.keys.firstWhere(
+            (k) => items[k] == ColumnTypes.category, orElse: () => -1);
+    if (categoryIndex < 0) {
+      return null;
+    } else {
+      return transactions.map((row) => row[categoryIndex]).toSet();
+    }
+  }
+
+  Future<void> parseData(String transferCategoryName) async {
     int dateIndex = items.keys.firstWhere(
             (k) => items[k] == ColumnTypes.date, orElse: () => -1);
     if (dateIndex < 0) {
@@ -45,22 +55,22 @@ class ImportController extends GetxController {
     int sumIndex = items.keys.firstWhere(
             (k) => items[k] == ColumnTypes.sum, orElse: () => -1);
 
-    for (var transaction in transactions) {
+    final Iterable<List<String>> filteredTransactions;
+    if (transferCategoryName.isEmpty) {
+      filteredTransactions = transactions;
+    } else {
+      filteredTransactions = transactions.where((element) {
+        return element[categoryIndex] != transferCategoryName;
+      });
+    }
+
+    for (var transaction in filteredTransactions) {
       debugPrint("transaction: $transaction");
       final dateStr = transaction[dateIndex].clean;
-      DateTime parsedDate;
-      try {
-        parsedDate = DateTime.parse(dateStr);
-      } catch (e) {
-        debugPrint("Cannot parse on default way, try other...");
-        e.printError();
-        try {
-          final date = dateStr.split(".");
-          parsedDate = DateTime(int.parse(date[2]), int.parse(date[1]), int.parse(date[0]));
-        } catch (e) {
-          e.printError();
-          continue;
-        }
+      DateTime? parsedDate = _parseDate(dateStr);
+
+      if (parsedDate == null) {
+        continue;
       }
 
       if (sumIndex >= 0 || (incomeSumIndex >= 0 && expenseSumIndex >= 0)) {
@@ -132,6 +142,30 @@ class ImportController extends GetxController {
         );
       } else {
         continue;
+      }
+    }
+
+    final transferTransactions = transactions.where((element) {
+      return element[categoryIndex] == transferCategoryName;
+    });
+
+    for (var value in transferTransactions) {
+
+    }
+  }
+
+  DateTime? _parseDate(String dateStr) {
+    try {
+      return DateTime.parse(dateStr);
+    } catch (e) {
+      debugPrint("Cannot parse on default way, try other...");
+      e.printError();
+      try {
+        final date = dateStr.split(".");
+        return DateTime(int.parse(date[2]), int.parse(date[1]), int.parse(date[0]));
+      } catch (e) {
+        e.printError();
+        return null;
       }
     }
   }

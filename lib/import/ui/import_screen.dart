@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
@@ -6,7 +7,6 @@ import '../domain/import_controller.dart';
 import '../domain/models/column_types.dart';
 
 class ImportScreen extends GetView<ImportController> {
-
   const ImportScreen({super.key});
 
   @override
@@ -60,16 +60,80 @@ class ImportScreen extends GetView<ImportController> {
           ),
           PlatformElevatedButton(
             onPressed: () async {
+              final categories = controller.getAllCategories()?.toList();
+              if (categories == null) {
+                return;
+              }
+              final transferCategoryName = await showPlatformDialog(
+                  context: context,
+                  material: MaterialDialogData(
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text("Select transfer category"),
+                        content: ListView.builder(
+                          itemBuilder: (context, index) {
+                            final item = categories[index];
+                            return TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(item);
+                                },
+                                child: Text(item));
+                          },
+                          itemCount: categories.length,
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop("");
+                            },
+                            child: Text("None"),
+                          )
+                        ],
+                      );
+                    },
+                  ),
+                  cupertino: CupertinoDialogData(
+                    builder: (context) {
+                      return CupertinoAlertDialog(
+                        title: Text("Select transfer category"),
+                        content: ListView.builder(
+                          itemBuilder: (context, index) {
+                            final item = categories[index];
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).pop(item);
+                              },
+                              child: Text(item),
+                            );
+                          },
+                          itemCount: categories.length,
+                        ),
+                        actions: [
+                          CupertinoDialogAction(
+                            child: Text("None"),
+                            onPressed: () {
+                              Navigator.of(context).pop("");
+                            },
+                          )
+                        ],
+                      );
+                    },
+                  ));
+              debugPrint("Transfer category: $transferCategoryName");
+              if (transferCategoryName == null) {
+                return;
+              }
               showDialog(
                   barrierDismissible: false,
                   context: context,
                   builder: (_) {
                     return const Dialog(
-                      child: CircularProgressIndicator(),
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
                     );
-                  }
-              );
-              await controller.parseData();
+                  });
+              await controller.parseData(transferCategoryName);
               Navigator.of(context).pop();
               Get.back();
             },
