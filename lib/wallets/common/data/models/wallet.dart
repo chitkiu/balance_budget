@@ -29,6 +29,11 @@ abstract class Wallet {
       return DebitWallet.fromJson(json);
     }
   }
+
+  @override
+  String toString() {
+    return 'Wallet{_id: $_id, name: $name, archived: $archived}';
+  }
 }
 
 @JsonSerializable()
