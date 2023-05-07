@@ -1,6 +1,7 @@
 import 'package:balance_budget/common/getx_extensions.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -42,4 +43,60 @@ Future<void> confirmBeforeActionDialog(
   if (isConfirm == true) {
     await action();
   }
+}
+
+Future<void> loadingDialogWhileExecution(
+    BuildContext context,
+    Future<void> Function() action,
+) async {
+  if (CommonUI.isCupertino) {
+    showCupertinoDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return Center(
+            child: Container(
+              width: 60.0,
+              height: 60.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(4.0),
+              ),
+              child: const Padding(
+                padding: EdgeInsets.all(12.0),
+                child: CupertinoActivityIndicator(),
+              ),
+            ),
+          );
+        },
+    );
+  } else {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (_) {
+          return WillPopScope(
+              onWillPop: () async => false,
+              child: Dialog(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      CircularProgressIndicator(),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      //TODO Add translation
+                      Text('Loading...')
+                    ],
+                  ),
+                ),
+              ),
+          );
+        });
+  }
+  await action();
+
+  Navigator.pop(context);
 }

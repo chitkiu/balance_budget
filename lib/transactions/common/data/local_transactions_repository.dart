@@ -8,9 +8,10 @@ import 'models/rich_transaction_model.dart';
 import 'models/transaction.dart';
 
 class LocalTransactionsRepository {
-  CollectionReference<Transaction> get _ref => FirebaseFirestore.instance
-      .collection(
-          "users/${FirebaseAuth.instance.currentUser!.uid}/transactions")
+  CollectionReference get collection => FirebaseFirestore.instance
+      .collection("users/${FirebaseAuth.instance.currentUser!.uid}/transactions");
+
+  CollectionReference<Transaction> get _ref => collection
       .withConverter<Transaction>(
         fromFirestore: (snapshot, _) =>
             Transaction.fromJson(MapEntry(snapshot.id, snapshot.data()!)),
@@ -19,6 +20,16 @@ class LocalTransactionsRepository {
 
   Stream<List<Transaction>> get transactions =>
       _ref.snapshots().map((event) => event.docs.map((e) => e.data()).toList());
+
+  Future<void> removeAll() async {
+    final instance = FirebaseFirestore.instance;
+    final batch = instance.batch();
+    var snapshots = await collection.get();
+    for (var doc in snapshots.docs) {
+      batch.delete(doc.reference);
+    }
+    await batch.commit();
+  }
 
   Stream<Transaction?> transactionById(
     String id,

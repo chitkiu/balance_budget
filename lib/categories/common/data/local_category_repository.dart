@@ -25,8 +25,10 @@ class LocalCategoryRepository {
     ),
   ];
 
-  CollectionReference<Category> get _ref => FirebaseFirestore.instance
-      .collection("users/${FirebaseAuth.instance.currentUser!.uid}/categories")
+  CollectionReference get collection => FirebaseFirestore.instance
+      .collection("users/${FirebaseAuth.instance.currentUser!.uid}/categories");
+
+  CollectionReference<Category> get _ref => collection
       .withConverter<Category>(
         fromFirestore: (snapshot, _) =>
             Category.fromJson(MapEntry(snapshot.id, snapshot.data()!)),
@@ -53,6 +55,16 @@ class LocalCategoryRepository {
     // create("Car", TransactionType.spend, null);
     // create("Tax", TransactionType.spend, null);
     // create("Salary", TransactionType.income, null);
+  }
+
+  Future<void> removeAll() async {
+    final instance = FirebaseFirestore.instance;
+    final batch = instance.batch();
+    var snapshots = await collection.get();
+    for (var doc in snapshots.docs) {
+      batch.delete(doc.reference);
+    }
+    await batch.commit();
   }
 
   Future<Category> create(String title, TransactionType transactionType, IconData? icon) async {

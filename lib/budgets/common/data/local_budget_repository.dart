@@ -6,9 +6,11 @@ import 'models/budget_repeat_type.dart';
 import 'models/category_budget_info.dart';
 
 class LocalBudgetRepository {
+  CollectionReference get collection => FirebaseFirestore.instance
+      .collection("users/${FirebaseAuth.instance.currentUser!.uid}/budgets");
 
-  CollectionReference<Budget> get _ref =>
-      FirebaseFirestore.instance.collection("users/${FirebaseAuth.instance.currentUser!.uid}/budgets").withConverter<Budget>(
+  CollectionReference<Budget> get _ref => collection
+      .withConverter<Budget>(
         fromFirestore: (snapshot, _) =>
             Budget.fromJson(MapEntry(snapshot.id, snapshot.data()!)),
         toFirestore: (budget, _) => budget.toJson(),
@@ -16,6 +18,16 @@ class LocalBudgetRepository {
 
   Stream<List<Budget>> get budgets =>
       _ref.snapshots().map((event) => event.docs.map((e) => e.data()).toList());
+
+  Future<void> removeAll() async {
+    final instance = FirebaseFirestore.instance;
+    final batch = instance.batch();
+    var snapshots = await collection.get();
+    for (var doc in snapshots.docs) {
+      batch.delete(doc.reference);
+    }
+    await batch.commit();
+  }
 
   void createTotalBudget(
     BudgetRepeatType repeatType,

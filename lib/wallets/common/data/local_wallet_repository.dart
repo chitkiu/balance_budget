@@ -8,8 +8,10 @@ import '../../../transactions/common/data/local_transactions_repository.dart';
 import 'models/wallet.dart';
 
 class LocalWalletRepository {
-  CollectionReference<Wallet> get _ref => FirebaseFirestore.instance
-      .collection("users/${FirebaseAuth.instance.currentUser!.uid}/wallets")
+  CollectionReference get collection => FirebaseFirestore.instance
+      .collection("users/${FirebaseAuth.instance.currentUser!.uid}/wallets");
+
+  CollectionReference<Wallet> get _ref => collection
       .withConverter<Wallet>(
         fromFirestore: (snapshot, _) =>
             Wallet.fromJson(MapEntry(snapshot.id, snapshot.data()!)),
@@ -30,6 +32,16 @@ class LocalWalletRepository {
   LocalWalletRepository() {
     // createDebit("Mono white", 1000);
     // createCredit("Mono black", 0, 1000);
+  }
+
+  Future<void> removeAll() async {
+    final instance = FirebaseFirestore.instance;
+    final batch = instance.batch();
+    var snapshots = await collection.get();
+    for (var doc in snapshots.docs) {
+      batch.delete(doc.reference);
+    }
+    await batch.commit();
   }
 
   Future<Wallet> createDebit(String name, double totalBalance) async {
