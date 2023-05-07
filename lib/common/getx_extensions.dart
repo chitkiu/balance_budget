@@ -1,5 +1,6 @@
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
+
+import '../generated/l10n.dart';
 
 extension GetxExtension on GetInterface {
   Future<void> deleteIfExist<T>({bool force = false}) {
@@ -10,5 +11,5 @@ extension GetxExtension on GetInterface {
     }
   }
 
-  AppLocalizations get localisation => AppLocalizations.of(context!)!;
+  S get localisation => S.of(context!);
 }

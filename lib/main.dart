@@ -1,12 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
 import 'auth_gate.dart';
 import 'firebase_options.dart';
+import 'generated/l10n.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,6 +15,13 @@ void main() async {
 
   runApp(const MyApp());
 }
+
+const Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates = [
+  S.delegate,
+  GlobalMaterialLocalizations.delegate,
+  GlobalWidgetsLocalizations.delegate,
+  GlobalCupertinoLocalizations.delegate,
+];
 
 //TODO Add theme
 class MyApp extends StatelessWidget {
@@ -23,9 +31,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     if (isMaterial(context)) {
       return GetMaterialApp(
-        onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
+        onGenerateTitle: (context) => S.of(context).appTitle,
+        localizationsDelegates: localizationsDelegates,
+        supportedLocales: S.delegate.supportedLocales,
         theme: ThemeData(
             useMaterial3: true,
             textTheme: const TextTheme(titleMedium: TextStyle(fontSize: 17))),
@@ -33,9 +41,9 @@ class MyApp extends StatelessWidget {
       );
     } else {
       return GetCupertinoApp(
-        onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
+        onGenerateTitle: (context) => S.of(context).appTitle,
+        localizationsDelegates: localizationsDelegates,
+        supportedLocales: S.delegate.supportedLocales,
         theme: const CupertinoThemeData(
           brightness: Brightness.light,
         ),
