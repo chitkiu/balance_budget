@@ -40,8 +40,8 @@ class SettingsController extends GetxController {
     final csv = const CsvToListConverter().convert<String>(text, eol: "\n", shouldParseNumbers: false);
     final columnTitles = csv.sublist(0, 1).single;
     final transactions = csv.sublist(1);
-    debugPrint("${columnTitles}");
-    debugPrint("${transactions}");
+    debugPrint("$columnTitles");
+    debugPrint("$transactions");
     Get.to(
         () => const ImportScreen(),
       binding: ImportBinding(columnNames: columnTitles, transactions: transactions),

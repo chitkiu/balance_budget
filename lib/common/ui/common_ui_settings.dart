@@ -77,12 +77,12 @@ Future<void> loadingDialogWhileExecution(
         builder: (_) {
           return WillPopScope(
               onWillPop: () async => false,
-              child: Dialog(
+              child: const Dialog(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  padding: EdgeInsets.symmetric(vertical: 20),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
+                    children: [
                       CircularProgressIndicator(),
                       SizedBox(
                         height: 15,

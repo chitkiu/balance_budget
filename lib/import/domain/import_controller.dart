@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:rxdart/transformers.dart';
 
 import '../../categories/common/data/local_category_repository.dart';
-import '../../categories/common/data/models/category.dart' as DomainCategory;
+import '../../categories/common/data/models/category.dart' as domain_category;
 import '../../common/data/models/transaction_type.dart';
 import '../../common/pair.dart';
 import '../../transactions/common/data/local_transactions_repository.dart';
@@ -316,7 +316,7 @@ class ImportController extends GetxController {
         }
       }
 
-      category ??= DomainCategory.Category(
+      category ??= domain_category.Category(
         name: categoryName, transactionType: transactionType, archived: false,);
 
       final comment = commentIndex != -1 ? data[commentIndex] : null;
@@ -331,7 +331,7 @@ class ImportController extends GetxController {
 
 class _ParsedData {
   final DateTime date;
-  final DomainCategory.Category category;
+  final domain_category.Category category;
   final Wallet wallet;
   final TransactionType transactionType;
   final double sum;
@@ -340,7 +340,7 @@ class _ParsedData {
   _ParsedData(this.date, this.category, this.wallet, this.transactionType, this.sum,
       this.comment);
 
-  _ParsedData copyWith({Wallet? newWallet, DomainCategory.Category? newCategory}) {
+  _ParsedData copyWith({Wallet? newWallet, domain_category.Category? newCategory}) {
     return _ParsedData(
       date,
       newCategory ?? category,
