@@ -49,9 +49,10 @@ class TransactionItem extends StatelessWidget {
           size: 14,
         ),
         const SizedBox(width: 6),
-        Text(
+        Expanded(child: Text(
           text,
-        )
+          overflow: TextOverflow.ellipsis,
+        ))
       ],
     );
   }

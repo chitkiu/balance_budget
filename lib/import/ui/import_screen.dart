@@ -16,17 +16,18 @@ class ImportScreen extends GetView<ImportController> {
       appBar: PlatformAppBar(
         title: Text("Select import"),
       ),
-      body: Column(
-        children: [
-          Row(
-            children: [
-              Text("Column name:", style: TextStyle(color: Colors.black)),
-              Spacer(),
-              Text("Column type:", style: TextStyle(color: Colors.black))
-            ],
-          ),
-          Divider(),
-          ListView.builder(
+      body: SafeArea(
+        child: Column(
+          children: [
+            const Row(
+              children: [
+                Text("Column name:"),
+                Spacer(),
+                Text("Column type:")
+              ],
+            ),
+            const Divider(),
+            ListView.builder(
             shrinkWrap: true,
             itemBuilder: (context, index) {
               final columnName = controller.columnNames[index];
@@ -34,14 +35,14 @@ class ImportScreen extends GetView<ImportController> {
               return Row(
                 children: [
                   Text(columnName),
-                  Spacer(),
+                  const Spacer(),
                   Material(
                     child: Obx(() {
                       return DropdownButton(
                         items: ColumnTypes.values.map((e) {
                           return DropdownMenuItem(
-                            child: Text("${e.name}"),
                             value: e,
+                            child: Text(e.name),
                           );
                         }).toList(),
                         onChanged: (value) {
@@ -59,79 +60,84 @@ class ImportScreen extends GetView<ImportController> {
             },
             itemCount: controller.columnNames.length,
           ),
-          PlatformElevatedButton(
-            onPressed: () async {
-              final categories = controller.getAllCategories()?.toList();
-              if (categories == null) {
-                return;
-              }
-              final transferCategoryName = await showPlatformDialog(
-                  context: context,
-                  material: MaterialDialogData(
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text("Select transfer category"),
-                        content: ListView.builder(
-                          itemBuilder: (context, index) {
-                            final item = categories[index];
-                            return TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop(item);
-                                },
-                                child: Text(item));
-                          },
-                          itemCount: categories.length,
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop("");
+            PlatformElevatedButton(
+              onPressed: () async {
+                final categories = controller.getAllCategories()?.toList();
+                if (categories == null) {
+                  return;
+                }
+                final transferCategoryName = await showPlatformDialog(
+                    context: context,
+                    material: MaterialDialogData(
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text("Select transfer category"),
+                          content: ListView.builder(
+                            itemBuilder: (context, index) {
+                              final item = categories[index];
+                              return TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(item);
+                                  },
+                                  child: Text(item));
                             },
-                            child: Text("None"),
-                          )
-                        ],
-                      );
-                    },
-                  ),
-                  cupertino: CupertinoDialogData(
-                    builder: (context) {
-                      return CupertinoAlertDialog(
-                        title: Text("Select transfer category"),
-                        content: ListView.builder(
-                          itemBuilder: (context, index) {
-                            final item = categories[index];
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).pop(item);
+                            itemCount: categories.length,
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop("");
                               },
-                              child: Text(item),
-                            );
-                          },
-                          itemCount: categories.length,
-                        ),
-                        actions: [
-                          CupertinoDialogAction(
-                            child: Text("None"),
-                            onPressed: () {
-                              Navigator.of(context).pop("");
-                            },
-                          )
-                        ],
-                      );
-                    },
-                  ));
-              debugPrint("Transfer category: $transferCategoryName");
-              if (transferCategoryName == null) {
-                return;
-              }
-              await loadingDialogWhileExecution(context, () async {
-                await controller.parseData(transferCategoryName);
-              });
-              Get.back();
-            },
-            child: Text("Save transactions"),
-          ),
-        ],
+                              child: Text("None"),
+                            )
+                          ],
+                        );
+                      },
+                    ),
+                    cupertino: CupertinoDialogData(
+                      builder: (context) {
+                        return CupertinoAlertDialog(
+                          title: Text("Select transfer category"),
+                          content: SizedBox(
+                            height: 500,
+                            width: 250,
+                            child: ListView.builder(
+                              itemBuilder: (context, index) {
+                                final item = categories[index];
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).pop(item);
+                                  },
+                                  child: Text(item),
+                                );
+                              },
+                              itemCount: categories.length,
+                            ),
+                          ),
+                          actions: [
+                            CupertinoDialogAction(
+                              child: Text("None"),
+                              onPressed: () {
+                                Navigator.of(context).pop("");
+                              },
+                            )
+                          ],
+                        );
+                      },
+                    ));
+                debugPrint("Transfer category: $transferCategoryName");
+                if (transferCategoryName == null) {
+                  return;
+                }
+                await loadingDialogWhileExecution(context, () async {
+                  await controller.parseData(transferCategoryName);
+                });
+                Get.back();
+              },
+              child: Text("Save transactions"),
+            ),
+          ],
+        ),
       ),
     );
   }
