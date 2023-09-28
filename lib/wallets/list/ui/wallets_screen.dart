@@ -49,6 +49,12 @@ class WalletsScreen extends CommonScaffoldWithButtonScreen<WalletsController> {
           style: textTheme.titleSmall);
     }
 
+    Color? iconColor;
+
+    if (wallet.isArchived) {
+      iconColor = Colors.grey;
+    }
+
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
@@ -58,6 +64,7 @@ class WalletsScreen extends CommonScaffoldWithButtonScreen<WalletsController> {
         padding: CommonUI.defaultTilePadding,
         child: CommonTile(
           icon: CommonIcons.wallet,
+          iconColor: iconColor,
           textWidget: Text(
             wallet.name,
             style: textTheme.titleMedium,

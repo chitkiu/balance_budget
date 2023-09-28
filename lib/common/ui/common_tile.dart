@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const Color _defaultIconColor = Color.fromARGB(77, 158, 158, 158);
+const Color _defaultIconBackgroundColor = Color.fromARGB(77, 158, 158, 158);
 
 class CommonTile extends StatelessWidget {
   final String? text;
@@ -8,7 +8,8 @@ class CommonTile extends StatelessWidget {
   final String? secondText;
   final Widget? secondTextWidget;
   final IconData icon;
-  final Color iconColor;
+  final Color iconBackgroundColor;
+  final Color? iconColor;
   final Color? secondTextColor;
   final Widget? additionalTextWidget;
   final Widget? tailing;
@@ -20,7 +21,8 @@ class CommonTile extends StatelessWidget {
     this.secondText,
     this.secondTextWidget,
     required this.icon,
-    this.iconColor = _defaultIconColor,
+    this.iconBackgroundColor = _defaultIconBackgroundColor,
+    this.iconColor,
     this.secondTextColor,
     this.additionalTextWidget,
     this.tailing,
@@ -34,8 +36,11 @@ class CommonTile extends StatelessWidget {
       children: [
         Center(
           child: CircleAvatar(
-            backgroundColor: iconColor,
-            child: Icon(icon),
+            backgroundColor: iconBackgroundColor,
+            child: Icon(
+                icon,
+              color: iconColor,
+            ),
           ),
         ),
         const SizedBox(
