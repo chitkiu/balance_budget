@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -86,7 +87,7 @@ class BudgetAggregator {
           budget.endDate,
           categories,
           transactions,
-          wallets,
+          wallets.where((value) => value.archived == false).toList(),
         ));
   }
 
@@ -115,11 +116,11 @@ class BudgetAggregator {
       List<Category> categories,
       List<Transaction> transactions,
       List<Wallet> wallets) {
-
     var filteredTransaction = transactions.where((element) {
       return element is CommonTransaction &&
           element.transactionType == TransactionType.expense &&
           element.categoryId == categoryInfo.categoryId &&
+          wallets.any((wallet) => wallet.id == element.walletId) &&
           _periodValidation.isInCurrentPeriod(
               element.time, repeatType, startDate, endDate) &&
           _isCorrectWallet(categoryInfo.wallets, element.walletId);
