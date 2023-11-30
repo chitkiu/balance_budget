@@ -220,7 +220,7 @@ class ImportController extends GetxController {
                       TransactionType.transfer,
                       from.wallet.id,
                       from.date,
-                      comment: from.comment,
+                      comment: from.comment ?? to.comment,
                       toWalletId: to.wallet.id
                   );
                 } else {

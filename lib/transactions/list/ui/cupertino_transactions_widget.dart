@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_icons.dart';
 import 'base_transactions_widget.dart';
+import 'filter_popup/filter_dialog.dart';
 
 class CupertinoTransactionsWidget extends BaseTransactionsWidget {
   CupertinoTransactionsWidget({super.key});
@@ -68,6 +69,7 @@ class _CupertinoFilterWidget extends StatelessWidget {
                 child: calendarButton,
               ),
               GestureDetector(
+                onTap: () => showFilterDialog(context: context),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: Row(

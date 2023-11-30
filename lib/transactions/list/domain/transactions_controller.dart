@@ -4,7 +4,6 @@ import 'package:balance_budget/transactions/common/data/rich_transaction_compara
 import 'package:balance_budget/transactions/update/domain/update_transaction_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rxdart/transformers.dart';
 
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/base_bottom_sheet_screen.dart';
@@ -61,11 +60,10 @@ class TransactionsController extends GetxController
   }
 
   Stream<ComplexTransactionsUIModel> _transactionsStream() {
-    return _dateStorage.currentDateStream.switchMap((dateRange) {
-      return _transactionsAggregator
-          .transactionsByDate(dateRange.start, dateRange.end)
-          .map(_transactionsHeaderUIMapper.mapTransactionsToUI);
-    }).handleError((Object e, StackTrace str) {
+    return _transactionsAggregator
+        .transactionsByDate()
+        .map(_transactionsHeaderUIMapper.mapTransactionsToUI)
+        .handleError((Object e, StackTrace str) {
       change(null, status: RxStatus.error(str.toString()));
     });
   }
