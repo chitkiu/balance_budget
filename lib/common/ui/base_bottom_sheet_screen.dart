@@ -96,7 +96,6 @@ class _BottomSheetWidget extends StatelessWidget {
   final void Function(BuildContext context)? onTailingClick;
   final Widget body;
   const _BottomSheetWidget({
-    super.key,
     this.title,
     this.tailing,
     this.onTailingClick,

@@ -4,7 +4,6 @@ import 'package:rxdart/transformers.dart';
 
 import '../../../categories/common/data/local_category_repository.dart';
 import '../../../categories/common/data/models/category.dart';
-import '../../../categories/list/domain/categories_binding.dart';
 import '../../../categories/list/ui/categories_screen.dart';
 import '../../../common/data/models/transaction_type.dart';
 import '../../../common/domain/number_validator.dart';
@@ -225,8 +224,7 @@ class UpdateTransactionController extends GetxController with NumberValidator {
 
   void onManageCategoriesClick() {
     Get.to(
-      () => CategoriesScreen(),
-      binding: CategoriesBinding(),
+      () => const CategoriesScreen(),
     );
   }
 

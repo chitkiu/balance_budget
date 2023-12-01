@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 
 import '../../budgets/common/data/local_budget_repository.dart';
 import '../../categories/common/data/local_category_repository.dart';
-import '../../categories/list/domain/categories_binding.dart';
 import '../../categories/list/ui/categories_screen.dart';
 import '../../import/domain/import_binding.dart';
 import '../../import/ui/import_screen.dart';
@@ -22,8 +21,7 @@ class SettingsController extends GetxController {
 
   void onManageCategoriesClick() {
     Get.to(
-          () => CategoriesScreen(),
-      binding: CategoriesBinding(),
+          () => const CategoriesScreen(),
     );
   }
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BottomSheetHideIcon extends StatelessWidget {
-  const BottomSheetHideIcon({Key? key}) : super(key: key);
+  const BottomSheetHideIcon({super.key});
 
   @override
   Widget build(BuildContext context) {
