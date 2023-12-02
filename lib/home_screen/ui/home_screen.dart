@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     Get.lazyPut(() => context.read<LocalCategoryRepository>());
-    Get.lazyPut(() => LocalWalletRepository());
+    Get.lazyPut(() => context.read<LocalWalletRepository>());
     Get.lazyPut(() => LocalTransactionsRepository());
     Get.lazyPut(() => LocalBudgetRepository());
     Get.lazyPut(() => SelectedTransactionsDateStorage());

@@ -20,7 +20,7 @@ class WalletsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<WalletsListCubit>(
       create: (context) => WalletsListCubit(
-        Get.find<LocalWalletRepository>(), //TODO Rewrite to BLoC
+        context.read<LocalWalletRepository>(),
       ),
       child: _WalletsView(),
     );

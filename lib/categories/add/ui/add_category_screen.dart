@@ -23,7 +23,7 @@ class AddCategoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => AddCategoryCubit(
-        Get.find<LocalCategoryRepository>(), //TODO Rewrite to BLoC
+        context.read<LocalCategoryRepository>(),
       ),
       child: _AddCategoryView(),
     );

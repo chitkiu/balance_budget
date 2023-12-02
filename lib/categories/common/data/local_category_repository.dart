@@ -6,18 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../common/data/models/transaction_type.dart';
-import '../../../common/getx_extensions.dart';
 import 'models/category.dart';
 
+//TODO Add translation
 class LocalCategoryRepository {
   final List<Category> _localCategories = [
     Category(
-      name: Get.localisation.addInitialBalanceCategoryTitle,
+      name: /*Get.localisation.*/"addInitialBalanceCategoryTitle",
       transactionType: TransactionType.setInitialBalance,
       archived: false,
     ),
     Category(
-      name: Get.localisation.transferCategoryTitle,
+      name: /*Get.localisation.*/"transferCategoryTitle",
       transactionType: TransactionType.transfer,
       //TODO Change icon
       icon: Icons.compare_arrows,

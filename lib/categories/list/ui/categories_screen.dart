@@ -21,7 +21,7 @@ class CategoriesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => CategoriesListBloc(
-          Get.find<LocalCategoryRepository>() //TODO Rewrite to BLoC
+          context.read<LocalCategoryRepository>(),
       )
       ..add(const LoadCategoriesListEvent()),
       child: _CategoriesScreenView(),

@@ -22,7 +22,7 @@ class CategoryInfoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<CategoryInfoBloc>(
       create: (context) => CategoryInfoBloc(
-        Get.find<LocalCategoryRepository>(), //TODO Rewrite to BLoC
+        context.read<LocalCategoryRepository>(),
       )..add(LoadCategoryEvent(id)),
       child: _CategoryInfoView(),
     );
