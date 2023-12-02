@@ -9,7 +9,6 @@ import '../../../common/data/models/transaction_type.dart';
 import '../../../common/domain/number_validator.dart';
 import '../../../common/ui/common_selection_list.dart';
 import '../../../wallets/common/data/local_wallet_repository.dart';
-import '../../../wallets/list/domain/wallets_binding.dart';
 import '../../../wallets/list/ui/wallets_screen.dart';
 import '../../common/data/local_transactions_repository.dart';
 import '../../common/data/models/rich_transaction_model.dart';
@@ -68,21 +67,17 @@ class UpdateTransactionController extends GetxController with NumberValidator {
     _selectedCategory.refresh();
     selectedType.refresh();
 
-    selectedWallet.bindStream(
-      CombineLatestStream.combine2(
-          _walletRepo.walletsWithoutArchived,
-          _selectedWalletId.stream,
-          _transactionWalletUIMapper.map,
-      )
-    );
+    selectedWallet.bindStream(CombineLatestStream.combine2(
+      _walletRepo.walletsWithoutArchived,
+      _selectedWalletId.stream,
+      _transactionWalletUIMapper.map,
+    ));
 
-    selectedToWallet.bindStream(
-      CombineLatestStream.combine2(
-          _walletRepo.walletsWithoutArchived,
-          _selectedToWalletId.stream,
-          _transactionWalletUIMapper.map,
-      )
-    );
+    selectedToWallet.bindStream(CombineLatestStream.combine2(
+      _walletRepo.walletsWithoutArchived,
+      _selectedToWalletId.stream,
+      _transactionWalletUIMapper.map,
+    ));
 
     _selectedWalletId.refresh();
     _selectedToWalletId.refresh();
@@ -230,8 +225,7 @@ class UpdateTransactionController extends GetxController with NumberValidator {
 
   void onManageWalletsClick() {
     Get.to(
-      () => WalletsScreen(),
-      binding: WalletsBinding(),
+      () => const WalletsScreen(),
     );
   }
 

@@ -18,7 +18,7 @@ class TransactionInfoController extends GetxController {
   TransactionInfoController(this.id, this.canEdit);
 
   LocalTransactionsRepository get _transactionsRepo => Get.find();
-  TransactionsAggregator get _transactionsAggregator => Get.find();
+  final TransactionsAggregator _transactionsAggregator = const TransactionsAggregator();
 
   final TransactionsUIMapper _transactionsUIMapper = TransactionsUIMapper();
 

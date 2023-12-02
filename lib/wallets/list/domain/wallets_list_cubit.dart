@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:balance_budget/wallets/common/data/wallet_balance_calculator.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -8,41 +8,47 @@ import '../../../common/pair.dart';
 import '../../add/domain/add_wallet_binding.dart';
 import '../../add/ui/add_wallet_screen.dart';
 import '../../common/data/local_wallet_repository.dart';
+import '../../common/data/wallet_balance_calculator.dart';
 import '../../info/domain/wallet_info_binding.dart';
 import '../../info/ui/wallet_info_screen.dart';
 import '../data/filtered_transactions_repository.dart';
 import '../ui/models/wallet_ui_model.dart';
 import 'mappers/wallet_ui_mapper.dart';
+import 'wallets_list_state.dart';
 
-class WalletsController extends GetxController with StateMixin<List<WalletUIModel>> {
-  LocalWalletRepository get _walletRepo => Get.find();
-  FilteredTransactionsRepository get _transactionRepo => Get.find();
-
+class WalletsListCubit extends Cubit<WalletsListState> {
+  final LocalWalletRepository _walletRepo;
+  final FilteredTransactionsRepository _transactionRepo =
+      const FilteredTransactionsRepository();
   final WalletUIMapper _mapper = const WalletUIMapper();
   final WalletBalanceCalculator _calculator = const WalletBalanceCalculator();
+
   StreamSubscription? _walletsSubscription;
 
-  @override
-  void onInit() {
-    super.onInit();
-
+  WalletsListCubit(this._walletRepo)
+      : super(WalletsListState(WalletsListStatus.initial, List.empty(), null)) {
+    emit(state.copyWith(
+      status: WalletsListStatus.loading,
+    ));
     _walletsSubscription ??= _getWallets().handleError((Object e, StackTrace str) {
-      change(null, status: RxStatus.error(str.toString()));
-    }).listen((categories) {
-      if (categories.isNotEmpty) {
-        change(categories, status: RxStatus.success());
-      } else {
-        change(null, status: RxStatus.empty());
-      }
+      emit(state.copyWith(
+        status: WalletsListStatus.failure,
+        error: str.toString(),
+      ));
+    }).listen((wallets) {
+      emit(state.copyWith(
+        status: WalletsListStatus.success,
+        items: wallets,
+        error: null,
+      ));
     });
   }
 
   @override
-  void onClose() {
-    super.onClose();
-
-    _walletsSubscription?.cancel();
+  Future<void> close() async {
+    await _walletsSubscription?.cancel();
     _walletsSubscription = null;
+    await super.close();
   }
 
   Stream<List<WalletUIModel>> _getWallets() {
@@ -53,8 +59,7 @@ class WalletsController extends GetxController with StateMixin<List<WalletUIMode
       var transactionsData = value.first;
       var walletsData = value.second;
       return walletsData.map((e) {
-        return _mapper.map(
-            e, _calculator.calculateBalance(transactionsData, e));
+        return _mapper.map(e, _calculator.calculateBalance(transactionsData, e));
       }).toList();
     });
   }

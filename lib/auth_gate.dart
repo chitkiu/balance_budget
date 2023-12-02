@@ -1,4 +1,3 @@
-import 'package:balance_budget/categories/common/data/local_category_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart' as ui;
 import 'package:flutter/widgets.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
+import 'categories/common/data/local_category_repository.dart';
 import 'common/getx_extensions.dart';
 import 'home_screen/ui/home_screen.dart';
 

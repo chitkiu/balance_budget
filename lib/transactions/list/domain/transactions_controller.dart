@@ -20,7 +20,7 @@ import 'selected_transactions_date_storage.dart';
 
 class TransactionsController extends GetxController
     with StateMixin<ComplexTransactionsUIModel> {
-  TransactionsAggregator get _transactionsAggregator => Get.find();
+  final TransactionsAggregator _transactionsAggregator = const TransactionsAggregator();
 
   SelectedTransactionsDateStorage get _dateStorage => Get.find();
 
