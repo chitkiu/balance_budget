@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
-import 'package:rxdart/transformers.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../../common/ui/base_bottom_sheet_screen.dart';
 import '../../../common/ui/transaction_item/mappers/transactions_header_ui_mapper.dart';
@@ -18,74 +18,49 @@ import '../../common/data/wallet_balance_calculator.dart';
 import '../../list/domain/mappers/wallet_ui_mapper.dart';
 import '../data/wallet_transactions_aggregator.dart';
 import '../ui/models/rich_wallet_ui_model.dart';
+import 'wallet_info_state.dart';
 
-class WalletInfoController extends GetxController
-    with StateMixin<RichWalletUIModel> {
+class WalletInfoCubit extends Cubit<WalletInfoState> {
   final String id;
 
-  WalletInfoController(this.id);
-
-  LocalWalletRepository get _walletRepo => Get.find();
-  WalletTransactionAggregator get _transactionsAggregator => Get.find();
+  final LocalWalletRepository _walletRepo;
+  final WalletTransactionAggregator _transactionsAggregator =
+      const WalletTransactionAggregator();
 
   final WalletUIMapper _walletUIMapper = const WalletUIMapper();
-
+  final WalletBalanceCalculator _calculator = const WalletBalanceCalculator();
   final TransactionsHeaderUIMapper _transactionsHeaderUIMapper =
-      TransactionsHeaderUIMapper(
+  TransactionsHeaderUIMapper(
     const RichTransactionComparator(),
     TransactionsUIMapper(),
   );
-  final WalletBalanceCalculator _calculator = const WalletBalanceCalculator();
 
   StreamSubscription? _walletSubscription;
 
-  @override
-  void onInit() {
-    super.onInit();
-
-    _walletSubscription ??= _walletRepo.walletById(id).switchMap((wallet) {
-      if (wallet == null) {
-        return const Stream.empty();
-      } else {
-        return _transactionsAggregator
-            .transactionByWalletId(wallet.id)
-            .map((transactions) => _mapToUIModel(wallet, transactions));
-      }
-    }).handleError((Object e, StackTrace str) {
-      change(null, status: RxStatus.error(str.toString()));
-    }).listen((event) {
-      if (event is RichWalletUIModel) {
-        change(event, status: RxStatus.success());
-      } else {
-        change(null, status: RxStatus.empty());
-      }
+  WalletInfoCubit(this.id, this._walletRepo)
+      : super(WalletInfoState(WalletInfoStatus.initial, null, null)) {
+    emit(state.copyWith(
+      status: WalletInfoStatus.loading,
+    ));
+    _walletSubscription ??= _getWalletInfo(id).handleError((Object e, StackTrace str) {
+      emit(state.copyWith(
+        status: WalletInfoStatus.failure,
+        error: str.toString(),
+      ));
+    }).listen((wallet) {
+      emit(state.copyWith(
+        status: WalletInfoStatus.success,
+        model: wallet,
+        error: null,
+      ));
     });
   }
 
   @override
-  void onClose() {
-    super.onClose();
-
-    _walletSubscription?.cancel();
+  Future<void> close() async {
+    await _walletSubscription?.cancel();
     _walletSubscription = null;
-  }
-
-  void onTransactionClicked(BuildContext context, TransactionUIModel transaction, bool canEdit) {
-    openModalSheetWithController(
-      context,
-          (controller) {
-        return TransactionInfoScreen(controller: controller,);
-      },
-      TransactionInfoController(transaction.id, canEdit),
-    );
-  }
-
-  RichWalletUIModel _mapToUIModel(
-      Wallet wallet, List<RichTransactionModel> transactions) {
-    return RichWalletUIModel(
-        _walletUIMapper.map(
-            wallet, _calculator.calculateBalanceFromRich(transactions, wallet)),
-        _transactionsHeaderUIMapper.mapTransactionsToUI(transactions));
+    await super.close();
   }
 
   Future<void> archiveWallet() async {
@@ -98,5 +73,35 @@ class WalletInfoController extends GetxController
 
   Future<void> deleteWallet() async {
     await _walletRepo.delete(id);
+  }
+
+  void onTransactionClicked(BuildContext context, TransactionUIModel transaction, bool canEdit) {
+    openModalSheetWithController(
+      context,
+          (controller) {
+        return TransactionInfoScreen(controller: controller,);
+      },
+      TransactionInfoController(transaction.id, canEdit),
+    );
+  }
+
+  Stream<RichWalletUIModel?> _getWalletInfo(String id) {
+   return _walletRepo.walletById(id).switchMap((wallet) {
+      if (wallet == null) {
+        return Stream.value(null);
+      } else {
+        return _transactionsAggregator
+            .transactionByWalletId(wallet.id)
+            .map((transactions) => _mapToUIModel(wallet, transactions));
+      }
+    });
+  }
+
+  RichWalletUIModel _mapToUIModel(
+      Wallet wallet, List<RichTransactionModel> transactions) {
+    return RichWalletUIModel(
+        _walletUIMapper.map(
+            wallet, _calculator.calculateBalanceFromRich(transactions, wallet)),
+        _transactionsHeaderUIMapper.mapTransactionsToUI(transactions));
   }
 }

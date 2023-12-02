@@ -9,8 +9,6 @@ import '../../add/domain/add_wallet_binding.dart';
 import '../../add/ui/add_wallet_screen.dart';
 import '../../common/data/local_wallet_repository.dart';
 import '../../common/data/wallet_balance_calculator.dart';
-import '../../info/domain/wallet_info_binding.dart';
-import '../../info/ui/wallet_info_screen.dart';
 import '../data/filtered_transactions_repository.dart';
 import '../ui/models/wallet_ui_model.dart';
 import 'mappers/wallet_ui_mapper.dart';
@@ -69,9 +67,5 @@ class WalletsListCubit extends Cubit<WalletsListState> {
       () => AddWalletScreen(),
       binding: AddWalletBinding(),
     );
-  }
-
-  void onItemClick(WalletUIModel wallet) {
-    Get.to(() => WalletInfoScreen(wallet.id), binding: WalletInfoBinding(wallet.id));
   }
 }

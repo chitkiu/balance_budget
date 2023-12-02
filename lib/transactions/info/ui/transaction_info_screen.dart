@@ -9,7 +9,6 @@ import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_tile.dart';
 import '../../../common/ui/common_ui_settings.dart';
 import '../../../common/ui/transaction_item/models/transaction_ui_model.dart';
-import '../../../wallets/info/domain/wallet_info_binding.dart';
 import '../../../wallets/info/ui/wallet_info_screen.dart';
 import '../domain/transaction_info_controller.dart';
 
@@ -97,7 +96,6 @@ class TransactionInfoScreen extends StatelessWidget {
           Get.back();
           Get.to(
             () => WalletInfoScreen(model.fromWalletId),
-            binding: WalletInfoBinding(model.fromWalletId),
             preventDuplicates: false,
           );
         },
@@ -140,7 +138,6 @@ class TransactionInfoScreen extends StatelessWidget {
           Get.back();
           Get.to(
             () => WalletInfoScreen(model.fromWalletId),
-            binding: WalletInfoBinding(model.fromWalletId),
             preventDuplicates: false,
           );
         },
@@ -159,7 +156,6 @@ class TransactionInfoScreen extends StatelessWidget {
           Get.back();
           Get.to(
             () => WalletInfoScreen(model.toWalletId),
-            binding: WalletInfoBinding(model.toWalletId),
             preventDuplicates: false,
           );
         },

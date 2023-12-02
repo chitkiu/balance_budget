@@ -9,6 +9,7 @@ import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_tile.dart';
 import '../../../common/ui/common_ui_settings.dart';
 import '../../common/data/local_wallet_repository.dart';
+import '../../info/ui/wallet_info_screen.dart';
 import '../domain/wallets_list_cubit.dart';
 import '../domain/wallets_list_state.dart';
 import 'models/wallet_ui_model.dart';
@@ -87,7 +88,12 @@ class _WalletsView extends CommonBlocScaffoldWithButtonScreen {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
-        context.read<WalletsListCubit>().onItemClick(wallet);
+        Navigator.of(context).push(
+            platformPageRoute(
+              context: context,
+              builder: (_) => WalletInfoScreen(wallet.id),
+            )
+        );
       },
       child: Padding(
         padding: CommonUI.defaultTilePadding,
