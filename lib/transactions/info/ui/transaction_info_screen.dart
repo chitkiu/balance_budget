@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
-import '../../../categories/info/domain/category_info_binding.dart';
 import '../../../categories/info/ui/category_info_screen.dart';
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/base_bottom_sheet_screen.dart';
@@ -81,7 +80,6 @@ class TransactionInfoScreen extends StatelessWidget {
           Get.back();
           Get.to(
             () => CategoryInfoScreen(model.categoryId),
-            binding: CategoryInfoBinding(model.categoryId),
             preventDuplicates: false,
           );
         },

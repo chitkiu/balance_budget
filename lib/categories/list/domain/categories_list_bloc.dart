@@ -5,7 +5,6 @@ import '../../../common/data/models/transaction_type.dart';
 import '../../add/domain/add_category_binding.dart';
 import '../../add/ui/add_category_screen.dart';
 import '../../common/data/local_category_repository.dart';
-import '../../info/domain/category_info_binding.dart';
 import '../../info/ui/category_info_screen.dart';
 import '../ui/models/category_ui_model.dart';
 import 'categories_list_event.dart';
@@ -40,7 +39,7 @@ class CategoriesListBloc extends Bloc<CategoriesListEvent, CategoriesListState> 
       Emitter<CategoriesListState> emit,
       ) async {
     Get.to(() => CategoryInfoScreen(event.id),
-        binding: CategoryInfoBinding(event.id));
+        /*binding: CategoryInfoBinding(event.id)*/);
   }
 
   Future<void> _onLoadCategories(

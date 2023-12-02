@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
@@ -12,7 +13,7 @@ import 'mappers/home_screen_tab_mapper.dart';
 import 'models/home_screen_tab.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -26,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    Get.lazyPut(() => LocalCategoryRepository());
+    Get.lazyPut(() => context.read<LocalCategoryRepository>());
     Get.lazyPut(() => LocalWalletRepository());
     Get.lazyPut(() => LocalTransactionsRepository());
     Get.lazyPut(() => LocalBudgetRepository());
