@@ -17,6 +17,7 @@ import '../ui/models/rich_category_ui_model.dart';
 import 'category_info_event.dart';
 import 'category_info_status.dart';
 
+//TODO Maybe rewrite to Cubit
 class CategoryInfoBloc extends Bloc<CategoryInfoEvent, CategoryInfoState> {
 
   final LocalCategoryRepository _categoryRepo;

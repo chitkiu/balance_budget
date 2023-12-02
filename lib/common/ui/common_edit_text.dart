@@ -34,6 +34,7 @@ class CommonEditText extends StatelessWidget {
           padding: EdgeInsets.zero,
         );
       },
+      onChanged: onChanged,
     );
   }
 }
