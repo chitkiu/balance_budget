@@ -1,3 +1,4 @@
+import 'package:balance_budget/common/domain/name_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
@@ -30,7 +31,7 @@ class AddCategoryScreen extends StatelessWidget {
   }
 }
 
-class _AddCategoryView extends CommonBlocScaffoldWithButtonScreen {
+class _AddCategoryView extends CommonBlocScaffoldWithButtonScreen with NameValidator {
   _AddCategoryView()
       : super(
           Get.localisation.addCategoryTitle,
@@ -54,7 +55,7 @@ class _AddCategoryView extends CommonBlocScaffoldWithButtonScreen {
               children: [
                 CommonEditText(
                   widgetKey: _nameInputKey,
-                  validator: context.read<AddCategoryCubit>().validateName,
+                  validator: validateName,
                   hintText: Get.localisation.nameHint,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   onChanged: (value) {
@@ -104,7 +105,7 @@ class _AddCategoryView extends CommonBlocScaffoldWithButtonScreen {
                     )
                   ],
                 ),
-                errorText(state.error),
+                _errorText(state.error),
               ],
             ),
           ),
@@ -126,7 +127,7 @@ class _AddCategoryView extends CommonBlocScaffoldWithButtonScreen {
     }
   }
 
-  Widget errorText(String? errorText) {
+  Widget _errorText(String? errorText) {
     if (errorText != null) {
       return Text(
         errorText,

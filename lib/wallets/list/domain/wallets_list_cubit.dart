@@ -1,12 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../common/pair.dart';
-import '../../add/domain/add_wallet_binding.dart';
-import '../../add/ui/add_wallet_screen.dart';
 import '../../common/data/local_wallet_repository.dart';
 import '../../common/data/wallet_balance_calculator.dart';
 import '../data/filtered_transactions_repository.dart';
@@ -60,12 +57,5 @@ class WalletsListCubit extends Cubit<WalletsListState> {
         return _mapper.map(e, _calculator.calculateBalance(transactionsData, e));
       }).toList();
     });
-  }
-
-  void onAddClick() {
-    Get.to(
-      () => AddWalletScreen(),
-      binding: AddWalletBinding(),
-    );
   }
 }

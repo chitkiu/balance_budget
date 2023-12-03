@@ -10,7 +10,7 @@ class CommonEditText extends StatelessWidget {
   final AutovalidateMode? autovalidateMode;
   final ValueChanged<String>? onChanged;
 
-  const CommonEditText({Key? key, this.widgetKey, this.controller, this.hintText, this.validator, this.keyboardType, this.autovalidateMode, this.onChanged}) : super(key: key);
+  const CommonEditText({super.key, this.widgetKey, this.controller, this.hintText, this.validator, this.keyboardType, this.autovalidateMode, this.onChanged});
 
   @override
   Widget build(BuildContext context) {

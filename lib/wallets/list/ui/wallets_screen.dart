@@ -8,6 +8,7 @@ import '../../../common/ui/common_bloc_scaffold_with_button_screen.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_tile.dart';
 import '../../../common/ui/common_ui_settings.dart';
+import '../../add/ui/add_wallet_screen.dart';
 import '../../common/data/local_wallet_repository.dart';
 import '../../info/ui/wallet_info_screen.dart';
 import '../domain/wallets_list_cubit.dart';
@@ -65,7 +66,12 @@ class _WalletsView extends CommonBlocScaffoldWithButtonScreen {
 
   @override
   void onButtonPress(BuildContext context) {
-    context.read<WalletsListCubit>().onAddClick();
+    Navigator.of(context).push(
+        platformPageRoute(
+          context: context,
+          builder: (_) => const AddWalletScreen(),
+        )
+    );
   }
 
   Widget _walletWidget(BuildContext context, WalletUIModel wallet) {
