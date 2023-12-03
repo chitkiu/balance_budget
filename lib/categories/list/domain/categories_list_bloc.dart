@@ -7,7 +7,7 @@ import '../../common/data/local_category_repository.dart';
 import '../../info/ui/category_info_screen.dart';
 import '../ui/models/category_ui_model.dart';
 import 'categories_list_event.dart';
-import 'categories_list_status.dart';
+import 'categories_list_state.dart';
 import 'mappers/category_ui_mapper.dart';
 
 //TODO Maybe rewrite to Cubit

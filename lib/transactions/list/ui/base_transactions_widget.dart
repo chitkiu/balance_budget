@@ -1,27 +1,28 @@
-import 'package:balance_budget/transactions/list/domain/transactions_controller.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/transaction_item/models/transaction_header_ui_model.dart';
 import '../../../common/ui/transaction_item/transaction_section_header_widget.dart';
 import '../domain/models/transactions_filter_date.dart';
+import '../domain/transactions_cubit.dart';
 
-abstract class BaseTransactionsWidget extends GetView<TransactionsController> {
+//TODO Improve UI
+abstract class BaseTransactionsWidget extends StatelessWidget {
   final DateFormat _appBarDateFormatter = DateFormat("dd, MMM");
 
   BaseTransactionsWidget({super.key});
 
   @protected
-  Widget mapTransactionToUI(
-      BuildContext context, TransactionHeaderUIModel item) {
+  Widget mapTransactionToUI(BuildContext context, TransactionHeaderUIModel item) {
     return TransactionSectionHeaderWidget(
       model: item,
-      onItemClick: (transaction) =>
-          controller.onItemClick(context, transaction),
+      onItemClick: (transaction) {
+        context.read<TransactionsCubit>().onItemClick(context, transaction);
+      },
     );
   }
 
@@ -35,29 +36,19 @@ abstract class BaseTransactionsWidget extends GetView<TransactionsController> {
             ),
             dialogSize: const Size(325, 400),
             value: [
-          controller.currentDate.value.start,
-          controller.currentDate.value.end
+          context.read<TransactionsCubit>().state.date?.start,
+          context.read<TransactionsCubit>().state.date?.end
         ]))
         ?.whereNotNull()
         .toList();
 
     if (result != null) {
-      if (result.length == 1) {
-        controller.setNewDate(TransactionsFilterDate(
-          start: result.first,
-          end: result.first,
-        ));
-      } else if (result.length == 2) {
-        controller.setNewDate(TransactionsFilterDate(
-          start: result.first,
-          end: result[1],
-        ));
-      }
+      context.read<TransactionsCubit>().setNewDate(result);
     }
   }
 
   @protected
-  Widget calendarButton(BuildContext context) {
+  Widget calendarButton(BuildContext context, TransactionsFilterDate? currentDate) {
     return GestureDetector(
       onTap: () => changeDate(context),
       child: Row(
@@ -75,18 +66,15 @@ abstract class BaseTransactionsWidget extends GetView<TransactionsController> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Obx(() {
-                  var currentDate = controller.currentDate.value;
-                  return Text(
-                    '${_appBarDateFormatter.format(currentDate.start)} - ${_appBarDateFormatter.format(currentDate.end)}',
-                    textAlign: TextAlign.left,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 18,
-                      letterSpacing: -0.2,
-                    ),
-                  );
-                }),
+                Text(
+                  '${_appBarDateFormatter.format(currentDate?.start ?? DateTime.now())} - ${_appBarDateFormatter.format(currentDate?.end ?? DateTime.now())}',
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 18,
+                    letterSpacing: -0.2,
+                  ),
+                ),
               ],
             ),
           )

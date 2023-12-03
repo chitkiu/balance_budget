@@ -7,7 +7,7 @@ import '../../common/data/local_transactions_repository.dart';
 import '../../common/data/models/rich_transaction_model.dart';
 import '../../common/data/rich_transaction_comparator.dart';
 import '../../common/data/rich_transaction_mapper.dart';
-import '../domain/selected_transactions_date_storage.dart';
+import '../domain/models/transactions_filter_date.dart';
 
 class TransactionsAggregator {
   LocalCategoryRepository get _categoryRepository => Get.find();
@@ -16,21 +16,16 @@ class TransactionsAggregator {
 
   LocalWalletRepository get _walletRepository => Get.find();
 
-  SelectedTransactionsDateStorage get _dateStorage => Get.find();
-
   final RichTransactionMapper _mapper =
       const RichTransactionMapper(RichTransactionComparator());
 
   const TransactionsAggregator();
 
-  Stream<List<RichTransactionModel>> transactionsByDate() {
+  Stream<List<RichTransactionModel>> transactionsByDate(
+      TransactionsFilterDate dateRange) {
     return CombineLatestStream.combine3(
       _categoryRepository.categoriesWithoutArchived,
-      _dateStorage.currentDateStream.switchMap(
-              (dateRange) =>
-              _transactionsRepository.transactionByTimeRange(
-                  dateRange.start, dateRange.end)
-      ),
+      _transactionsRepository.transactionByTimeRange(dateRange.start, dateRange.end),
       _walletRepository.wallets,
       _mapper.mapTransactions,
     ).map((transactions) {

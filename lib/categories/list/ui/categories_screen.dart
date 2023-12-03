@@ -12,7 +12,7 @@ import '../../../common/ui/common_ui_settings.dart';
 import '../../common/data/local_category_repository.dart';
 import '../domain/categories_list_bloc.dart';
 import '../domain/categories_list_event.dart';
-import '../domain/categories_list_status.dart';
+import '../domain/categories_list_state.dart';
 
 class CategoriesScreen extends StatelessWidget {
   const CategoriesScreen({super.key});

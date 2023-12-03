@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import '../../budgets/common/data/local_budget_repository.dart';
 import '../../categories/common/data/local_category_repository.dart';
 import '../../transactions/common/data/local_transactions_repository.dart';
-import '../../transactions/list/domain/selected_transactions_date_storage.dart';
 import '../../wallets/common/data/local_wallet_repository.dart';
 import 'home_body_builder.dart';
 import 'mappers/home_screen_tab_mapper.dart';
@@ -31,7 +30,6 @@ class _HomeScreenState extends State<HomeScreen> {
     Get.lazyPut(() => context.read<LocalWalletRepository>());
     Get.lazyPut(() => LocalTransactionsRepository());
     Get.lazyPut(() => LocalBudgetRepository());
-    Get.lazyPut(() => SelectedTransactionsDateStorage());
     super.initState();
   }
 

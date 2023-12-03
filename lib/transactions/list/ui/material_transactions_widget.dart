@@ -1,5 +1,9 @@
 import 'package:balance_budget/common/ui/transaction_item/models/complex_transactions_ui_model.dart';
+import 'package:balance_budget/transactions/list/domain/transactions_cubit.dart';
+import 'package:balance_budget/transactions/list/domain/transactions_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../common/getx_extensions.dart';
@@ -7,6 +11,7 @@ import '../../../common/ui/common_icons.dart';
 import 'base_transactions_widget.dart';
 import 'filter_popup/filter_dialog.dart';
 
+//TODO Improve UI
 class MaterialTransactionsWidget extends BaseTransactionsWidget {
   MaterialTransactionsWidget({super.key});
 
@@ -16,20 +21,35 @@ class MaterialTransactionsWidget extends BaseTransactionsWidget {
       appBar: AppBar(
         title: Text(Get.localisation.transactionsTabName),
         actions: [
-          calendarButton(context),
+          BlocBuilder<TransactionsCubit, TransactionsState>(
+              builder: (context, state) {
+                return calendarButton(context, state.date);
+              },
+          ),
         ],
       ),
-      body: controller.obx(
-        (model) => _transactionsList(context, model),
-        onLoading: const Center(
-          child: CircularProgressIndicator(),
-        ),
-        onEmpty: Center(
-          child: Text(Get.localisation.noTransactions),
-        ),
+      body: BlocBuilder<TransactionsCubit, TransactionsState>(
+        builder: (context, state) {
+          switch (state.status) {
+            case TransactionsStatus.initial:
+              return const SizedBox.shrink();
+            case TransactionsStatus.loading:
+              return Center(
+                child: PlatformCircularProgressIndicator(),
+              );
+            case TransactionsStatus.success:
+              return _transactionsList(context, state.model);
+            case TransactionsStatus.failure:
+              return Center(
+                child: Text("Error:\n${state.error}"),
+              );
+          }
+        },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => controller.addTransaction(context),
+        onPressed: () {
+          context.read<TransactionsCubit>().addTransaction(context);
+        },
         child: Icon(CommonIcons.add),
       ),
     );
@@ -69,6 +89,12 @@ class MaterialTransactionsWidget extends BaseTransactionsWidget {
 
   Widget _transactionsList(
       BuildContext context, ComplexTransactionsUIModel? model) {
+    if (model?.transactions.isEmpty == true) {
+      return Center(
+        child: Text(Get.localisation.noTransactions),
+      );
+    }
+
     return CustomScrollView(
       slivers: [
         SliverList(
