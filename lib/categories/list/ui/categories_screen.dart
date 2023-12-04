@@ -8,7 +8,9 @@ import '../../../common/ui/common_bloc_scaffold_with_button_screen.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/common_tile.dart';
 import '../../../common/ui/common_ui_settings.dart';
+import '../../add/ui/add_category_screen.dart';
 import '../../common/data/local_category_repository.dart';
+import '../../info/ui/category_info_screen.dart';
 import '../domain/categories_list_bloc.dart';
 import '../domain/categories_list_event.dart';
 import '../domain/categories_list_state.dart';
@@ -72,8 +74,12 @@ class _CategoriesScreenView extends CommonBlocScaffoldWithButtonScreen {
         return GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () {
-            context.read<CategoriesListBloc>()
-                .add(CategoryClickEvent(category.id));
+            Navigator.of(context).push(
+                platformPageRoute(
+                  context: context,
+                  builder: (_) => CategoryInfoScreen(category.id),
+                )
+            );
           },
           child: Padding(
               padding: const EdgeInsets.symmetric(
@@ -88,8 +94,12 @@ class _CategoriesScreenView extends CommonBlocScaffoldWithButtonScreen {
 
   @override
   void onButtonPress(BuildContext context) {
-    context.read<CategoriesListBloc>()
-        .add(const AddCategoryEvent());
+    Navigator.of(context).push(
+        platformPageRoute(
+          context: context,
+          builder: (_) => const AddCategoryScreen(),
+        )
+    );
   }
 }
 

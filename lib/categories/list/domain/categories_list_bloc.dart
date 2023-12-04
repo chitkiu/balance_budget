@@ -1,10 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 
 import '../../../common/data/models/transaction_type.dart';
-import '../../add/ui/add_category_screen.dart';
 import '../../common/data/local_category_repository.dart';
-import '../../info/ui/category_info_screen.dart';
 import '../ui/models/category_ui_model.dart';
 import 'categories_list_event.dart';
 import 'categories_list_state.dart';
@@ -20,24 +17,6 @@ class CategoriesListBloc extends Bloc<CategoriesListEvent, CategoriesListState> 
       CategoriesListState(CategoriesListStatus.initial, List.empty())
   ) {
     on<LoadCategoriesListEvent>(_onLoadCategories);
-    on<AddCategoryEvent>(_onAddClick);
-    on<CategoryClickEvent>(_onCategoryClick);
-  }
-
-  Future<void> _onAddClick(
-      AddCategoryEvent event,
-      Emitter<CategoriesListState> emit,
-      ) async {
-    Get.to(
-          () => const AddCategoryScreen(),
-    );
-  }
-
-  Future<void> _onCategoryClick(
-      CategoryClickEvent event,
-      Emitter<CategoriesListState> emit,
-      ) async {
-    Get.to(() => CategoryInfoScreen(event.id));
   }
 
   Future<void> _onLoadCategories(

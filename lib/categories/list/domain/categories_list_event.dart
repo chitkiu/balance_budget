@@ -10,17 +10,3 @@ sealed class CategoriesListEvent extends Equatable {
 final class LoadCategoriesListEvent extends CategoriesListEvent {
   const LoadCategoriesListEvent();
 }
-
-final class AddCategoryEvent extends CategoriesListEvent {
-  const AddCategoryEvent();
-}
-
-final class CategoryClickEvent extends CategoriesListEvent {
-  final String id;
-  const CategoryClickEvent(this.id);
-
-  @override
-  List<Object> get props => [
-    id,
-  ];
-}
