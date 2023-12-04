@@ -1,9 +1,9 @@
-import 'package:balance_budget/common/domain/name_validator.dart';
-import 'package:balance_budget/common/domain/number_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+import '../../../common/domain/name_validator.dart';
+import '../../../common/domain/number_validator.dart';
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_bloc_scaffold_with_button_screen.dart';
 import '../../../common/ui/common_colors.dart';

@@ -1,4 +1,3 @@
-import 'package:balance_budget/transactions/common/data/rich_transaction_comparator.dart';
 import 'package:collection/collection.dart';
 
 import '../../../categories/common/data/models/category.dart';
@@ -6,6 +5,7 @@ import '../../../common/data/models/transaction_type.dart';
 import '../../../wallets/common/data/models/wallet.dart';
 import 'models/rich_transaction_model.dart';
 import 'models/transaction.dart';
+import 'rich_transaction_comparator.dart';
 
 class RichTransactionMapper {
   final RichTransactionComparator _comparator;

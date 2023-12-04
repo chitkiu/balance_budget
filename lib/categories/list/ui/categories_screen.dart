@@ -1,4 +1,3 @@
-import 'package:balance_budget/categories/list/ui/models/category_ui_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
@@ -13,6 +12,7 @@ import '../../common/data/local_category_repository.dart';
 import '../domain/categories_list_bloc.dart';
 import '../domain/categories_list_event.dart';
 import '../domain/categories_list_state.dart';
+import 'models/category_ui_model.dart';
 
 class CategoriesScreen extends StatelessWidget {
   const CategoriesScreen({super.key});

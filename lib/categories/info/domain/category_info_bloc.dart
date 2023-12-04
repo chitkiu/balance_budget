@@ -7,7 +7,6 @@ import '../../../common/ui/transaction_item/mappers/transactions_header_ui_mappe
 import '../../../common/ui/transaction_item/mappers/transactions_ui_mapper.dart';
 import '../../../transactions/common/data/models/rich_transaction_model.dart';
 import '../../../transactions/common/data/rich_transaction_comparator.dart';
-import '../../../transactions/info/domain/transaction_info_controller.dart';
 import '../../../transactions/info/ui/transaction_info_screen.dart';
 import '../../common/data/local_category_repository.dart';
 import '../../common/data/models/category.dart';
@@ -62,12 +61,9 @@ class CategoryInfoBloc extends Bloc<CategoryInfoEvent, CategoryInfoState> {
       TransactionClickInCategoryEvent event,
       Emitter<CategoryInfoState> emit,
       ) async {
-    openModalSheetWithController(
+    openModalSheet(
       Get.context!,
-          (controller) {
-        return TransactionInfoScreen(controller: controller,);
-      },
-      TransactionInfoController(event.transaction.id, event.canEdit),
+      TransactionInfoScreen(event.transaction.id),
     );
   }
 

@@ -1,6 +1,3 @@
-import 'package:balance_budget/common/ui/transaction_item/models/complex_transactions_ui_model.dart';
-import 'package:balance_budget/transactions/list/domain/transactions_cubit.dart';
-import 'package:balance_budget/transactions/list/domain/transactions_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
@@ -8,7 +5,10 @@ import 'package:get/get.dart';
 
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_icons.dart';
+import '../../../common/ui/transaction_item/models/complex_transactions_ui_model.dart';
 import '../domain/models/transactions_filter_date.dart';
+import '../domain/transactions_cubit.dart';
+import '../domain/transactions_state.dart';
 import 'base_transactions_widget.dart';
 import 'calendar_button.dart';
 import 'filter_popup/filter_dialog.dart';

@@ -1,4 +1,3 @@
-import 'package:balance_budget/transactions/common/data/local_transactions_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../common/data/models/transaction_type.dart';
+import '../../../transactions/common/data/local_transactions_repository.dart';
 import 'models/category.dart';
 
 //TODO Add translation

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
@@ -10,56 +11,80 @@ import '../../../common/ui/common_tile.dart';
 import '../../../common/ui/common_ui_settings.dart';
 import '../../../common/ui/transaction_item/models/transaction_ui_model.dart';
 import '../../../wallets/info/ui/wallet_info_screen.dart';
-import '../domain/transaction_info_controller.dart';
+import '../../common/data/local_transactions_repository.dart';
+import '../../list/data/transactions_aggregator.dart';
+import '../domain/transaction_info_cubit.dart';
+import '../domain/transaction_info_state.dart';
 
-//TODO Improve icons
 class TransactionInfoScreen extends StatelessWidget {
-  final TransactionInfoController controller;
-  const TransactionInfoScreen({required this.controller, super.key});
+  final String id;
+  const TransactionInfoScreen(this.id, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return CommonBottomSheetWidget(
-      title: Get.localisation.transactionInfoTitle,
-      tailing: controller.canEdit ? CommonIcons.edit : null,
-      onTailingClick: _onTailingClick,
-      body: Obx(() {
-        final model = controller.transaction.value;
-        if (model == null) {
-          return const Center(
-            child: CircularProgressIndicator(),
+    return BlocProvider(
+        create: (context) {
+          final localTransactionsRepository = context.read<LocalTransactionsRepository>();
+          return TransactionInfoCubit(
+            id,
+            localTransactionsRepository,
+            TransactionsAggregator(localTransactionsRepository),
           );
-        }
+        },
+      child: const _TransactionInfoView(),
+    );
+  }
+}
 
-        return Padding(
-          padding: const EdgeInsets.symmetric(
-              horizontal: CommonUI.defaultTileHorizontalPadding),
-          child: Column(
-            children: [
-              if (model is CommonTransactionUIModel) ..._commonWidgets(model),
-              if (model is TransferTransactionUIModel) ..._transferWidgets(model),
-              const SizedBox(
-                height: CommonUI.defaultFullTileVerticalPadding,
+//TODO Improve icons
+class _TransactionInfoView extends StatelessWidget {
+  const _TransactionInfoView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<TransactionInfoCubit, TransactionInfoState>(
+        builder: (context, state) {
+          final model = state.model;
+          if (model == null) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return CommonBottomSheetWidget(
+              title: Get.localisation.transactionInfoTitle,
+              tailing: state.canEdit ? CommonIcons.edit : null,
+              onTailingClick: _onTailingClick,
+              body: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: CommonUI.defaultTileHorizontalPadding),
+                child: Column(
+                  children: [
+                    if (model is CommonTransactionUIModel) ..._commonWidgets(model),
+                    if (model is TransferTransactionUIModel) ..._transferWidgets(model),
+                    const SizedBox(
+                      height: CommonUI.defaultFullTileVerticalPadding,
+                    ),
+                    PlatformElevatedButton(
+                      child: Text(Get.localisation.delete),
+                      onPressed: () async {
+                        await confirmBeforeActionDialog(
+                              () async {
+                            await context.read<TransactionInfoCubit>().deleteTransaction(model.id);
+                            Get.back();
+                          },
+                          title: Get.localisation.confirmToDeleteTitle,
+                          subTitle: Get.localisation.confirmToDeleteText,
+                          confirmAction: Get.localisation.yes,
+                          cancelAction: Get.localisation.no,
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
-              PlatformElevatedButton(
-                child: Text(Get.localisation.delete),
-                onPressed: () async {
-                  await confirmBeforeActionDialog(
-                    () async {
-                      await controller.deleteTransaction(model.id);
-                      Get.back();
-                    },
-                    title: Get.localisation.confirmToDeleteTitle,
-                    subTitle: Get.localisation.confirmToDeleteText,
-                    confirmAction: Get.localisation.yes,
-                    cancelAction: Get.localisation.no,
-                  );
-                },
-              ),
-            ],
-          ),
-        );
-      }),
+            );
+          }
+        },
     );
   }
 
@@ -78,7 +103,7 @@ class TransactionInfoScreen extends StatelessWidget {
         onTap: () {
           Get.back();
           Get.to(
-            () => CategoryInfoScreen(model.categoryId),
+                () => CategoryInfoScreen(model.categoryId),
             preventDuplicates: false,
           );
         },
@@ -95,7 +120,7 @@ class TransactionInfoScreen extends StatelessWidget {
         onTap: () {
           Get.back();
           Get.to(
-            () => WalletInfoScreen(model.fromWalletId),
+                () => WalletInfoScreen(model.fromWalletId),
             preventDuplicates: false,
           );
         },
@@ -137,7 +162,7 @@ class TransactionInfoScreen extends StatelessWidget {
         onTap: () {
           Get.back();
           Get.to(
-            () => WalletInfoScreen(model.fromWalletId),
+                () => WalletInfoScreen(model.fromWalletId),
             preventDuplicates: false,
           );
         },
@@ -155,7 +180,7 @@ class TransactionInfoScreen extends StatelessWidget {
         onTap: () {
           Get.back();
           Get.to(
-            () => WalletInfoScreen(model.toWalletId),
+                () => WalletInfoScreen(model.toWalletId),
             preventDuplicates: false,
           );
         },
@@ -176,5 +201,7 @@ class TransactionInfoScreen extends StatelessWidget {
     ];
   }
 
-  void _onTailingClick(BuildContext context) => controller.goToEdit(context);
+  void _onTailingClick(BuildContext context) {
+    context.read<TransactionInfoCubit>().goToEdit(context);
+  }
 }

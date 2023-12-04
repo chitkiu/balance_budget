@@ -1,10 +1,10 @@
-import 'package:balance_budget/common/ui/transaction_item/mappers/transactions_ui_mapper.dart';
 import 'package:collection/collection.dart';
 
 import '../../../../transactions/common/data/models/rich_transaction_model.dart';
 import '../../../../transactions/common/data/rich_transaction_comparator.dart';
 import '../models/complex_transactions_ui_model.dart';
 import '../models/transaction_header_ui_model.dart';
+import 'transactions_ui_mapper.dart';
 
 class TransactionsHeaderUIMapper {
   final RichTransactionComparator _richTransactionComparator;

@@ -1,6 +1,6 @@
-import 'package:balance_budget/common/data/models/epoch_date_time_converter.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import '../../../../common/data/models/epoch_date_time_converter.dart';
 import 'budget_repeat_type.dart';
 import 'category_budget_info.dart';
 

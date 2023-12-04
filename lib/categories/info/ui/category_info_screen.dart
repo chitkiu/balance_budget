@@ -146,9 +146,7 @@ class _CategoryInfoView extends CommonBlocScaffoldWithButtonScreen {
                       model: item,
                       onItemClick: (transaction) {
                         context.read<CategoryInfoBloc>().add(
-                            TransactionClickInCategoryEvent(
-                                transaction, !category.isArchived
-                            )
+                            TransactionClickInCategoryEvent(transaction)
                         );
                       },
                       itemPadding: const EdgeInsets.symmetric(

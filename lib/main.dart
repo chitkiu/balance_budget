@@ -10,6 +10,7 @@ import 'auth_gate.dart';
 import 'categories/common/data/local_category_repository.dart';
 import 'firebase_options.dart';
 import 'generated/l10n.dart';
+import 'transactions/common/data/local_transactions_repository.dart';
 import 'transactions/list/domain/selected_transactions_date_storage.dart';
 import 'wallets/common/data/local_wallet_repository.dart';
 
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         RepositoryProvider.value(value: LocalCategoryRepository()),
         RepositoryProvider.value(value: LocalWalletRepository()),
         RepositoryProvider.value(value: SelectedTransactionsDateStorage()),
+        RepositoryProvider.value(value: LocalTransactionsRepository()),
       ],
       child: _getWidget(context),
     );

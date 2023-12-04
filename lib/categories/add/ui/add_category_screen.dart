@@ -1,4 +1,3 @@
-import 'package:balance_budget/common/domain/name_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../common/data/models/transaction_type.dart';
+import '../../../common/domain/name_validator.dart';
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_bloc_scaffold_with_button_screen.dart';
 import '../../../common/ui/common_colors.dart';

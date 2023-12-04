@@ -13,7 +13,6 @@ import '../../../common/ui/transaction_item/mappers/transactions_ui_mapper.dart'
 import '../../../common/ui/transaction_item/models/complex_transactions_ui_model.dart';
 import '../../../common/ui/transaction_item/models/transaction_ui_model.dart';
 import '../../common/data/rich_transaction_comparator.dart';
-import '../../info/domain/transaction_info_controller.dart';
 import '../../info/ui/transaction_info_screen.dart';
 import '../../update/domain/update_transaction_controller.dart';
 import '../../update/ui/update_transaction_screen.dart';
@@ -23,7 +22,7 @@ import 'selected_transactions_date_storage.dart';
 import 'transactions_state.dart';
 
 class TransactionsCubit extends Cubit<TransactionsState> {
-  final TransactionsAggregator _transactionsAggregator = const TransactionsAggregator();
+  final TransactionsAggregator _transactionsAggregator;
   final SelectedTransactionsDateStorage _dateStorage;
   final TransactionsHeaderUIMapper _transactionsHeaderUIMapper =
       TransactionsHeaderUIMapper(
@@ -33,7 +32,7 @@ class TransactionsCubit extends Cubit<TransactionsState> {
 
   StreamSubscription? _transactionsSubscription;
 
-  TransactionsCubit(this._dateStorage)
+  TransactionsCubit(this._dateStorage, this._transactionsAggregator)
       : super(TransactionsState(TransactionsStatus.initial, null, null, null)) {
     _transactionsSubscription ??=
         _transactionsStream().handleError((Object e, StackTrace str) {
@@ -45,7 +44,8 @@ class TransactionsCubit extends Cubit<TransactionsState> {
 
   @override
   Future<void> close() async {
-    _transactionsSubscription?.cancel();
+    await _transactionsSubscription?.cancel();
+    _transactionsSubscription = null;
     await super.close();
   }
 
@@ -77,14 +77,9 @@ class TransactionsCubit extends Cubit<TransactionsState> {
   }
 
   void onItemClick(BuildContext context, TransactionUIModel transaction) {
-    openModalSheetWithController(
+    openModalSheet(
       context,
-      (controller) {
-        return TransactionInfoScreen(
-          controller: controller,
-        );
-      },
-      TransactionInfoController(transaction.id, true),
+      TransactionInfoScreen(transaction.id),
     );
   }
 

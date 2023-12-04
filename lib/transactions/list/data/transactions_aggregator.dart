@@ -12,14 +12,14 @@ import '../domain/models/transactions_filter_date.dart';
 class TransactionsAggregator {
   LocalCategoryRepository get _categoryRepository => Get.find();
 
-  LocalTransactionsRepository get _transactionsRepository => Get.find();
+  final LocalTransactionsRepository _transactionsRepository;
 
   LocalWalletRepository get _walletRepository => Get.find();
 
   final RichTransactionMapper _mapper =
       const RichTransactionMapper(RichTransactionComparator());
 
-  const TransactionsAggregator();
+  const TransactionsAggregator(this._transactionsRepository);
 
   Stream<List<RichTransactionModel>> transactionsByDate(
       TransactionsFilterDate dateRange) {

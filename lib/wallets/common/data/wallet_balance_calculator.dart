@@ -1,6 +1,5 @@
-import 'package:balance_budget/transactions/common/data/models/rich_transaction_model.dart';
-
 import '../../../common/data/models/transaction_type.dart';
+import '../../../transactions/common/data/models/rich_transaction_model.dart';
 import '../../../transactions/common/data/models/transaction.dart';
 import 'models/wallet.dart';
 

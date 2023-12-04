@@ -174,7 +174,7 @@ class _WalletInfoView extends CommonBlocScaffoldWithButtonScreen {
                   onItemClick: (transaction) {
                     context
                         .read<WalletInfoCubit>()
-                        .onTransactionClicked(context, transaction, !wallet.isArchived);
+                        .onTransactionClicked(context, transaction);
                   },
                   itemPadding: const EdgeInsets.symmetric(
                       horizontal: 4, vertical: CommonUI.defaultTileVerticalPadding),

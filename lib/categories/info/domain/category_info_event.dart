@@ -41,13 +41,11 @@ final class DeleteCategoryEvent extends CategoryInfoEvent {
 
 final class TransactionClickInCategoryEvent extends CategoryInfoEvent {
   final TransactionUIModel transaction;
-  final bool canEdit;
 
-  const TransactionClickInCategoryEvent(this.transaction, this.canEdit);
+  const TransactionClickInCategoryEvent(this.transaction);
 
   @override
   List<Object> get props => [
     transaction,
-    canEdit,
   ];
 }
