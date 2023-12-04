@@ -1,5 +1,6 @@
 import 'package:balance_budget/transactions/list/domain/transactions_cubit.dart';
 import 'package:balance_budget/transactions/list/domain/transactions_state.dart';
+import 'package:balance_budget/transactions/list/ui/calendar_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,12 +10,13 @@ import 'package:get/get.dart';
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_icons.dart';
 import '../../../common/ui/transaction_item/models/transaction_header_ui_model.dart';
+import '../domain/models/transactions_filter_date.dart';
 import 'base_transactions_widget.dart';
 import 'filter_popup/filter_dialog.dart';
 
 //TODO Improve UI
 class CupertinoTransactionsWidget extends BaseTransactionsWidget {
-  CupertinoTransactionsWidget({super.key});
+  const CupertinoTransactionsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +53,8 @@ class CupertinoTransactionsWidget extends BaseTransactionsWidget {
   Widget _transactionsWidget(BuildContext context, TransactionsState state) {
     return Column(
       children: [
-        _CupertinoFilterWidget(calendarButton(context, state.date)),
+        _CupertinoFilterWidget(state.date ??
+            TransactionsFilterDate(start: DateTime.now(), end: DateTime.now())),
         Expanded(
             child: _transactionsList(context, state.model?.transactions ?? List.empty()))
       ],
@@ -62,8 +65,7 @@ class CupertinoTransactionsWidget extends BaseTransactionsWidget {
       BuildContext context, List<TransactionHeaderUIModel> transactions) {
     if (transactions.isNotEmpty) {
       return ListView(
-        children:
-            transactions.map((item) => mapTransactionToUI(context, item)).toList() ?? [],
+        children: transactions.map((item) => transactionWidget(context, item)).toList(),
       );
     } else {
       return Center(
@@ -74,9 +76,9 @@ class CupertinoTransactionsWidget extends BaseTransactionsWidget {
 }
 
 class _CupertinoFilterWidget extends StatelessWidget {
-  final Widget calendarButton;
+  final TransactionsFilterDate date;
 
-  const _CupertinoFilterWidget(this.calendarButton);
+  const _CupertinoFilterWidget(this.date);
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +89,7 @@ class _CupertinoFilterWidget extends StatelessWidget {
           child: Row(
             children: <Widget>[
               Expanded(
-                child: calendarButton,
+                child: TransactionsCalendarButton(date),
               ),
               GestureDetector(
                 onTap: () => showFilterDialog(context: context),

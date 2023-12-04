@@ -18,8 +18,8 @@ class TransactionsScreen extends StatelessWidget {
           context.read<SelectedTransactionsDateStorage>(),
         ),
       child: PlatformWidgetBuilder(
-        cupertino: (context, child, target) => CupertinoTransactionsWidget(),
-        material: (context, child, target) => MaterialTransactionsWidget(),
+        cupertino: (context, child, target) => const CupertinoTransactionsWidget(),
+        material: (context, child, target) => const MaterialTransactionsWidget(),
       ),
     );
   }

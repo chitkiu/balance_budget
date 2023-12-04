@@ -8,12 +8,14 @@ import 'package:get/get.dart';
 
 import '../../../common/getx_extensions.dart';
 import '../../../common/ui/common_icons.dart';
+import '../domain/models/transactions_filter_date.dart';
 import 'base_transactions_widget.dart';
+import 'calendar_button.dart';
 import 'filter_popup/filter_dialog.dart';
 
 //TODO Improve UI
 class MaterialTransactionsWidget extends BaseTransactionsWidget {
-  MaterialTransactionsWidget({super.key});
+  const MaterialTransactionsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +24,8 @@ class MaterialTransactionsWidget extends BaseTransactionsWidget {
         title: Text(Get.localisation.transactionsTabName),
         actions: [
           BlocBuilder<TransactionsCubit, TransactionsState>(
-              builder: (context, state) {
-                return calendarButton(context, state.date);
-              },
+            builder: (context, state) => TransactionsCalendarButton(state.date ??
+                TransactionsFilterDate(start: DateTime.now(), end: DateTime.now())),
           ),
         ],
       ),
@@ -55,7 +56,40 @@ class MaterialTransactionsWidget extends BaseTransactionsWidget {
     );
   }
 
-  Widget _searchBar() {
+  Widget _transactionsList(BuildContext context, ComplexTransactionsUIModel? model) {
+    if (model == null || model.transactions.isEmpty) {
+      return Center(
+        child: Text(Get.localisation.noTransactions),
+      );
+    }
+
+    return CustomScrollView(
+      slivers: [
+        SliverList(
+          delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+            return const _SearchBar();
+          }, childCount: 1),
+        ),
+        SliverPersistentHeader(
+          pinned: true,
+          floating: true,
+          delegate: _FilterHeader(model.transactionCount),
+        ),
+        SliverList(
+            delegate: SliverChildListDelegate.fixed(
+          model.transactions.map((item) => transactionWidget(context, item)).toList(),
+        ))
+      ],
+    );
+  }
+}
+
+//TODO
+class _SearchBar extends StatelessWidget {
+  const _SearchBar();
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
@@ -68,8 +102,7 @@ class MaterialTransactionsWidget extends BaseTransactionsWidget {
                 fillColor: Colors.grey.withOpacity(0.1),
                 filled: true,
                 border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide.none),
+                    borderRadius: BorderRadius.circular(30), borderSide: BorderSide.none),
                 hintText: 'Search',
                 hintStyle: const TextStyle(
                   color: Colors.grey,
@@ -86,39 +119,8 @@ class MaterialTransactionsWidget extends BaseTransactionsWidget {
       ],
     );
   }
-
-  Widget _transactionsList(
-      BuildContext context, ComplexTransactionsUIModel? model) {
-    if (model?.transactions.isEmpty == true) {
-      return Center(
-        child: Text(Get.localisation.noTransactions),
-      );
-    }
-
-    return CustomScrollView(
-      slivers: [
-        SliverList(
-          delegate:
-              SliverChildBuilderDelegate((BuildContext context, int index) {
-            return _searchBar();
-          }, childCount: 1),
-        ),
-        SliverPersistentHeader(
-          pinned: true,
-          floating: true,
-          delegate: _FilterHeader(model?.transactionCount ?? 0),
-        ),
-        SliverList(
-            delegate: SliverChildListDelegate.fixed(
-          model?.transactions
-                  .map((item) => mapTransactionToUI(context, item))
-                  .toList() ??
-              [],
-        ))
-      ],
-    );
-  }
 }
+
 
 class _FilterHeader extends SliverPersistentHeaderDelegate {
   final int transactionCount;
@@ -126,22 +128,19 @@ class _FilterHeader extends SliverPersistentHeaderDelegate {
   _FilterHeader(this.transactionCount);
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       color: Theme.of(context).colorScheme.background,
       child: Column(
         children: [
           Padding(
-            padding:
-                const EdgeInsets.only(left: 16, right: 16, top: 4, bottom: 3),
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 4, bottom: 3),
             child: Row(
               children: <Widget>[
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child:
-                        Text(Get.localisation.transactions(transactionCount)),
+                    child: Text(Get.localisation.transactions(transactionCount)),
                   ),
                 ),
                 GestureDetector(
